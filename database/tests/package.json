@@ -1,0 +1,14 @@
+{
+  "name": "bizlink-db-tests",
+  "version": "1.0.0",
+  "description": "Layer 1 database tests — constraint, FK integrity, seed validity",
+  "scripts": {
+    "test": "node run_all.js",
+    "test:constraints": "node test_constraints.js",
+    "test:fk": "node test_fk_integrity.js",
+    "test:seeds": "node test_seed_validity.js"
+  },
+  "dependencies": {
+    "mysql2": "^3.9.4"
+  }
+}
