@@ -1,0 +1,160 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="bizlink" name="BizLink - Explicit Cardinality ER">
+    <mxGraphModel dx="1030" dy="2262" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="legend" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=8;fontSize=11;fillColor=#FFFFFF;strokeColor=#666666;dashed=0;" value="&lt;b style=&#39;font-size:14px&#39;&gt;BizLink — Relational ER Diagram&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:16px&#39;&gt;Operational Schema (OLTP) &amp;amp; Analytics Star Schema (DW)&lt;br&gt;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt; Primary Key &amp;nbsp;&amp;nbsp; &lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt; Foreign Key &amp;nbsp;&amp;nbsp; U = Unique&lt;br&gt;Cardinalities: &lt;b&gt;1..1&lt;/b&gt; (One-to-One), &lt;b&gt;1..*&lt;/b&gt; (One-to-Many), &lt;b&gt;*..1&lt;/b&gt; (Many-to-One), &lt;b&gt;*..*&lt;/b&gt; (Many-to-Many via Join Entity)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="800" x="60" y="-140" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr60" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#333333;" value="OLTP — Operational Schema (16 tables)" vertex="1">
+          <mxGeometry height="30" width="1110" x="60" y="-190" as="geometry" />
+        </mxCell>
+        <mxCell id="hdr1620" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#333333;" value="Analytics — Star Schema (5 tables)" vertex="1">
+          <mxGeometry height="30" width="650" x="1620" y="-190" as="geometry" />
+        </mxCell>
+        <mxCell id="t0" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#E1D5E7;strokeColor=#9673A6;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;users&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;user_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;email VARCHAR(190) U&lt;br&gt;phone VARCHAR(20) U&lt;br&gt;password_hash VARCHAR(255)&lt;br&gt;full_name VARCHAR(120)&lt;br&gt;avatar_url VARCHAR(500)&lt;br&gt;role ENUM(OWNER/PARTNER/ADMIN)&lt;br&gt;status ENUM(ACTIVE/SUSPENDED)&lt;br&gt;last_login_at DATETIME&lt;br&gt;created_at DATETIME&lt;br&gt;updated_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="213" width="270" x="60" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="t1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#E1D5E7;strokeColor=#9673A6;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;business_members&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK, FK)&lt;/span&gt;&lt;br&gt;user_id &amp;#8594; users&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK, FK)&lt;/span&gt;&lt;br&gt;member_role ENUM(ADMIN/STAFF)&lt;br&gt;joined_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="108" width="270" x="60" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="t2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#DAE8FC;strokeColor=#6C8EBF;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;categories&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;category_id INT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;parent_id &amp;#8594; categories&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;name VARCHAR(100)&lt;br&gt;slug VARCHAR(120) U&lt;/div&gt;" vertex="1">
+          <mxGeometry height="108" width="270" x="60" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="t3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#F8CECC;strokeColor=#B85450;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;reports&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;report_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;reporter_user_id &amp;#8594; users&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;admin_user_id &amp;#8594; users&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;target_type ENUM&lt;br&gt;target_id BIGINT&lt;br&gt;reason VARCHAR(255)&lt;br&gt;status ENUM(OPEN/RESOLVED)&lt;br&gt;created_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="180" width="270" x="60" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="t4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#F8CECC;strokeColor=#B85450;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;activity_events&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;event_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;user_id &amp;#8594; users&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;event_type VARCHAR(80)&lt;br&gt;metadata JSON&lt;br&gt;created_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="270" x="60" y="1180" as="geometry" />
+        </mxCell>
+        <mxCell id="t5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#DAE8FC;strokeColor=#6C8EBF;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;businesses&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;business_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;owner_user_id &amp;#8594; users&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;primary_category_id &amp;#8594; categories&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;name VARCHAR(160)&lt;br&gt;slug VARCHAR(180) U&lt;br&gt;description TEXT&lt;br&gt;city / state / country&lt;br&gt;status ENUM&lt;br&gt;created_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="230" width="270" x="440" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#D5E8D4;strokeColor=#82B366;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;services&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;service_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;category_id &amp;#8594; categories&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;title VARCHAR(160)&lt;br&gt;price_min DECIMAL(12,2)&lt;br&gt;price_max DECIMAL(12,2)&lt;br&gt;status ENUM&lt;/div&gt;" vertex="1">
+          <mxGeometry height="170" width="270" x="440" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="t7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#D5E8D4;strokeColor=#82B366;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;needs&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;need_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;category_id &amp;#8594; categories&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;title VARCHAR(160)&lt;br&gt;budget_min DECIMAL(12,2)&lt;br&gt;budget_max DECIMAL(12,2)&lt;br&gt;deadline DATE&lt;/div&gt;" vertex="1">
+          <mxGeometry height="170" width="270" x="440" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="t8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#D5E8D4;strokeColor=#82B366;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;matches&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;match_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;need_id &amp;#8594; needs&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;service_id &amp;#8594; services&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;score DECIMAL(5,4)&lt;br&gt;generated_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="270" x="440" y="1200" as="geometry" />
+        </mxCell>
+        <mxCell id="t9" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;connections&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;connection_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;requester_business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;receiver_business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;status ENUM&lt;br&gt;requested_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="270" x="820" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t10" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;messages&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;message_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;connection_id &amp;#8594; connections&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;sender_user_id &amp;#8594; users&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;sender_business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;body TEXT&lt;br&gt;sent_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="270" x="820" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="t11" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;collaborations&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;collaboration_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;initiator_business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;need_id &amp;#8594; needs&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;service_id &amp;#8594; services&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;title VARCHAR(160)&lt;br&gt;status ENUM&lt;br&gt;start_date / end_date DATE&lt;/div&gt;" vertex="1">
+          <mxGeometry height="170" width="270" x="820" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="t12" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#FFE6CC;strokeColor=#D79B00;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;collaboration_participants&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;collaboration_id &amp;#8594; collaborations&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK, FK)&lt;/span&gt;&lt;br&gt;business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK, FK)&lt;/span&gt;&lt;br&gt;participant_role ENUM&lt;br&gt;joined_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="120" width="270" x="820" y="1070" as="geometry" />
+        </mxCell>
+        <mxCell id="t13" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;reviews&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;review_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;reviewer_business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;reviewed_business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;collaboration_id &amp;#8594; collaborations&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;author_user_id &amp;#8594; users&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;rating TINYINT (1-5)&lt;br&gt;title VARCHAR(160)&lt;br&gt;created_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="190" width="270" x="1200" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="t14" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;posts&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;post_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;business_id &amp;#8594; businesses&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;author_user_id &amp;#8594; users&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;content TEXT&lt;br&gt;like_count INT&lt;br&gt;created_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="270" x="1200" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="t15" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#FFF2CC;strokeColor=#D6B656;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;post_interactions&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;interaction_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;post_id &amp;#8594; posts&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;user_id &amp;#8594; users&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;interaction_type ENUM(LIKE/COMMENT)&lt;br&gt;body TEXT&lt;br&gt;created_at DATETIME&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="270" x="1200" y="830" as="geometry" />
+        </mxCell>
+        <mxCell id="t16" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#E1D5E7;strokeColor=#9673A6;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;dw_dim_date&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;date_key INT (yyyymmdd)&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;full_date DATE&lt;br&gt;month TINYINT&lt;br&gt;year SMALLINT&lt;/div&gt;" vertex="1">
+          <mxGeometry height="130" width="270" x="1620" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="t17" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#E1D5E7;strokeColor=#9673A6;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;dw_dim_business &amp;nbsp;(SCD Type 2)&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;business_sk BIGINT (surrogate)&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;business_id BIGINT (natural key)&lt;br&gt;name VARCHAR(160)&lt;br&gt;effective_from DATETIME&lt;br&gt;effective_to DATETIME&lt;br&gt;is_current BOOLEAN&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="270" x="1620" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="t18" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#E1D5E7;strokeColor=#9673A6;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;dw_dim_user &amp;nbsp;(SCD Type 2)&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;user_sk BIGINT (surrogate)&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;user_id BIGINT (natural key)&lt;br&gt;role VARCHAR(20)&lt;br&gt;effective_from DATETIME&lt;br&gt;is_current BOOLEAN&lt;/div&gt;" vertex="1">
+          <mxGeometry height="150" width="270" x="1620" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="t19" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#B0E3E6;strokeColor=#0E8088;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;dw_fact_collaboration&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;fact_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;date_key &amp;#8594; dw_dim_date&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;initiator_business_sk &amp;#8594; dw_dim_business&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;partner_business_sk &amp;#8594; dw_dim_business&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;duration_days INT&lt;br&gt;participant_count INT&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="270" x="2000" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="t20" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacing=6;fontSize=11;fillColor=#B0E3E6;strokeColor=#0E8088;strokeWidth=2;shadow=1;" value="&lt;b style=&#39;font-size:13px&#39;&gt;dw_fact_review&lt;/b&gt;&lt;hr size=&#39;1&#39;&gt;&lt;div style=&#39;text-align:left;line-height:15px&#39;&gt;fact_id BIGINT&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(PK)&lt;/span&gt;&lt;br&gt;date_key &amp;#8594; dw_dim_date&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;reviewed_business_sk &amp;#8594; dw_dim_business&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;reviewer_business_sk &amp;#8594; dw_dim_business&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;author_user_sk &amp;#8594; dw_dim_user&amp;nbsp;&amp;nbsp;&lt;span style=&#39;color:#7A3E00&#39;&gt;(FK)&lt;/span&gt;&lt;br&gt;rating TINYINT&lt;/div&gt;" vertex="1">
+          <mxGeometry height="170" width="270" x="2000" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="e0" edge="1" parent="1" source="t5" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t0" value="owned by (1..* : 1..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="t5" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t2" value="listed under (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="t1" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t0" value="member (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="t1" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t5" value="of (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="t6" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t5" value="offered by (1..* : 1..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="t7" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t5" value="posted by (1..* : 1..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="t6" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t2" value="classified as (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="t7" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t2" value="classified as (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="t8" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t7" value="for (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="t8" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t6" value="suggests (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="t9" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t5" value="connection (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="t10" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t9" value="in thread (1..* : 1..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="t11" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t5" value="initiated by (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="t11" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t7" value="fulfils (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="t12" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t11" value="participant (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="t13" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t5" value="reviewer/reviewed (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="t13" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t11" value="evidence (1..1 : *..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="t14" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t5" value="published by (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" edge="1" parent="1" source="t15" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t14" value="on post (1..* : 1..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e25" edge="1" parent="1" source="t3" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t0" value="raised by (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e26" edge="1" parent="1" source="t4" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t0" value="logged for (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e27" edge="1" parent="1" source="t19" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t16" value="(*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e28" edge="1" parent="1" source="t19" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t17" value="initiator/partner (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e29" edge="1" parent="1" source="t20" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t16" value="(*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e30" edge="1" parent="1" source="t20" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t17" value="reviewed/reviewer (*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e31" edge="1" parent="1" source="t20" style="edgeStyle=entityRelationEdgeStyle;rounded=1;html=1;fontSize=10;startArrow=ERmany;startFill=0;endArrow=ERone;endFill=0;strokeColor=#4D4D4D;strokeWidth=1.5;" target="t18" value="(*..1)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
