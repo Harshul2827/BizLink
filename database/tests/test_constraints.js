@@ -107,12 +107,19 @@ async function run() {
     ['Duplicate Cat', 'healthcare']
   );
 
-  console.log(`\n=== Results: ${passed} passed, ${failed} failed ===\n`);
-  await db.end();
-  process.exit(failed > 0 ? 1 : 0);
+  console.log(`\n=== Constraints Results: ${passed} passed, ${failed} failed ===\n`);
+  return { passed, failed };
 }
 
-run().catch(err => {
-  console.error('Unexpected test runner error:', err);
-  process.exit(1);
-});
+if (require.main === module) {
+  run().then(res => {
+    db.end();
+    process.exit(res.failed > 0 ? 1 : 0);
+  }).catch(err => {
+    console.error('Unexpected test runner error:', err);
+    process.exit(1);
+  });
+}
+
+module.exports = { run };
+
