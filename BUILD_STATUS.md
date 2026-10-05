@@ -10,8 +10,8 @@
 
 | Layer | Status | Approved By | Approval Date | Approval Commit Hash | Gate Condition Passed |
 |:---|:---|:---|:---|:---|:---|
-| **Layer 1 — Database** | **Gate Passed / Completed** | Pending Explicit Confirmation | 2026-10-05 | `4f0a229` | Yes (Schema, Seeds, 10 Constraint/FK Assertions) |
-| **Layer 2 — Backend** | Not Started | — | — | — | No |
+| **Layer 1 — Database** | **Gate Passed / Completed** | Explicitly Confirmed | 2026-10-05 | `411d898` | Yes (Schema, Seeds, 10 Constraint/FK Assertions) |
+| **Layer 2 — Backend** | In Progress (Foundation) | — | — | — | No |
 | **Layer 3 — Frontend** | Not Started | — | — | — | No |
 | **Layer 4 — Power BI** | Gated (Post-L3) | — | — | — | No |
 
