@@ -1,6 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const config = require('./config');
+const apiRoutes = require('./routes');
+const errorHandler = require('./middleware/errorHandler');
+const { NotFoundError } = require('./errors/AppError');
 
 const app = express();
 
@@ -12,26 +16,26 @@ app.get('/health', (req, res) => {
   res.json({
     success: true,
     message: 'BizLink API is running',
+    environment: config.env,
     timestamp: new Date().toISOString()
   });
 });
 
-// Setup /api/v1 routes here
+// API v1 root
+app.use('/api/v1', apiRoutes);
+
+// Catch-all 404 for unhandled routes
+app.use((req, res, next) => {
+  next(new NotFoundError(`Route ${req.method} ${req.originalUrl} not found`, 'ROUTE_NOT_FOUND'));
+});
 
 // Global Error Handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({
-    success: false,
-    error: {
-      code: err.code || 'INTERNAL_SERVER_ERROR',
-      message: err.message || 'An unexpected error occurred'
-    }
+app.use(errorHandler);
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(config.port, () => {
+    console.log(`BizLink API server is running on port ${config.port} [${config.env}]`);
   });
-});
+}
 
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = app;
