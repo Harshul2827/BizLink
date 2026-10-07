@@ -9,6 +9,7 @@ const collaborationRoutes = require('./collaboration.routes');
 const reviewRoutes = require('./review.routes');
 const postRoutes = require('./post.routes');
 const adminRoutes = require('./admin.routes');
+const analyticsRoutes = require('./analytics.routes');
 
 const router = express.Router();
 
@@ -24,6 +25,8 @@ router.use('/reviews', reviewRoutes);
 router.use('/posts', postRoutes);
 router.use('/admin', adminRoutes);
 router.use('/reports', adminRoutes);
+router.use('/analytics', analyticsRoutes);
 
 module.exports = router;
+
 

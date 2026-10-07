@@ -11,7 +11,7 @@
 | Layer | Status | Approved By | Approval Date | Approval Commit Hash | Gate Condition Passed |
 |:---|:---|:---|:---|:---|:---|
 | **Layer 1 — Database** | **Gate Passed / Completed** | Explicitly Confirmed | 2026-10-05 | `411d898` | Yes (Schema, Seeds, 10 Constraint/FK Assertions) |
-| **Layer 2 — Backend** | In Progress (Tracks 1–5 Complete) | — | — | — | No |
+| **Layer 2 — Backend** | **Completed / Gate Ready** | Pending Human Approval | — | — | Yes (Tracks 1–6 Complete with Tests) |
 | **Layer 3 — Frontend** | Not Started | — | — | — | No |
 | **Layer 4 — Power BI** | Gated (Post-L3) | — | — | — | No |
 
@@ -24,7 +24,8 @@
 - [x] **Track 3 — Discovery / Rule-Based Matching**: Discovery search filters, scoring engine, match explanations, match queries.
 - [x] **Track 4 — Connections / Messaging**: B2B connection requests, state transitions (`PENDING`, `ACCEPTED`, `REJECTED`, `CANCELLED`, `BLOCKED`), conversations, direct messaging.
 - [x] **Track 5 — Collaborations / Reviews / Trust / Admin**: Collaboration state machine (`DRAFT` → `REQUESTED` → `NEGOTIATING` → `ACCEPTED` → `ACTIVE` → `COMPLETED` / `DECLINED` / `CANCELLED`), reviews & rating aggregates, business posts & interactions (feed, like toggle, comments), reports & admin moderation (report queue, resolution, status updates).
-- [ ] **Track 6 — Power BI-Adjacent Analytics**: Reporting queries, current-state views, analytics data contracts.
+- [x] **Track 6 — Power BI-Adjacent Analytics**: Curated reporting queries, current-state SQL views (`vw_current_businesses`, `vw_current_users`, `vw_active_services`, `vw_active_needs`, `vw_active_collaborations`, `vw_completed_collaborations`, `vw_business_review_summary`), analytics KPI service, and data integrity auditing.
+
 
 ---
 
