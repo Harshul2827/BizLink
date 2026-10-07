@@ -8,11 +8,21 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 
-// Placeholder views for subsequent track pages
+// Business Pages
+import DashboardPage from './pages/business/DashboardPage';
+import CreateBusinessPage from './pages/business/CreateBusinessPage';
+import BusinessProfilePage from './pages/business/BusinessProfilePage';
+
+// Discovery & Networking Pages
+import DiscoverPage from './pages/discovery/DiscoverPage';
+import ConnectionsPage from './pages/connections/ConnectionsPage';
+import MessagesPage from './pages/messaging/MessagesPage';
+
+// Placeholder for remaining track pages
 function PlaceholderView({ title, description }) {
   return (
     <div className="py-12 max-w-4xl mx-auto space-y-6">
-      <div className="glass-card p-8 rounded-3xl space-y-4">
+      <div className="glass-card p-8 rounded-3xl space-y-4 shadow-xl">
         <h1 className="text-2xl font-bold font-display text-surface-900 dark:text-white">{title}</h1>
         <p className="text-surface-600 dark:text-surface-400 text-sm leading-relaxed">{description}</p>
       </div>
@@ -28,28 +38,32 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/business/:id" element={<BusinessProfilePage />} />
 
         {/* Protected Feature Routes */}
         <Route
-          path="/discover"
+          path="/dashboard"
           element={
             <ProtectedRoute>
-              <PlaceholderView
-                title="Discover Marketplace"
-                description="Rule-based matching and directory discovery across active needs and services."
-              />
+              <DashboardPage />
             </ProtectedRoute>
           }
         />
 
         <Route
-          path="/dashboard"
+          path="/business/create"
           element={
             <ProtectedRoute>
-              <PlaceholderView
-                title="Business Dashboard"
-                description="Manage your business profiles, service offerings, and open commercial needs."
-              />
+              <CreateBusinessPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/discover"
+          element={
+            <ProtectedRoute>
+              <DiscoverPage />
             </ProtectedRoute>
           }
         />
@@ -58,10 +72,7 @@ export default function App() {
           path="/connections"
           element={
             <ProtectedRoute>
-              <PlaceholderView
-                title="B2B Connections"
-                description="Manage incoming and outgoing B2B connection requests and verified network relationships."
-              />
+              <ConnectionsPage />
             </ProtectedRoute>
           }
         />
@@ -70,10 +81,7 @@ export default function App() {
           path="/messages"
           element={
             <ProtectedRoute>
-              <PlaceholderView
-                title="Messages & Conversations"
-                description="Real-time direct messaging between connected commercial partners."
-              />
+              <MessagesPage />
             </ProtectedRoute>
           }
         />
@@ -84,7 +92,7 @@ export default function App() {
             <ProtectedRoute>
               <PlaceholderView
                 title="Collaborations & Contracts"
-                description="Track lifecycle collaborations from draft proposal to completion and reviews."
+                description="Manage structured B2B collaborations across negotiation, execution, and milestone review phases."
               />
             </ProtectedRoute>
           }
@@ -95,8 +103,8 @@ export default function App() {
           element={
             <ProtectedRoute>
               <PlaceholderView
-                title="Business Feed"
-                description="Commercial updates, opportunity announcements, and partner milestone feed."
+                title="Business Opportunity Feed"
+                description="Corporate announcements, requirement postings, and partner achievements."
               />
             </ProtectedRoute>
           }
@@ -108,7 +116,7 @@ export default function App() {
             <ProtectedRoute requiredRole="ADMIN">
               <PlaceholderView
                 title="Administration & Moderation"
-                description="Administrative queue for entity verification, user reports resolution, and platform moderation."
+                description="Enterprise moderation queue for business verification, user reports resolution, and audit logs."
               />
             </ProtectedRoute>
           }
