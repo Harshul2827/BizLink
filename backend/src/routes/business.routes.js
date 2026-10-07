@@ -1,5 +1,6 @@
 const express = require('express');
 const businessController = require('../controllers/business.controller');
+const reviewController = require('../controllers/review.controller');
 const { authenticate, optionalAuth, requireRole } = require('../middleware/auth');
 const { requireBusinessRole } = require('../middleware/businessAuth');
 const validate = require('../middleware/validate');
@@ -124,6 +125,12 @@ router.delete(
   authenticate,
   requireBusinessRole('ADMIN'),
   businessController.deleteNeed
+);
+
+// ─── Business Reviews ────────────────────────────────────────────────────────
+router.get(
+  '/:id/reviews',
+  reviewController.getBusinessReviews
 );
 
 module.exports = router;
