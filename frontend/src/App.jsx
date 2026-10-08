@@ -3,32 +3,30 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import AppLayout from './layouts/AppLayout';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
-// Auth Pages
+// Track 1: Auth Pages
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 
-// Business Pages
+// Track 2: Business Pages
 import DashboardPage from './pages/business/DashboardPage';
 import CreateBusinessPage from './pages/business/CreateBusinessPage';
 import BusinessProfilePage from './pages/business/BusinessProfilePage';
 
-// Discovery & Networking Pages
+// Track 3: Discovery
 import DiscoverPage from './pages/discovery/DiscoverPage';
+
+// Track 4: Networking & Messaging
 import ConnectionsPage from './pages/connections/ConnectionsPage';
 import MessagesPage from './pages/messaging/MessagesPage';
 
-// Placeholder for remaining track pages
-function PlaceholderView({ title, description }) {
-  return (
-    <div className="py-12 max-w-4xl mx-auto space-y-6">
-      <div className="glass-card p-8 rounded-3xl space-y-4 shadow-xl">
-        <h1 className="text-2xl font-bold font-display text-surface-900 dark:text-white">{title}</h1>
-        <p className="text-surface-600 dark:text-surface-400 text-sm leading-relaxed">{description}</p>
-      </div>
-    </div>
-  );
-}
+// Track 5: Collaborations, Posts & Admin
+import CollaborationsPage from './pages/collaborations/CollaborationsPage';
+import PostsPage from './pages/posts/PostsPage';
+import AdminPage from './pages/admin/AdminPage';
+
+// Track 6: Analytics
+import AnalyticsPage from './pages/analytics/AnalyticsPage';
 
 export default function App() {
   return (
@@ -90,10 +88,7 @@ export default function App() {
           path="/collaborations"
           element={
             <ProtectedRoute>
-              <PlaceholderView
-                title="Collaborations & Contracts"
-                description="Manage structured B2B collaborations across negotiation, execution, and milestone review phases."
-              />
+              <CollaborationsPage />
             </ProtectedRoute>
           }
         />
@@ -102,10 +97,16 @@ export default function App() {
           path="/posts"
           element={
             <ProtectedRoute>
-              <PlaceholderView
-                title="Business Opportunity Feed"
-                description="Corporate announcements, requirement postings, and partner achievements."
-              />
+              <PostsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/analytics"
+          element={
+            <ProtectedRoute>
+              <AnalyticsPage />
             </ProtectedRoute>
           }
         />
@@ -114,10 +115,7 @@ export default function App() {
           path="/admin"
           element={
             <ProtectedRoute requiredRole="ADMIN">
-              <PlaceholderView
-                title="Administration & Moderation"
-                description="Enterprise moderation queue for business verification, user reports resolution, and audit logs."
-              />
+              <AdminPage />
             </ProtectedRoute>
           }
         />

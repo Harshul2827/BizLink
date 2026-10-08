@@ -15,7 +15,8 @@ import {
   Sun,
   Menu,
   X,
-  Plus
+  Plus,
+  BarChart3
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -44,6 +45,7 @@ export default function Navbar() {
     { label: 'Connections', href: '/connections', icon: Users2 },
     { label: 'Messages', href: '/messages', icon: MessageSquare },
     { label: 'Collaborations', href: '/collaborations', icon: Building2 },
+    { label: 'Analytics', href: '/analytics', icon: BarChart3 },
     ...(isAdmin ? [{ label: 'Admin', href: '/admin', icon: ShieldCheck }] : [])
   ] : [];
 
