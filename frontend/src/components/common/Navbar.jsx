@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -24,18 +24,29 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [bizDropdownOpen, setBizDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(document.documentElement.classList.contains('dark'));
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('theme');
+      if (stored) return stored === 'dark';
+      return document.documentElement.classList.contains('dark');
+    }
+    return false;
+  });
   const navigate = useNavigate();
   const location = useLocation();
 
-  const toggleDarkMode = () => {
-    const isDark = !darkMode;
-    setDarkMode(isDark);
-    if (isDark) {
+  useEffect(() => {
+    if (darkMode) {
       document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
     }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev);
   };
 
   const navLinks = isAuthenticated ? [
@@ -52,7 +63,7 @@ export default function Navbar() {
   const isActive = (path) => location.pathname.startsWith(path);
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#FFFFFF] dark:bg-[#131C2E] border-b border-[#D9E2EC] dark:border-[#22314A] shadow-[0_1px_2px_0_rgba(0,0,0,0.03)] transition-colors">
+    <nav className="sticky top-0 z-50 bg-white dark:bg-[#131C2E] border-b border-[#D9E2EC] dark:border-[#22314A] shadow-[0_1px_2px_0_rgba(0,0,0,0.03)] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
@@ -97,7 +108,7 @@ export default function Navbar() {
             {/* Theme Toggle */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg text-[#5E6C76] hover:text-[#1D2226] dark:text-[#94A3B8] dark:hover:text-white hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] transition-colors"
+              className="p-2 rounded-lg text-[#5E6C76] hover:text-[#1D2226] dark:text-[#94A3B8] dark:hover:text-white hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] transition-colors cursor-pointer"
               title="Toggle theme"
             >
               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -110,7 +121,7 @@ export default function Navbar() {
                   <div className="relative hidden md:block">
                     <button
                       onClick={() => setBizDropdownOpen(!bizDropdownOpen)}
-                      className="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-[#D9E2EC] dark:border-[#22314A] bg-[#FFFFFF] dark:bg-[#1A263D] text-xs font-semibold text-[#1D2226] dark:text-white hover:border-[#0A66C2] transition-colors"
+                      className="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-[#D9E2EC] dark:border-[#22314A] bg-white dark:bg-[#1A263D] text-xs font-semibold text-[#1D2226] dark:text-white hover:border-[#0A66C2] transition-colors cursor-pointer"
                     >
                       <Building2 className="w-3.5 h-3.5 text-[#0A66C2]" />
                       <span className="max-w-[130px] truncate">
@@ -121,7 +132,7 @@ export default function Navbar() {
 
                     {bizDropdownOpen && (
                       <div
-                        className="absolute right-0 mt-2 w-60 rounded-xl bg-[#FFFFFF] dark:bg-[#131C2E] shadow-lg py-2 z-50 border border-[#D9E2EC] dark:border-[#22314A]"
+                        className="absolute right-0 mt-2 w-60 rounded-xl bg-white dark:bg-[#131C2E] shadow-lg py-2 z-50 border border-[#D9E2EC] dark:border-[#22314A]"
                         onMouseLeave={() => setBizDropdownOpen(false)}
                       >
                         <div className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#5E6C76] dark:text-[#94A3B8] border-b border-[#D9E2EC] dark:border-[#22314A]">
@@ -134,7 +145,7 @@ export default function Navbar() {
                               setActiveBusiness(biz);
                               setBizDropdownOpen(false);
                             }}
-                            className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] transition-colors ${
+                            className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] transition-colors cursor-pointer ${
                               activeBusiness?.business_id === biz.business_id
                                 ? 'text-[#0A66C2] dark:text-[#388FE5] font-bold bg-[#EEF6FC] dark:bg-[#1E2E48]'
                                 : 'text-[#1D2226] dark:text-white'
@@ -178,7 +189,7 @@ export default function Navbar() {
 
                   {dropdownOpen && (
                     <div
-                      className="absolute right-0 mt-2 w-56 rounded-xl bg-[#FFFFFF] dark:bg-[#131C2E] shadow-xl py-2 z-50 border border-[#D9E2EC] dark:border-[#22314A]"
+                      className="absolute right-0 mt-2 w-56 rounded-xl bg-white dark:bg-[#131C2E] shadow-xl py-2 z-50 border border-[#D9E2EC] dark:border-[#22314A]"
                       onMouseLeave={() => setDropdownOpen(false)}
                     >
                       <div className="px-4 py-3 border-b border-[#D9E2EC] dark:border-[#22314A]">
@@ -213,7 +224,7 @@ export default function Navbar() {
                       <div className="border-t border-[#D9E2EC] dark:border-[#22314A] pt-1">
                         <button
                           onClick={logout}
-                          className="w-full text-left px-4 py-2 text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center space-x-2 font-semibold"
+                          className="w-full text-left px-4 py-2 text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center space-x-2 font-semibold cursor-pointer"
                         >
                           <LogOut className="w-3.5 h-3.5" />
                           <span>Sign Out</span>
@@ -226,7 +237,7 @@ export default function Navbar() {
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="lg:hidden p-2 rounded-lg text-[#5E6C76] dark:text-[#94A3B8] hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D]"
+                  className="lg:hidden p-2 rounded-lg text-[#5E6C76] dark:text-[#94A3B8] hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] cursor-pointer"
                 >
                   {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </button>

@@ -6,12 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="BizLink — High-trust B2B collaboration platform connecting verified businesses through rule-based need matching, secure messaging, and validated reviews." />
     <title>BizLink | B2B Collaboration & Trust Platform</title>
+    <!-- Dark Mode Init Script -->
+    <script>
+      (function() {
+        try {
+          const theme = localStorage.getItem('theme');
+          if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (_) {}
+      })();
+    </script>
     <!-- Modern Typography: Inter & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   </head>
-  <body class="bg-surface-50 text-surface-900 dark:bg-surface-950 dark:text-surface-50 antialiased min-h-screen">
+  <body class="bg-white text-surface-900 dark:bg-surface-950 dark:text-surface-50 antialiased min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

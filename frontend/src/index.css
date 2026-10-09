@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-brand-50: #eef6fc;
   --color-brand-100: #d7ebf9;
@@ -20,17 +22,22 @@
   --color-accent-600: #0d9488;
   --color-accent-700: #0f766e;
 
-  --color-surface-bg: #f3f6f8;
-  --color-surface-card: #ffffff;
-  --color-surface-border: #d9e2ec;
-  --color-surface-border-subtle: #e9eff5;
-  --color-surface-text-primary: #1d2226;
-  --color-surface-text-secondary: #5e6c76;
+  --color-surface-50: #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-200: #e2e8f0;
+  --color-surface-300: #cbd5e1;
+  --color-surface-400: #94a3b8;
+  --color-surface-500: #64748b;
+  --color-surface-600: #475569;
+  --color-surface-700: #334155;
+  --color-surface-800: #1e293b;
+  --color-surface-900: #0f172a;
+  --color-surface-950: #020617;
 }
 
 @layer base {
   :root {
-    --bg-main: #f3f6f8;
+    --bg-main: #ffffff;
     --card-bg: #ffffff;
     --border-main: #d9e2ec;
     --text-primary: #1d2226;
