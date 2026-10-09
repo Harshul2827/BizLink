@@ -48,62 +48,59 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-lg w-full space-y-8 glass-card p-8 sm:p-10 rounded-3xl shadow-2xl border border-surface-200/80 dark:border-surface-800/80 relative overflow-hidden">
+    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-lg w-full space-y-6 bg-white dark:bg-surface-900 p-8 sm:p-10 rounded-2xl shadow-enterprise border border-surface-200 dark:border-surface-800">
         
-        {/* Accent Top Bar */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-500 via-indigo-500 to-violet-500" />
-
         <div className="text-center">
-          <div className="mx-auto w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center shadow-lg shadow-brand-500/30 mb-4">
+          <div className="mx-auto w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm mb-4">
             <Building2 className="w-6 h-6" />
           </div>
-          <h2 className="text-2xl sm:text-3xl font-display font-bold text-surface-900 dark:text-white tracking-tight">
+          <h2 className="text-2xl font-display font-bold text-surface-900 dark:text-white tracking-tight">
             Create your account
           </h2>
-          <p className="mt-2 text-sm text-surface-600 dark:text-surface-400">
-            Join the verified B2B collaboration and opportunity network
+          <p className="mt-1.5 text-xs text-surface-500 dark:text-surface-400">
+            Join the verified B2B collaboration and commercial networking platform
           </p>
         </div>
 
         {/* Role Selector Tabs */}
-        <div className="grid grid-cols-2 gap-3 p-1.5 rounded-2xl bg-surface-100 dark:bg-surface-900/60 border border-surface-200 dark:border-surface-800">
+        <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-surface-100 dark:bg-surface-800/60 border border-surface-200 dark:border-surface-700">
           <button
             type="button"
             onClick={() => setRole('OWNER')}
-            className={`py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all ${
+            className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition-all cursor-pointer ${
               role === 'OWNER'
-                ? 'bg-white dark:bg-surface-800 text-brand-600 dark:text-brand-400 shadow-md'
+                ? 'bg-white dark:bg-surface-900 text-brand-600 dark:text-brand-400 shadow-sm border border-surface-200 dark:border-surface-700'
                 : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white'
             }`}
           >
-            <Building2 className="w-4 h-4" />
+            <Building2 className="w-3.5 h-3.5" />
             <span>Business Owner</span>
           </button>
           <button
             type="button"
             onClick={() => setRole('PARTNER')}
-            className={`py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center space-x-2 transition-all ${
+            className={`py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center space-x-1.5 transition-all cursor-pointer ${
               role === 'PARTNER'
-                ? 'bg-white dark:bg-surface-800 text-brand-600 dark:text-brand-400 shadow-md'
+                ? 'bg-white dark:bg-surface-900 text-brand-600 dark:text-brand-400 shadow-sm border border-surface-200 dark:border-surface-700'
                 : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white'
             }`}
           >
-            <CheckCircle2 className="w-4 h-4" />
+            <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Solution Partner</span>
           </button>
         </div>
 
         {error && (
-          <div className="flex items-center space-x-2 p-3.5 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-700 dark:text-rose-300 text-sm">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <div className="flex items-center space-x-2 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
+            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
               Full Name *
             </label>
             <div className="relative">
@@ -116,14 +113,14 @@ export default function RegisterPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Jane Doe"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all"
+                className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
+              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
                 Work Email *
               </label>
               <div className="relative">
@@ -136,13 +133,13 @@ export default function RegisterPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="jane@company.com"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
+              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
                 Phone Number
               </label>
               <div className="relative">
@@ -154,14 +151,14 @@ export default function RegisterPage() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+1 (555) 000-0000"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
                 />
               </div>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
+            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
               Password *
             </label>
             <div className="relative">
@@ -174,7 +171,7 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="At least 8 characters"
-                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all"
+                className="w-full pl-10 pr-10 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
               />
               <button
                 type="button"
@@ -189,24 +186,24 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3 px-4 mt-2 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-medium text-sm shadow-lg shadow-brand-500/25 flex items-center justify-center space-x-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full py-2.5 px-4 mt-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-sm flex items-center justify-center space-x-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {submitting ? (
-              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             ) : (
               <>
-                <span>Complete Registration</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>Agree & Join</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </>
             )}
           </button>
         </form>
 
-        <div className="pt-4 border-t border-surface-200/60 dark:border-surface-800 text-center">
-          <p className="text-xs text-surface-600 dark:text-surface-400">
-            Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-brand-600 dark:text-brand-400 hover:underline">
-              Sign in instead
+        <div className="pt-3 border-t border-surface-200 dark:border-surface-800 text-center">
+          <p className="text-xs text-surface-500 dark:text-surface-400">
+            Already on BizLink?{' '}
+            <Link to="/login" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 hover:underline">
+              Sign in
             </Link>
           </p>
         </div>
