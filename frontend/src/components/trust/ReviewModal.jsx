@@ -51,38 +51,38 @@ export default function ReviewModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative border border-surface-200 dark:border-surface-700">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-white dark:bg-surface-900 w-full max-w-md rounded-2xl p-6 sm:p-7 space-y-5 shadow-2xl relative border border-surface-200 dark:border-surface-700">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-surface-100 dark:border-surface-800">
+        <div className="flex items-center justify-between pb-3 border-b border-surface-200 dark:border-surface-800">
           <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-xl bg-amber-500 text-white">
+            <div className="p-2 rounded-lg bg-amber-500 text-white">
               <Award className="w-4 h-4" />
             </div>
-            <h3 className="font-display font-bold text-lg text-surface-900 dark:text-white">
-              Author Verified Review
+            <h3 className="font-display font-bold text-base text-surface-900 dark:text-white">
+              Verified Partner Review
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-surface-400 hover:text-surface-600 dark:hover:text-surface-200"
+            className="p-1 rounded-lg text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="space-y-1">
+        <div className="space-y-0.5">
           <p className="text-xs text-surface-500 dark:text-surface-400">
-            Reviewing partner on completed collaboration:
+            Reviewing partner on completed engagement:
           </p>
-          <p className="text-sm font-bold text-surface-900 dark:text-white">
+          <p className="text-xs font-bold text-surface-900 dark:text-white">
             {partner?.business_name || 'Partner Business'}
           </p>
         </div>
 
         {error && (
-          <div className="flex items-center space-x-2 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-700 dark:text-rose-300 text-xs">
+          <div className="flex items-center space-x-2 p-2.5 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
@@ -90,10 +90,10 @@ export default function ReviewModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-2">
+            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
               Rating (1 to 5 Stars) *
             </label>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1.5">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   type="button"
@@ -101,10 +101,10 @@ export default function ReviewModal({
                   onClick={() => setRating(star)}
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
-                  className="p-1 text-2xl transition-transform hover:scale-110 focus:outline-none"
+                  className="p-1 text-2xl transition-transform hover:scale-110 focus:outline-none cursor-pointer"
                 >
                   <Star
-                    className={`w-7 h-7 ${
+                    className={`w-6 h-6 ${
                       (hoverRating || rating) >= star
                         ? 'text-amber-400 fill-amber-400'
                         : 'text-surface-300 dark:text-surface-700'
@@ -112,37 +112,37 @@ export default function ReviewModal({
                   />
                 </button>
               ))}
-              <span className="text-sm font-bold text-surface-700 dark:text-surface-300 ml-2">
+              <span className="text-xs font-bold text-surface-700 dark:text-surface-300 ml-2">
                 {hoverRating || rating} / 5
               </span>
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
-              Review Title & Feedback
+            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
+              Review & Feedback Summary
             </label>
             <textarea
               rows={3}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Share details about performance, reliability, and deliverable quality..."
-              className="w-full p-3 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/50 resize-none"
+              placeholder="Share details about performance, reliability, communication, and deliverable quality..."
+              className="w-full p-3 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-colors resize-none"
             />
           </div>
 
-          <div className="flex items-center justify-end space-x-3 pt-2">
+          <div className="flex items-center justify-end space-x-2 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-medium text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800"
+              className="px-3.5 py-2 rounded-lg text-xs font-medium text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-white text-xs font-semibold shadow-lg shadow-amber-500/25 disabled:opacity-60 cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold shadow-sm disabled:opacity-60 transition-colors cursor-pointer"
             >
               {submitting ? 'Submitting...' : 'Submit Verified Review'}
             </button>
