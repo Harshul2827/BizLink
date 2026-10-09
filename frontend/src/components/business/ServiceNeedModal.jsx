@@ -102,29 +102,29 @@ export default function ServiceNeedModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="glass-card w-full max-w-lg rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative border border-surface-200 dark:border-surface-700">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-white dark:bg-surface-900 w-full max-w-lg rounded-2xl p-6 sm:p-7 space-y-5 shadow-2xl relative border border-surface-200 dark:border-surface-700">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-surface-100 dark:border-surface-800">
+        <div className="flex items-center justify-between pb-3 border-b border-surface-200 dark:border-surface-800">
           <div className="flex items-center space-x-2.5">
-            <div className={`p-2 rounded-xl text-white ${isService ? 'bg-brand-600' : 'bg-violet-600'}`}>
+            <div className={`p-2 rounded-lg text-white ${isService ? 'bg-brand-600' : 'bg-accent-500'}`}>
               <Briefcase className="w-4 h-4" />
             </div>
-            <h3 className="font-display font-bold text-lg text-surface-900 dark:text-white">
-              {isEditing ? `Edit ${isService ? 'Service' : 'Commercial Need'}` : `Add New ${isService ? 'Service Offer' : 'Commercial Need'}`}
+            <h3 className="font-display font-bold text-base text-surface-900 dark:text-white">
+              {isEditing ? `Edit ${isService ? 'Service' : 'Commercial Need'}` : `Add New ${isService ? 'Service' : 'Commercial Need'}`}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-surface-400 hover:text-surface-600 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+            className="p-1 rounded-lg text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {error && (
-          <div className="flex items-center space-x-2 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-700 dark:text-rose-300 text-xs">
+          <div className="flex items-center space-x-2 p-2.5 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
@@ -132,7 +132,7 @@ export default function ServiceNeedModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
+            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
               Title / Description *
             </label>
             <input
@@ -141,19 +141,19 @@ export default function ServiceNeedModal({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder={isService ? 'e.g. Cloud Security Architecture & Audit' : 'e.g. ISO 27001 Compliance Lead Auditor Needed'}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50"
+              className="w-full px-3.5 py-2 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
+            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
               Category
             </label>
             <div className="relative">
               <select
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50"
+                className="w-full px-3.5 py-2 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors cursor-pointer"
               >
                 <option value="">Select category (optional)</option>
                 {categories.map((c) => (
@@ -167,7 +167,7 @@ export default function ServiceNeedModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
+              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
                 {isService ? 'Price Min ($)' : 'Budget Min ($)'}
               </label>
               <div className="relative">
@@ -178,13 +178,13 @@ export default function ServiceNeedModal({
                   value={minVal}
                   onChange={(e) => setMinVal(e.target.value)}
                   placeholder="0.00"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50"
+                  className="w-full px-3.5 py-2 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
+              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
                 {isService ? 'Price Max ($)' : 'Budget Max ($)'}
               </label>
               <input
@@ -194,14 +194,14 @@ export default function ServiceNeedModal({
                 value={maxVal}
                 onChange={(e) => setMaxVal(e.target.value)}
                 placeholder="5000.00"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50"
+                className="w-full px-3.5 py-2 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
               />
             </div>
           </div>
 
           {!isService && (
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-surface-700 dark:text-surface-300 mb-1">
+              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
                 Target Deadline
               </label>
               <div className="relative">
@@ -209,26 +209,26 @@ export default function ServiceNeedModal({
                   type="date"
                   value={deadline}
                   onChange={(e) => setDeadline(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-surface-50 dark:bg-surface-900/80 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50"
+                  className="w-full px-3.5 py-2 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-accent-500/30 focus:border-accent-500 transition-colors"
                 />
               </div>
             </div>
           )}
 
-          <div className="flex items-center justify-end space-x-3 pt-3">
+          <div className="flex items-center justify-end space-x-2 pt-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-sm font-medium text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors"
+              className="px-3.5 py-2 rounded-lg text-xs font-medium text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className={`px-5 py-2 rounded-xl text-white text-sm font-semibold shadow-lg transition-all ${
-                isService ? 'bg-brand-600 hover:bg-brand-500 shadow-brand-500/25' : 'bg-violet-600 hover:bg-violet-500 shadow-violet-500/25'
-              } disabled:opacity-60 cursor-pointer`}
+              className={`px-4 py-2 rounded-lg text-white text-xs font-semibold shadow-sm transition-colors cursor-pointer ${
+                isService ? 'bg-brand-600 hover:bg-brand-700' : 'bg-accent-500 hover:bg-accent-600'
+              } disabled:opacity-60`}
             >
               {submitting ? 'Saving...' : isEditing ? 'Update' : 'Publish'}
             </button>

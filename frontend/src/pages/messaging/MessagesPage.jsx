@@ -89,21 +89,21 @@ export default function MessagesPage() {
 
   return (
     <div className="max-w-6xl mx-auto py-2">
-      <div className="glass-card rounded-3xl shadow-2xl overflow-hidden border border-surface-200 dark:border-surface-800 grid grid-cols-1 md:grid-cols-12 min-h-[75vh]">
+      <div className="bg-white dark:bg-surface-900 rounded-2xl shadow-enterprise overflow-hidden border border-surface-200 dark:border-surface-800 grid grid-cols-1 md:grid-cols-12 min-h-[75vh]">
         
         {/* ─── Left Pane: Conversations List ─────────────────────────── */}
-        <div className="md:col-span-4 border-r border-surface-200/60 dark:border-surface-800 flex flex-col bg-surface-50/50 dark:bg-surface-900/30">
-          <div className="p-4 border-b border-surface-200/60 dark:border-surface-800 flex items-center justify-between">
+        <div className="md:col-span-4 border-r border-surface-200 dark:border-surface-800 flex flex-col bg-surface-50/70 dark:bg-surface-900/60">
+          <div className="p-4 border-b border-surface-200 dark:border-surface-800 flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <MessageSquare className="w-5 h-5 text-brand-600 dark:text-brand-400" />
-              <h2 className="font-bold text-base text-surface-900 dark:text-white">Conversations</h2>
+              <MessageSquare className="w-4 h-4 text-brand-600 dark:text-brand-400" />
+              <h2 className="font-bold text-sm text-surface-900 dark:text-white">Messaging</h2>
             </div>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-300 font-semibold">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 font-semibold border border-brand-200 dark:border-brand-800">
               {conversations.length}
             </span>
           </div>
 
-          <div className="flex-1 overflow-y-auto divide-y divide-surface-100 dark:divide-surface-800/60">
+          <div className="flex-1 overflow-y-auto divide-y divide-surface-200/60 dark:divide-surface-800/60">
             {loadingConvs ? (
               <div className="p-8 text-center text-xs text-surface-500">Loading chats...</div>
             ) : conversations.length === 0 ? (
@@ -121,13 +121,13 @@ export default function MessagesPage() {
                   <button
                     key={c.connection_id}
                     onClick={() => setActiveConnectionId(c.connection_id)}
-                    className={`w-full text-left p-4 transition-all flex items-start space-x-3 cursor-pointer ${
+                    className={`w-full text-left p-3.5 transition-colors flex items-start space-x-3 cursor-pointer ${
                       isSelected
-                        ? 'bg-brand-50/80 dark:bg-brand-950/40 border-l-4 border-brand-600'
-                        : 'hover:bg-surface-100/60 dark:hover:bg-surface-800/40'
+                        ? 'bg-blue-50/90 dark:bg-brand-950/50 border-l-3 border-brand-600'
+                        : 'hover:bg-surface-100/70 dark:hover:bg-surface-800/50'
                     }`}
                   >
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm">
                       {partnerName ? partnerName[0] : 'B'}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -153,35 +153,35 @@ export default function MessagesPage() {
         </div>
 
         {/* ─── Right Pane: Active Message Thread ──────────────────────── */}
-        <div className="md:col-span-8 flex flex-col justify-between h-full bg-white/40 dark:bg-surface-950/40">
+        <div className="md:col-span-8 flex flex-col justify-between h-full bg-white dark:bg-surface-900">
           {activeConnectionId ? (
             <>
               {/* Thread Header */}
-              <div className="p-4 border-b border-surface-200/60 dark:border-surface-800 flex items-center space-x-3 backdrop-blur-sm">
-                <div className="w-9 h-9 rounded-xl bg-brand-100 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center font-bold text-xs">
+              <div className="p-3.5 border-b border-surface-200 dark:border-surface-800 flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 flex items-center justify-center font-bold text-xs">
                   <Building2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-surface-900 dark:text-white">
+                  <h3 className="font-bold text-xs sm:text-sm text-surface-900 dark:text-white">
                     {activeConv
                       ? (Number(activeConv.requester_business_id) === Number(activeBusiness?.business_id)
                           ? activeConv.receiver_business_name
                           : activeConv.requester_business_name)
                       : 'Commercial Partner'}
                   </h3>
-                  <p className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
+                  <p className="text-[10px] text-accent-600 dark:text-accent-400 font-medium">
                     Verified Direct Commercial Channel
                   </p>
                 </div>
               </div>
 
               {/* Message Timeline */}
-              <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-4 max-h-[55vh]">
+              <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-3.5 max-h-[55vh] bg-surface-50/30 dark:bg-surface-900/30">
                 {loadingMsgs ? (
                   <div className="text-center text-xs text-surface-400 py-8">Loading chat history...</div>
                 ) : messages.length === 0 ? (
                   <div className="text-center text-xs text-surface-400 py-12">
-                    No messages in this conversation yet. Send a greeting below.
+                    No messages in this conversation yet. Send a message below.
                   </div>
                 ) : (
                   messages.map((m) => {
@@ -191,14 +191,14 @@ export default function MessagesPage() {
                         key={m.message_id}
                         className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
                       >
-                        <div className="text-[10px] text-surface-400 mb-1 px-1">
+                        <div className="text-[10px] text-surface-400 mb-0.5 px-1">
                           {isMe ? 'You' : m.sender_business_name || m.sender_name}
                         </div>
                         <div
-                          className={`max-w-md p-3.5 rounded-2xl text-xs leading-relaxed shadow-sm ${
+                          className={`max-w-md p-3 rounded-xl text-xs leading-relaxed ${
                             isMe
-                              ? 'bg-gradient-to-r from-brand-600 to-indigo-600 text-white rounded-br-none'
-                              : 'bg-surface-100 dark:bg-surface-800 text-surface-900 dark:text-surface-100 rounded-bl-none border border-surface-200/50 dark:border-surface-700/50'
+                              ? 'bg-brand-600 text-white rounded-br-none shadow-sm'
+                              : 'bg-surface-100 dark:bg-surface-800 text-surface-900 dark:text-surface-100 rounded-bl-none border border-surface-200 dark:border-surface-700'
                           }`}
                         >
                           {m.body}
@@ -215,18 +215,18 @@ export default function MessagesPage() {
               </div>
 
               {/* Message Composer */}
-              <form onSubmit={handleSendMessage} className="p-3 sm:p-4 border-t border-surface-200/60 dark:border-surface-800 flex items-center space-x-2">
+              <form onSubmit={handleSendMessage} className="p-3 border-t border-surface-200 dark:border-surface-800 flex items-center space-x-2 bg-white dark:bg-surface-900">
                 <input
                   type="text"
                   value={bodyText}
                   onChange={(e) => setBodyText(e.target.value)}
-                  placeholder="Type a secure message..."
-                  className="flex-1 px-4 py-2.5 rounded-2xl bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500/50"
+                  placeholder="Write a message..."
+                  className="flex-1 px-3.5 py-2 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={sending || !bodyText.trim()}
-                  className="p-2.5 rounded-2xl bg-brand-600 hover:bg-brand-500 text-white shadow-md shadow-brand-500/20 disabled:opacity-50 transition-all cursor-pointer"
+                  className="p-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white shadow-sm disabled:opacity-50 transition-colors cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
                 </button>
@@ -234,8 +234,8 @@ export default function MessagesPage() {
             </>
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-2 text-surface-400">
-              <MessageSquare className="w-12 h-12" />
-              <p className="text-sm font-semibold">Select a conversation to start messaging</p>
+              <MessageSquare className="w-10 h-10" />
+              <p className="text-xs font-semibold">Select a conversation to start messaging</p>
             </div>
           )}
         </div>
