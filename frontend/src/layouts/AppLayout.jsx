@@ -4,34 +4,29 @@ import Navbar from '../components/common/Navbar';
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen flex flex-col bg-surface-50 dark:bg-surface-950 text-surface-900 dark:text-surface-50 transition-colors duration-200">
-      {/* Dynamic background ambient glow */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-brand-500/10 dark:bg-brand-500/5 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 -left-40 w-96 h-96 bg-violet-500/10 dark:bg-violet-500/5 rounded-full blur-3xl" />
-      </div>
-
+    <div className="min-h-screen flex flex-col bg-[#F3F6F8] dark:bg-[#0B1120] text-[#1D2226] dark:text-[#F1F5F9] transition-colors duration-200">
       {/* Navigation Header */}
       <Navbar />
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Outlet />
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-surface-200 dark:border-surface-800/80 bg-surface-100/50 dark:bg-surface-900/30 backdrop-blur-sm relative z-10 py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-surface-500 dark:text-surface-400 gap-4">
+      {/* Corporate Professional Footer */}
+      <footer className="border-t border-[#D9E2EC] dark:border-[#22314A] bg-[#FFFFFF] dark:bg-[#131C2E] py-6 mt-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-[#5E6C76] dark:text-[#94A3B8] gap-4">
           <div className="flex items-center space-x-2">
-            <span className="font-semibold text-surface-700 dark:text-surface-300">BizLink Platform</span>
+            <span className="font-semibold text-[#1D2226] dark:text-white">BizLink</span>
             <span>&bull;</span>
-            <span>High-Trust B2B Collaboration</span>
+            <span>Enterprise B2B Collaboration & Trust Platform</span>
           </div>
           <div className="flex items-center space-x-6">
-            <a href="#privacy" className="hover:text-surface-900 dark:hover:text-white transition-colors">Privacy</a>
-            <a href="#terms" className="hover:text-surface-900 dark:hover:text-white transition-colors">Terms</a>
-            <a href="#support" className="hover:text-surface-900 dark:hover:text-white transition-colors">Support</a>
-            <span>&copy; {new Date().getFullYear()} BizLink. All rights reserved.</span>
+            <a href="#about" className="hover:text-[#0A66C2] transition-colors">About</a>
+            <a href="#privacy" className="hover:text-[#0A66C2] transition-colors">Privacy Policy</a>
+            <a href="#terms" className="hover:text-[#0A66C2] transition-colors">Terms of Service</a>
+            <a href="#support" className="hover:text-[#0A66C2] transition-colors">Help Center</a>
+            <span>&copy; {new Date().getFullYear()} BizLink Corporation.</span>
           </div>
         </div>
       </footer>

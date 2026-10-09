@@ -9,39 +9,47 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#f0f4fe',
-          100: '#dde6fc',
-          200: '#c2d4fb',
-          300: '#99baf8',
-          400: '#6997f3',
-          500: '#4373eb',
-          600: '#2d54df',
-          700: '#2441cc',
-          800: '#2236a5',
-          900: '#203183',
-          950: '#141e50'
+          50: '#eef6fc',
+          100: '#d7ebf9',
+          200: '#b5daf4',
+          300: '#81c2ee',
+          400: '#46a4e4',
+          500: '#1b8ad6',
+          600: '#0a66c2', // Professional Blue
+          700: '#0055a5',
+          800: '#004182', // Dark Blue
+          900: '#002d5b',
+          950: '#001c3b'
+        },
+        accent: {
+          50: '#f0fdfa',
+          100: '#ccfbf1',
+          200: '#99f6e4',
+          300: '#5eead4',
+          400: '#2dd4bf',
+          500: '#14b8a6', // Growth Teal
+          600: '#0d9488',
+          700: '#0f766e',
+          800: '#115e59',
+          900: '#134e4a'
         },
         surface: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-          950: '#020617'
+          bg: '#f3f6f8',
+          card: '#ffffff',
+          border: '#d9e2ec',
+          borderSubtle: '#e9eff5',
+          textPrimary: '#1d2226',
+          textSecondary: '#5e6c76'
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        display: ['Outfit', 'Inter', 'sans-serif']
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        display: ['Inter', 'system-ui', 'sans-serif']
       },
       boxShadow: {
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.08)',
-        'glass-dark': '0 8px 32px 0 rgba(0, 0, 0, 0.37)'
+        'enterprise': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
+        'enterprise-hover': '0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04)',
+        'enterprise-lg': '0 10px 25px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04)'
       }
     },
   },
