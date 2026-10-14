@@ -221,14 +221,11 @@ any major architectural or schema change — nothing proceeds silently.
 
 ## Team
 
-**Group 34 — Department of Computer Engineering**
-Bharatiya Vidya Bhavan's Sardar Patel Institute of Technology, Mumbai
-
-| Name | Roll Number |
+| Name
 |---|---|
-| Harshul Shah | 2024300225 |
-| Rushil Patadia | 2024300161 |
-| Aryan R Shah | 2024300223 |
+| Harshul Shah
+| Rushil Patadia
+| Aryan R Shah
 
 ---
 
