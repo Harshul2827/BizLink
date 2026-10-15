@@ -57,8 +57,8 @@ class UserRepository {
    */
   async create({ email, phone = null, passwordHash, fullName, role = 'OWNER', avatarUrl = null }) {
     const [result] = await pool.query(
-      `INSERT INTO users (email, phone, password_hash, full_name, role, avatar_url)
-       VALUES (?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO users (email, phone, password_hash, full_name, role, avatar_url, last_login_at)
+       VALUES (?, ?, ?, ?, ?, ?, NOW())`,
       [email, phone, passwordHash, fullName, role, avatarUrl]
     );
 
@@ -69,7 +69,8 @@ class UserRepository {
       full_name: fullName,
       role,
       status: 'ACTIVE',
-      avatar_url: avatarUrl
+      avatar_url: avatarUrl,
+      last_login_at: new Date()
     };
   }
 

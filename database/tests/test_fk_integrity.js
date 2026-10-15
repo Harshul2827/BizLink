@@ -103,17 +103,25 @@ async function run() {
   //    We use a temp business to avoid corrupting seed data
   const conn = await db.getConnection();
   try {
-    await conn.execute(
-      `INSERT INTO users (user_id, email, password_hash, full_name, role) VALUES (999, 'temp_cascade@test.com', 'hash', 'Temp User', 'OWNER')`
+    const [uRes] = await conn.execute(
+      `INSERT INTO users (email, password_hash, full_name, role) VALUES ('temp_cascade_${Date.now()}@test.com', 'hash', 'Temp User', 'OWNER')`
     );
-    await conn.execute(
-      `INSERT INTO businesses (business_id, owner_user_id, name, slug, status) VALUES (999, 999, 'Temp Biz', 'temp-biz-cascade', 'ACTIVE')`
+    const tempUserId = uRes.insertId;
+
+    const [bRes] = await conn.execute(
+      `INSERT INTO businesses (owner_user_id, name, slug, status) VALUES (?, 'Temp Biz', 'temp-biz-cascade-${Date.now()}', 'ACTIVE')`,
+      [tempUserId]
     );
-    await conn.execute(
-      `INSERT INTO services (service_id, business_id, title, status) VALUES (999, 999, 'Temp Service', 'ACTIVE')`
+    const tempBizId = bRes.insertId;
+
+    const [sRes] = await conn.execute(
+      `INSERT INTO services (business_id, title, status) VALUES (?, 'Temp Service', 'ACTIVE')`,
+      [tempBizId]
     );
-    await conn.execute(`DELETE FROM businesses WHERE business_id = 999`);
-    const [rows] = await conn.execute(`SELECT COUNT(*) as count FROM services WHERE service_id = 999`);
+    const tempServiceId = sRes.insertId;
+
+    await conn.execute(`DELETE FROM businesses WHERE business_id = ?`, [tempBizId]);
+    const [rows] = await conn.execute(`SELECT COUNT(*) as count FROM services WHERE service_id = ?`, [tempServiceId]);
     const remaining = rows[0]['count'];
     if (remaining === 0) {
       console.log(`  PASS  [services CASCADE DELETE on business] — service removed correctly`);
@@ -123,7 +131,15 @@ async function run() {
       failed++;
     }
     // Cleanup temp user
-    await conn.execute(`DELETE FROM users WHERE user_id = 999`);
+    await conn.execute(`DELETE FROM users WHERE user_id = ?`, [tempUserId]);
+
+    // Reset AUTO_INCREMENT cleanly so tests never pollute table sequences
+    const [[maxU]] = await conn.execute(`SELECT COALESCE(MAX(user_id), 0) + 1 AS next_id FROM users`);
+    await conn.execute(`ALTER TABLE users AUTO_INCREMENT = ${maxU.next_id}`);
+    const [[maxB]] = await conn.execute(`SELECT COALESCE(MAX(business_id), 0) + 1 AS next_id FROM businesses`);
+    await conn.execute(`ALTER TABLE businesses AUTO_INCREMENT = ${maxB.next_id}`);
+    const [[maxS]] = await conn.execute(`SELECT COALESCE(MAX(service_id), 0) + 1 AS next_id FROM services`);
+    await conn.execute(`ALTER TABLE services AUTO_INCREMENT = ${maxS.next_id}`);
   } catch (err) {
     console.error(`  FAIL  [CASCADE DELETE test] — setup error: ${err.message}`);
     failed++;

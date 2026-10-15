@@ -3,6 +3,8 @@
 // Configure via environment variables or defaults for local dev.
 // Usage: const db = require('./db');
 
+const path = require('path');
+require(path.resolve(__dirname, '../../backend/node_modules/dotenv')).config({ path: path.resolve(__dirname, '../../backend/.env') });
 const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({

@@ -20,7 +20,8 @@ async function expect_failure(label, sql, values) {
   } catch (err) {
     if (err.code === 'ER_DUP_ENTRY' || err.code === 'ER_BAD_NULL_ERROR' ||
         err.code === 'ER_CHECK_CONSTRAINT_VIOLATED' || err.code === 'ER_TRUNCATED_WRONG_VALUE_FOR_FIELD' ||
-        err.code === 'ER_DATA_TOO_LONG' || err.errno === 1048 || err.errno === 1292 || err.errno === 3819) {
+        err.code === 'ER_DATA_TOO_LONG' || err.code === 'WARN_DATA_TRUNCATED' || err.code === 'ER_NO_DEFAULT_FOR_FIELD' ||
+        err.errno === 1048 || err.errno === 1265 || err.errno === 1292 || err.errno === 1364 || err.errno === 3819) {
       console.log(`  PASS  [${label}] — correctly rejected (${err.code || err.errno})`);
       passed++;
     } else {

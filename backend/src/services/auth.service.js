@@ -52,7 +52,8 @@ class AuthService {
         fullName: createdUser.full_name,
         role: createdUser.role,
         status: createdUser.status,
-        avatarUrl: createdUser.avatar_url
+        avatarUrl: createdUser.avatar_url,
+        lastLoginAt: createdUser.last_login_at
       },
       token
     };
