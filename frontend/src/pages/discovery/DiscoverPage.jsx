@@ -289,10 +289,20 @@ export default function DiscoverPage() {
 
     try {
       setIsSearching(true);
+      const trimmedQuery = debouncedQuery.trim();
+      const trimmedCity = debouncedCity.trim();
+
       const params = {};
-      if (debouncedQuery) params.q = debouncedQuery;
-      if (selectedCategory) params.category_id = selectedCategory;
-      if (debouncedCity) params.city = debouncedCity;
+      if (trimmedQuery) {
+        params.search = trimmedQuery;
+      }
+      if (selectedCategory) {
+        params.categoryId = Number(selectedCategory);
+      }
+      if (trimmedCity) {
+        params.city = trimmedCity;
+      }
+      params.limit = 50;
 
       let endpoint = '/discover/businesses';
       if (mode === 'services') endpoint = '/discover/services';
@@ -304,7 +314,7 @@ export default function DiscoverPage() {
           setInitialLoading(false);
           return;
         }
-        endpoint = `/discover/needs/${selectedNeedId}/matches`;
+        endpoint = `/discover/matches/needs/${selectedNeedId}`;
       }
 
       const res = await api.get(endpoint, {
@@ -401,6 +411,9 @@ export default function DiscoverPage() {
                   type="text"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') setDebouncedQuery(searchInput.trim());
+                  }}
                   placeholder={`Search ${mode} by keyword...`}
                   className="w-full pl-10 pr-9 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
                 />
@@ -436,6 +449,9 @@ export default function DiscoverPage() {
                   type="text"
                   value={cityInput}
                   onChange={(e) => setCityInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') setDebouncedCity(cityInput.trim());
+                  }}
                   placeholder="Filter by city..."
                   className="w-full pl-3 pr-8 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
                 />
