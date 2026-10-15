@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/client';
@@ -18,6 +18,156 @@ import {
   X
 } from 'lucide-react';
 
+function getStatusBadge(status) {
+  switch (status) {
+    case 'REQUESTED':
+      return 'bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800';
+    case 'NEGOTIATING':
+      return 'bg-[#EFF6FF] text-[#1D4ED8] dark:bg-[#172554] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF]';
+    case 'ACCEPTED':
+      return 'bg-[#F0FDFA] text-[#0F766E] dark:bg-[#042F2E] dark:text-[#2DD4BF] border border-[#CCFBF1] dark:border-[#115E59]';
+    case 'ACTIVE':
+      return 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800';
+    case 'COMPLETED':
+      return 'bg-[#EFF6FF] text-[#1D4ED8] dark:bg-[#172554] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF]';
+    case 'DECLINED':
+      return 'bg-red-50 text-red-800 dark:bg-red-950/60 dark:text-red-300 border border-red-200 dark:border-red-800';
+    case 'CANCELLED':
+      return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border border-gray-300 dark:border-gray-700';
+    default:
+      return 'bg-[#F8FAFC] text-[#475569] border border-[#E2E8F0]';
+  }
+}
+
+// Memoized Collaboration Card
+const CollaborationCard = memo(function CollaborationCard({
+  collab,
+  activeBusinessId,
+  onUpdateStatus,
+  onSelectReview
+}) {
+  const isInitiator = Number(collab.initiator_business_id) === Number(activeBusinessId);
+
+  return (
+    <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-5 rounded-lg shadow-subtle space-y-3 hover:border-[#2563EB]/30 transition-colors flex flex-col justify-between">
+      <div className="space-y-2.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] font-mono font-semibold text-[#64748B] dark:text-[#94A3B8]">
+            ID: #{collab.collaboration_id}
+          </span>
+          <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase ${getStatusBadge(collab.status)}`}>
+            {collab.status}
+          </span>
+        </div>
+
+        <h3 className="font-bold text-sm sm:text-base text-[#0F172A] dark:text-white">
+          {collab.title}
+        </h3>
+
+        <div className="flex items-center space-x-1.5 text-xs text-[#64748B] dark:text-[#94A3B8]">
+          <Building2 className="w-3.5 h-3.5 shrink-0" />
+          <span>Initiated by: <strong className="text-[#0F172A] dark:text-white">{collab.initiator_business_name}</strong></span>
+          {isInitiator && <span className="text-[10px] text-[#2563EB] dark:text-[#3B82F6] font-semibold">(You)</span>}
+        </div>
+
+        {(collab.start_date || collab.end_date) && (
+          <div className="flex items-center space-x-1.5 text-[11px] text-[#64748B] dark:text-[#94A3B8]">
+            <Calendar className="w-3.5 h-3.5 shrink-0" />
+            <span>
+              Timeline: {collab.start_date || 'TBD'} &rarr; {collab.end_date || 'In Progress'}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Status Transitions & Action Bar */}
+      <div className="pt-3 border-t border-[#E2E8F0] dark:border-[#22314A] flex flex-wrap items-center justify-between gap-2">
+        {collab.status === 'REQUESTED' && (
+          <div className="flex items-center space-x-2 w-full justify-end">
+            <button
+              onClick={() => onUpdateStatus(collab.collaboration_id, 'NEGOTIATING')}
+              className="px-3 py-1.5 rounded-md bg-[#EFF6FF] text-[#1D4ED8] dark:bg-[#172554] dark:text-[#60A5FA] text-xs font-semibold hover:bg-[#DBEAFE] border border-[#DBEAFE] dark:border-[#1E40AF] cursor-pointer"
+            >
+              Negotiate
+            </button>
+            <button
+              onClick={() => onUpdateStatus(collab.collaboration_id, 'ACCEPTED')}
+              className="px-3 py-1.5 rounded-md bg-[#2563EB] text-white text-xs font-semibold hover:bg-[#1D4ED8] shadow-subtle cursor-pointer"
+            >
+              Accept Proposal
+            </button>
+            <button
+              onClick={() => onUpdateStatus(collab.collaboration_id, 'DECLINED')}
+              className="px-3 py-1.5 rounded-md bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 text-xs font-semibold border border-red-200 dark:border-red-900 cursor-pointer"
+            >
+              Decline
+            </button>
+          </div>
+        )}
+
+        {collab.status === 'NEGOTIATING' && (
+          <div className="flex items-center space-x-2 w-full justify-end">
+            <button
+              onClick={() => onUpdateStatus(collab.collaboration_id, 'ACCEPTED')}
+              className="px-3 py-1.5 rounded-md bg-[#2563EB] text-white text-xs font-semibold hover:bg-[#1D4ED8] shadow-subtle cursor-pointer"
+            >
+              Accept Terms
+            </button>
+            <button
+              onClick={() => onUpdateStatus(collab.collaboration_id, 'DECLINED')}
+              className="px-3 py-1.5 rounded-md bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 text-xs font-semibold border border-red-200 dark:border-red-900 cursor-pointer"
+            >
+              Decline
+            </button>
+          </div>
+        )}
+
+        {collab.status === 'ACCEPTED' && (
+          <button
+            onClick={() => onUpdateStatus(collab.collaboration_id, 'ACTIVE')}
+            className="w-full py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle transition-colors cursor-pointer"
+          >
+            Start Active Execution
+          </button>
+        )}
+
+        {collab.status === 'ACTIVE' && (
+          <div className="flex items-center space-x-2 w-full justify-between">
+            <button
+              onClick={() => onUpdateStatus(collab.collaboration_id, 'CANCELLED')}
+              className="px-3 py-1.5 rounded-md border border-red-200 dark:border-red-900/60 bg-red-50/60 dark:bg-red-950/30 text-red-700 dark:text-red-400 text-xs font-semibold hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors cursor-pointer"
+            >
+              Cancel Contract
+            </button>
+            <button
+              onClick={() => onUpdateStatus(collab.collaboration_id, 'COMPLETED')}
+              className="px-4 py-1.5 rounded-md bg-[#0F766E] text-white text-xs font-semibold hover:bg-[#0D9488] shadow-subtle transition-colors cursor-pointer"
+            >
+              Confirm Deliverables Fulfilled
+            </button>
+          </div>
+        )}
+
+        {collab.status === 'COMPLETED' && (
+          <div className="flex items-center justify-between w-full">
+            <span className="text-xs text-[#0F766E] dark:text-[#2DD4BF] font-semibold flex items-center space-x-1.5">
+              <CheckCircle2 className="w-4 h-4 text-[#14B8A6]" />
+              <span>Deliverables Fulfilled</span>
+            </span>
+            <button
+              onClick={() => onSelectReview(collab)}
+              className="px-3.5 py-1.5 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle flex items-center space-x-1 cursor-pointer transition-colors"
+            >
+              <Award className="w-3.5 h-3.5" />
+              <span>Submit Peer Review</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
 export default function CollaborationsPage() {
   const { activeBusiness } = useAuth();
   const [searchParams] = useSearchParams();
@@ -28,7 +178,8 @@ export default function CollaborationsPage() {
 
   const [collaborations, setCollaborations] = useState([]);
   const [activeTab, setActiveTab] = useState('ALL');
-  const [loading, setLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // New Collaboration Modal State
   const [modalOpen, setModalOpen] = useState(!!partnerParam);
@@ -46,7 +197,7 @@ export default function CollaborationsPage() {
   const loadCollaborations = useCallback(async () => {
     if (!activeBusiness?.business_id) return;
     try {
-      setLoading(true);
+      setIsUpdating(true);
       const res = await api.get('/collaborations', {
         params: {
           business_id: activeBusiness.business_id,
@@ -57,7 +208,8 @@ export default function CollaborationsPage() {
     } catch (err) {
       console.warn('Failed to load collaborations:', err);
     } finally {
-      setLoading(false);
+      setIsUpdating(false);
+      setInitialLoading(false);
     }
   }, [activeBusiness, activeTab]);
 
@@ -96,47 +248,32 @@ export default function CollaborationsPage() {
     }
   };
 
-  const handleUpdateStatus = async (collabId, nextStatus) => {
+  const handleUpdateStatus = useCallback(async (collabId, nextStatus) => {
     try {
       await api.patch(`/collaborations/${collabId}/status`, { status: nextStatus });
       loadCollaborations();
     } catch (err) {
       alert(err.message || 'Failed to update collaboration status');
     }
-  };
+  }, [loadCollaborations]);
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'REQUESTED':
-        return 'bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800';
-      case 'NEGOTIATING':
-        return 'bg-[#EFF6FF] text-[#1D4ED8] dark:bg-[#172554] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF]';
-      case 'ACCEPTED':
-        return 'bg-[#F0FDFA] text-[#0F766E] dark:bg-[#042F2E] dark:text-[#2DD4BF] border border-[#CCFBF1] dark:border-[#115E59]';
-      case 'ACTIVE':
-        return 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800';
-      case 'COMPLETED':
-        return 'bg-[#EFF6FF] text-[#1D4ED8] dark:bg-[#172554] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF]';
-      case 'DECLINED':
-      case 'CANCELLED':
-        return 'bg-red-50 text-red-800 dark:bg-red-950/60 dark:text-red-300 border border-red-200 dark:border-red-800';
-      default:
-        return 'bg-[#F1F5F9] text-[#475569] dark:bg-[#1E293B] dark:text-[#94A3B8] border border-[#E2E8F0] dark:border-[#334155]';
-    }
-  };
+  const handleSelectReview = useCallback((collab) => {
+    setSelectedCollabForReview(collab);
+    setReviewModalOpen(true);
+  }, []);
 
   if (!activeBusiness) {
     return (
       <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-10 rounded-lg shadow-subtle text-center max-w-md mx-auto my-12 space-y-3">
         <Briefcase className="w-12 h-12 text-[#2563EB] dark:text-[#3B82F6] mx-auto" />
         <h2 className="font-bold text-base text-[#0F172A] dark:text-white">Select a Business</h2>
-        <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Please choose an active business profile to manage commercial contracts and collaborations.</p>
+        <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Choose or register an active business profile to manage commercial contracts and collaborations.</p>
       </div>
     );
   }
 
   return (
-    <div className="w-full space-y-6 py-2">
+    <div className="space-y-6 py-2">
       {/* ─── Header ──────────────────────────────────────────────────── */}
       <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 sm:p-7 rounded-lg shadow-subtle space-y-5">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -181,7 +318,7 @@ export default function CollaborationsPage() {
       </div>
 
       {/* ─── Collaborations Grid ─────────────────────────────────────── */}
-      {loading ? (
+      {initialLoading ? (
         <div className="min-h-[30vh] flex flex-col items-center justify-center space-y-3">
           <div className="w-8 h-8 border-2 border-[#DBEAFE] border-t-[#2563EB] rounded-full animate-spin" />
           <p className="text-xs text-[#64748B] dark:text-[#94A3B8] font-medium">Loading commercial engagements...</p>
@@ -195,135 +332,16 @@ export default function CollaborationsPage() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {collaborations.map((collab) => {
-            const isInitiator = Number(collab.initiator_business_id) === Number(activeBusiness.business_id);
-
-            return (
-              <div
-                key={collab.collaboration_id}
-                className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-5 rounded-lg shadow-subtle space-y-3 hover:border-[#2563EB]/30 transition-colors flex flex-col justify-between"
-              >
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono font-semibold text-[#64748B] dark:text-[#94A3B8]">
-                      ID: #{collab.collaboration_id}
-                    </span>
-                    <span className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold uppercase ${getStatusBadge(collab.status)}`}>
-                      {collab.status}
-                    </span>
-                  </div>
-
-                  <h3 className="font-bold text-sm sm:text-base text-[#0F172A] dark:text-white">
-                    {collab.title}
-                  </h3>
-
-                  <div className="flex items-center space-x-1.5 text-xs text-[#64748B] dark:text-[#94A3B8]">
-                    <Building2 className="w-3.5 h-3.5 shrink-0" />
-                    <span>Initiated by: <strong className="text-[#0F172A] dark:text-white">{collab.initiator_business_name}</strong></span>
-                    {isInitiator && <span className="text-[10px] text-[#2563EB] dark:text-[#3B82F6] font-semibold">(You)</span>}
-                  </div>
-
-                  {(collab.start_date || collab.end_date) && (
-                    <div className="flex items-center space-x-1.5 text-[11px] text-[#64748B] dark:text-[#94A3B8]">
-                      <Calendar className="w-3.5 h-3.5 shrink-0" />
-                      <span>
-                        Timeline: {collab.start_date || 'TBD'} &rarr; {collab.end_date || 'In Progress'}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Status Transitions & Action Bar */}
-                <div className="pt-3 border-t border-[#E2E8F0] dark:border-[#22314A] flex flex-wrap items-center justify-between gap-2">
-                  {collab.status === 'REQUESTED' && (
-                    <div className="flex items-center space-x-2 w-full justify-end">
-                      <button
-                        onClick={() => handleUpdateStatus(collab.collaboration_id, 'NEGOTIATING')}
-                        className="px-3 py-1.5 rounded-md bg-[#EFF6FF] text-[#1D4ED8] dark:bg-[#172554] dark:text-[#60A5FA] text-xs font-semibold hover:bg-[#DBEAFE] border border-[#DBEAFE] dark:border-[#1E40AF] cursor-pointer"
-                      >
-                        Negotiate
-                      </button>
-                      <button
-                        onClick={() => handleUpdateStatus(collab.collaboration_id, 'ACCEPTED')}
-                        className="px-3 py-1.5 rounded-md bg-[#2563EB] text-white text-xs font-semibold hover:bg-[#1D4ED8] shadow-subtle cursor-pointer"
-                      >
-                        Accept Proposal
-                      </button>
-                      <button
-                        onClick={() => handleUpdateStatus(collab.collaboration_id, 'DECLINED')}
-                        className="px-3 py-1.5 rounded-md bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 text-xs font-semibold border border-red-200 dark:border-red-900 cursor-pointer"
-                      >
-                        Decline
-                      </button>
-                    </div>
-                  )}
-
-                  {collab.status === 'NEGOTIATING' && (
-                    <div className="flex items-center space-x-2 w-full justify-end">
-                      <button
-                        onClick={() => handleUpdateStatus(collab.collaboration_id, 'ACCEPTED')}
-                        className="px-3 py-1.5 rounded-md bg-[#2563EB] text-white text-xs font-semibold hover:bg-[#1D4ED8] shadow-subtle cursor-pointer"
-                      >
-                        Accept Terms
-                      </button>
-                      <button
-                        onClick={() => handleUpdateStatus(collab.collaboration_id, 'DECLINED')}
-                        className="px-3 py-1.5 rounded-md bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 text-xs font-semibold border border-red-200 dark:border-red-900 cursor-pointer"
-                      >
-                        Decline
-                      </button>
-                    </div>
-                  )}
-
-                  {collab.status === 'ACCEPTED' && (
-                    <button
-                      onClick={() => handleUpdateStatus(collab.collaboration_id, 'ACTIVE')}
-                      className="w-full py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle transition-colors cursor-pointer"
-                    >
-                      Start Active Execution
-                    </button>
-                  )}
-
-                  {collab.status === 'ACTIVE' && (
-                    <div className="flex items-center space-x-2 w-full justify-between">
-                      <button
-                        onClick={() => handleUpdateStatus(collab.collaboration_id, 'CANCELLED')}
-                        className="px-3 py-1.5 rounded-md border border-red-200 dark:border-red-900/60 bg-red-50/60 dark:bg-red-950/30 text-red-700 dark:text-red-400 text-xs font-semibold hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors cursor-pointer"
-                      >
-                        Cancel Contract
-                      </button>
-                      <button
-                        onClick={() => handleUpdateStatus(collab.collaboration_id, 'COMPLETED')}
-                        className="px-4 py-1.5 rounded-md bg-[#0F766E] text-white text-xs font-semibold hover:bg-[#0D9488] shadow-subtle transition-colors cursor-pointer"
-                      >
-                        Confirm Deliverables Fulfilled
-                      </button>
-                    </div>
-                  )}
-
-                  {collab.status === 'COMPLETED' && (
-                    <div className="flex items-center justify-between w-full">
-                      <span className="text-xs text-[#0F766E] dark:text-[#2DD4BF] font-semibold flex items-center space-x-1.5">
-                        <CheckCircle2 className="w-4 h-4 text-[#14B8A6]" />
-                        <span>Deliverables Fulfilled</span>
-                      </span>
-                      <button
-                        onClick={() => {
-                          setSelectedCollabForReview(collab);
-                          setReviewModalOpen(true);
-                        }}
-                        className="px-3.5 py-1.5 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle flex items-center space-x-1 cursor-pointer transition-colors"
-                      >
-                        <Award className="w-3.5 h-3.5" />
-                        <span>Submit Peer Review</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+        <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 transition-opacity duration-150 ${isUpdating ? 'opacity-70' : 'opacity-100'}`}>
+          {collaborations.map((collab) => (
+            <CollaborationCard
+              key={collab.collaboration_id}
+              collab={collab}
+              activeBusinessId={activeBusiness.business_id}
+              onUpdateStatus={handleUpdateStatus}
+              onSelectReview={handleSelectReview}
+            />
+          ))}
         </div>
       )}
 
@@ -444,4 +462,3 @@ export default function CollaborationsPage() {
     </div>
   );
 }
-

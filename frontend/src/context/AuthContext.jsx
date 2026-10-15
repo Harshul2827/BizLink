@@ -4,10 +4,21 @@ import api from '../api/client';
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    try {
+      const token = localStorage.getItem('bizlink_token');
+      const savedUser = localStorage.getItem('bizlink_user');
+      return (token && savedUser) ? JSON.parse(savedUser) : null;
+    } catch {
+      return null;
+    }
+  });
   const [businesses, setBusinesses] = useState([]);
   const [activeBusiness, setActiveBusinessState] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    // If token exists in storage, keep loading true until verified with backend
+    return !!localStorage.getItem('bizlink_token');
+  });
 
   const fetchUserBusinesses = useCallback(async () => {
     try {
@@ -30,24 +41,35 @@ export function AuthProvider({ children }) {
   }, []);
 
   const refreshUser = useCallback(async () => {
-    try {
-      const token = localStorage.getItem('bizlink_token');
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+    const token = localStorage.getItem('bizlink_token');
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
 
+    try {
       const res = await api.get('/auth/me');
-      if (res.data?.user) {
-        setUser(res.data.user);
-        localStorage.setItem('bizlink_user', JSON.stringify(res.data.user));
+      // res is { success: true, data: user } because response interceptor unwraps response.data
+      const userData = res.data?.user || res.data;
+      if (userData && (userData.userId || userData.user_id || userData.email)) {
+        setUser(userData);
+        localStorage.setItem('bizlink_user', JSON.stringify(userData));
         await fetchUserBusinesses();
+      } else {
+        throw new Error('Invalid user payload');
       }
     } catch (err) {
       console.warn('Session check failed:', err);
-      localStorage.removeItem('bizlink_token');
-      localStorage.removeItem('bizlink_user');
-      setUser(null);
+      // Only clear session on actual 401 or token expiration
+      if (err.statusCode === 401 || err.code === 'TOKEN_EXPIRED' || err.code === 'INVALID_TOKEN') {
+        localStorage.removeItem('bizlink_token');
+        localStorage.removeItem('bizlink_user');
+        localStorage.removeItem('bizlink_active_biz_id');
+        setUser(null);
+        setBusinesses([]);
+        setActiveBusinessState(null);
+      }
     } finally {
       setLoading(false);
     }

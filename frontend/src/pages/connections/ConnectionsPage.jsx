@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/client';
@@ -15,6 +15,89 @@ import {
   Building2,
   ArrowRight
 } from 'lucide-react';
+
+// Memoized Connection Card
+const ConnectionCard = memo(function ConnectionCard({
+  connection,
+  activeBusinessId,
+  activeTab,
+  onUpdateStatus
+}) {
+  const c = connection;
+  const isRequester = Number(c.requester_business_id) === Number(activeBusinessId);
+  const partnerName = isRequester ? c.receiver_business_name : c.requester_business_name;
+  const partnerId = isRequester ? c.receiver_business_id : c.requester_business_id;
+
+  return (
+    <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-4 rounded-lg shadow-subtle flex items-center justify-between hover:border-[#2563EB]/30 transition-colors">
+      <div className="flex items-center space-x-3 min-w-0 pr-2">
+        <div className="w-10 h-10 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-[#1E40AF] flex items-center justify-center font-bold text-xs shrink-0">
+          {partnerName ? partnerName.charAt(0).toUpperCase() : 'B'}
+        </div>
+        <div className="min-w-0">
+          <Link
+            to={`/business/${partnerId}`}
+            className="font-bold text-xs sm:text-sm text-[#0F172A] dark:text-white hover:text-[#2563EB] dark:hover:text-[#3B82F6] hover:underline truncate block"
+          >
+            {partnerName}
+          </Link>
+          <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">
+            Requested {new Date(c.requested_at).toLocaleDateString()}
+          </p>
+        </div>
+      </div>
+
+      {/* Actions based on tab */}
+      <div className="flex items-center space-x-1.5 shrink-0">
+        {activeTab === 'active' && (
+          <>
+            <Link
+              to={`/messages?connection=${c.connection_id}`}
+              className="p-1.5 rounded-md border border-[#E2E8F0] dark:border-[#334155] text-[#2563EB] dark:text-[#3B82F6] hover:bg-[#EFF6FF] dark:hover:bg-[#172554] transition-colors"
+              title="Send Message"
+            >
+              <MessageSquare className="w-4 h-4" />
+            </Link>
+            <Link
+              to={`/collaborations?partner=${partnerId}`}
+              className="px-3 py-1.5 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle transition-colors"
+            >
+              Collaborate
+            </Link>
+          </>
+        )}
+
+        {activeTab === 'incoming' && (
+          <>
+            <button
+              onClick={() => onUpdateStatus(c.connection_id, 'ACCEPTED')}
+              className="p-1.5 rounded-md bg-[#F0FDFA] text-[#0F766E] dark:bg-[#042F2E] dark:text-[#2DD4BF] hover:bg-[#CCFBF1] text-xs font-semibold flex items-center space-x-1 border border-[#CCFBF1] dark:border-[#115E59] cursor-pointer"
+              title="Accept Request"
+            >
+              <Check className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onUpdateStatus(c.connection_id, 'REJECTED')}
+              className="p-1.5 rounded-md bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 hover:bg-red-100 text-xs font-semibold flex items-center space-x-1 border border-red-200 dark:border-red-900 cursor-pointer"
+              title="Decline Request"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </>
+        )}
+
+        {activeTab === 'outgoing' && (
+          <button
+            onClick={() => onUpdateStatus(c.connection_id, 'CANCELLED')}
+            className="px-3 py-1.5 rounded-md border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] text-xs font-semibold hover:bg-red-50 hover:text-red-700 hover:border-red-200 shadow-subtle transition-colors cursor-pointer"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
+    </div>
+  );
+});
 
 export default function ConnectionsPage() {
   const { activeBusiness } = useAuth();
@@ -71,14 +154,14 @@ export default function ConnectionsPage() {
     }
   };
 
-  const handleUpdateStatus = async (connectionId, newStatus) => {
+  const handleUpdateStatus = useCallback(async (connectionId, newStatus) => {
     try {
       await api.patch(`/connections/${connectionId}`, { status: newStatus });
       loadConnections();
     } catch (err) {
       alert(err.message || 'Failed to update connection status');
     }
-  };
+  }, [loadConnections]);
 
   if (!activeBusiness) {
     return (
@@ -139,9 +222,9 @@ export default function ConnectionsPage() {
         {/* Tab Controls */}
         <div className="flex items-center space-x-1 border-t border-[#E2E8F0] dark:border-[#22314A] pt-4">
           {[
-            { id: 'active', label: 'Connected Network', icon: UserCheck },
+            { id: 'active', label: 'Active Network', icon: UserCheck },
             { id: 'incoming', label: 'Incoming Requests', icon: Clock },
-            { id: 'outgoing', label: 'Sent Requests', icon: Send }
+            { id: 'outgoing', label: 'Pending Outgoing', icon: Send }
           ].map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
@@ -165,98 +248,29 @@ export default function ConnectionsPage() {
 
       {/* ─── Connections List ────────────────────────────────────────── */}
       {loading ? (
-        <div className="min-h-[30vh] flex flex-col items-center justify-center space-y-3">
-          <div className="w-8 h-8 border-2 border-[#DBEAFE] border-t-[#2563EB] rounded-full animate-spin" />
-          <p className="text-xs text-[#64748B] dark:text-[#94A3B8] font-medium">Loading network connections...</p>
+        <div className="text-center py-12 space-y-2">
+          <div className="w-8 h-8 border-2 border-[#DBEAFE] border-t-[#2563EB] rounded-full animate-spin mx-auto" />
+          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Loading connection records...</p>
         </div>
       ) : connections.length === 0 ? (
-        <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-10 rounded-lg shadow-subtle text-center text-[#64748B] dark:text-[#94A3B8] text-xs space-y-2">
-          <Users2 className="w-8 h-8 text-[#94A3B8] mx-auto" />
-          <p>No connections found in this view.</p>
+        <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-10 rounded-lg shadow-subtle text-center space-y-2 text-[#94A3B8]">
+          <Users2 className="w-10 h-10 mx-auto text-[#94A3B8]" />
+          <p className="font-semibold text-sm text-[#0F172A] dark:text-white">No {activeTab} connection records</p>
+          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Use the Connect bar above or browse the public directory to find enterprise counterparties.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-          {connections.map((c) => {
-            const isRequester = Number(c.requester_business_id) === Number(activeBusiness.business_id);
-            const partnerName = isRequester ? c.receiver_business_name : c.requester_business_name;
-            const partnerId = isRequester ? c.receiver_business_id : c.requester_business_id;
-
-            return (
-              <div
-                key={c.connection_id}
-                className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-4 rounded-lg shadow-subtle flex items-center justify-between hover:border-[#2563EB]/30 transition-colors"
-              >
-                <div className="flex items-center space-x-3 min-w-0 pr-2">
-                  <div className="w-10 h-10 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-[#1E40AF] flex items-center justify-center font-bold text-xs shrink-0">
-                    {partnerName ? partnerName.charAt(0).toUpperCase() : 'B'}
-                  </div>
-                  <div className="min-w-0">
-                    <Link
-                      to={`/business/${partnerId}`}
-                      className="font-bold text-xs sm:text-sm text-[#0F172A] dark:text-white hover:text-[#2563EB] dark:hover:text-[#3B82F6] hover:underline truncate block"
-                    >
-                      {partnerName}
-                    </Link>
-                    <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">
-                      Requested {new Date(c.requested_at).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Actions based on tab */}
-                <div className="flex items-center space-x-1.5 shrink-0">
-                  {activeTab === 'active' && (
-                    <>
-                      <Link
-                        to={`/messages?connection=${c.connection_id}`}
-                        className="p-1.5 rounded-md border border-[#E2E8F0] dark:border-[#334155] text-[#2563EB] dark:text-[#3B82F6] hover:bg-[#EFF6FF] dark:hover:bg-[#172554] transition-colors"
-                        title="Send Message"
-                      >
-                        <MessageSquare className="w-4 h-4" />
-                      </Link>
-                      <Link
-                        to={`/collaborations?partner=${partnerId}`}
-                        className="px-3 py-1.5 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle transition-colors"
-                      >
-                        Collaborate
-                      </Link>
-                    </>
-                  )}
-
-                  {activeTab === 'incoming' && (
-                    <>
-                      <button
-                        onClick={() => handleUpdateStatus(c.connection_id, 'ACCEPTED')}
-                        className="p-1.5 rounded-md bg-[#F0FDFA] text-[#0F766E] dark:bg-[#042F2E] dark:text-[#2DD4BF] hover:bg-[#CCFBF1] text-xs font-semibold flex items-center space-x-1 border border-[#CCFBF1] dark:border-[#115E59] cursor-pointer"
-                        title="Accept Request"
-                      >
-                        <Check className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleUpdateStatus(c.connection_id, 'REJECTED')}
-                        className="p-1.5 rounded-md bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 hover:bg-red-100 text-xs font-semibold flex items-center space-x-1 border border-red-200 dark:border-red-900 cursor-pointer"
-                        title="Decline Request"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    </>
-                  )}
-
-                  {activeTab === 'outgoing' && (
-                    <button
-                      onClick={() => handleUpdateStatus(c.connection_id, 'CANCELLED')}
-                      className="px-3 py-1.5 rounded-md border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] text-xs font-semibold hover:bg-red-50 hover:text-red-700 hover:border-red-200 shadow-subtle transition-colors cursor-pointer"
-                    >
-                      Cancel
-                    </button>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+        <div className="space-y-3">
+          {connections.map((c) => (
+            <ConnectionCard
+              key={c.connection_id}
+              connection={c}
+              activeBusinessId={activeBusiness.business_id}
+              activeTab={activeTab}
+              onUpdateStatus={handleUpdateStatus}
+            />
+          ))}
         </div>
       )}
     </div>
   );
 }
-

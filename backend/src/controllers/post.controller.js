@@ -21,7 +21,10 @@ class PostController {
    */
   async getFeed(req, res, next) {
     try {
-      const posts = await postService.getFeed(req.query);
+      const posts = await postService.getFeed({
+        ...req.query,
+        currentUserId: req.user?.userId
+      });
       res.status(200).json({
         success: true,
         data: posts

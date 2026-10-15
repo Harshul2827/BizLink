@@ -1,6 +1,6 @@
 const express = require('express');
 const postController = require('../controllers/post.controller');
-const { authenticate } = require('../middleware/auth');
+const { authenticate, optionalAuth } = require('../middleware/auth');
 const validate = require('../middleware/validate');
 const {
   createPostSchema,
@@ -13,6 +13,7 @@ const router = express.Router();
 // GET /api/v1/posts - Public or authenticated feed
 router.get(
   '/',
+  optionalAuth,
   validate(listPostsQuerySchema, 'query'),
   postController.getFeed
 );

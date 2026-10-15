@@ -55,9 +55,20 @@ class PostRepository {
    * @param {object} options 
    * @returns {Promise<Array>}
    */
-  async listFeed({ businessId = null, page = 1, pageSize = 20 } = {}) {
+  async listFeed({ businessId = null, page = 1, pageSize = 20, currentUserId = null } = {}) {
     let whereClause = "b.status IN ('ACTIVE', 'VERIFIED')";
     const params = [];
+
+    let likedSelect = '0 AS is_liked';
+    if (currentUserId) {
+      likedSelect = `EXISTS(
+        SELECT 1 FROM post_interactions pi 
+        WHERE pi.post_id = p.post_id 
+          AND pi.user_id = ? 
+          AND pi.interaction_type = 'LIKE'
+      ) AS is_liked`;
+      params.push(currentUserId);
+    }
 
     if (businessId) {
       whereClause += ' AND p.business_id = ?';
@@ -75,6 +86,8 @@ class PostRepository {
          p.content,
          p.like_count,
          p.created_at,
+         (SELECT COUNT(*) FROM post_interactions pi WHERE pi.post_id = p.post_id AND pi.interaction_type = 'COMMENT') AS comment_count,
+         ${likedSelect},
          b.name AS business_name,
          b.slug AS business_slug,
          b.city AS business_city,
@@ -90,7 +103,10 @@ class PostRepository {
       [...params, limit, offset]
     );
 
-    return rows;
+    return rows.map(r => ({
+      ...r,
+      is_liked: Boolean(r.is_liked)
+    }));
   }
 
   /**
