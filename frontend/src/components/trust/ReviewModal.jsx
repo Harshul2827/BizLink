@@ -51,38 +51,44 @@ export default function ReviewModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white dark:bg-surface-900 w-full max-w-md rounded-2xl p-6 sm:p-7 space-y-5 shadow-2xl relative border border-surface-200 dark:border-surface-700">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/60 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-white dark:bg-[#0B1220] w-full max-w-md rounded-xl p-6 sm:p-7 space-y-5 shadow-2xl relative border border-surface-200 dark:border-surface-800">
         
         {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-surface-200 dark:border-surface-800">
-          <div className="flex items-center space-x-2.5">
-            <div className="p-2 rounded-lg bg-amber-500 text-white">
+        <div className="flex items-center justify-between pb-3.5 border-b border-surface-200 dark:border-surface-800">
+          <div className="flex items-center space-x-3">
+            <div className="w-9 h-9 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 flex items-center justify-center">
               <Award className="w-4 h-4" />
             </div>
-            <h3 className="font-display font-bold text-base text-surface-900 dark:text-white">
-              Verified Partner Review
-            </h3>
+            <div>
+              <h3 className="font-display font-bold text-base text-surface-900 dark:text-white">
+                Submit Verified Review
+              </h3>
+              <p className="text-xs text-surface-500 dark:text-surface-400">
+                Institutional counterparty evaluation
+              </p>
+            </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 transition-colors cursor-pointer"
+            className="p-1.5 rounded-md text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors cursor-pointer"
+            aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="space-y-0.5">
-          <p className="text-xs text-surface-500 dark:text-surface-400">
-            Reviewing partner on completed engagement:
+        <div className="p-3 rounded-md bg-surface-50 dark:bg-[#070D18] border border-surface-200 dark:border-surface-800 space-y-0.5">
+          <p className="text-[11px] uppercase tracking-wider font-bold text-surface-500 dark:text-surface-400">
+            Counterparty Under Review
           </p>
           <p className="text-xs font-bold text-surface-900 dark:text-white">
-            {partner?.business_name || 'Partner Business'}
+            {partner?.business_name || 'Counterparty Business'}
           </p>
         </div>
 
         {error && (
-          <div className="flex items-center space-x-2 p-2.5 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs">
+          <div className="flex items-center space-x-2 p-3 rounded-md bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs">
             <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
@@ -91,9 +97,9 @@ export default function ReviewModal({
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
-              Rating (1 to 5 Stars) *
+              Performance Rating (1 to 5 Stars) *
             </label>
-            <div className="flex items-center space-x-1.5">
+            <div className="flex items-center space-x-2">
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   type="button"
@@ -101,50 +107,51 @@ export default function ReviewModal({
                   onClick={() => setRating(star)}
                   onMouseEnter={() => setHoverRating(star)}
                   onMouseLeave={() => setHoverRating(0)}
-                  className="p-1 text-2xl transition-transform hover:scale-110 focus:outline-none cursor-pointer"
+                  className="p-1 transition-transform hover:scale-110 focus:outline-none cursor-pointer"
+                  aria-label={`${star} star`}
                 >
                   <Star
                     className={`w-6 h-6 ${
                       (hoverRating || rating) >= star
-                        ? 'text-amber-400 fill-amber-400'
+                        ? 'text-amber-500 fill-amber-500'
                         : 'text-surface-300 dark:text-surface-700'
                     }`}
                   />
                 </button>
               ))}
               <span className="text-xs font-bold text-surface-700 dark:text-surface-300 ml-2">
-                {hoverRating || rating} / 5
+                {hoverRating || rating} / 5.0
               </span>
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
-              Review & Feedback Summary
+              Executive Evaluation & Delivery Feedback
             </label>
             <textarea
               rows={3}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Share details about performance, reliability, communication, and deliverable quality..."
-              className="w-full p-3 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-amber-500/30 focus:border-amber-500 transition-colors resize-none"
+              placeholder="State key observations regarding deliverables, SLA adherence, communication efficiency, and technical rigor..."
+              className="w-full p-3 rounded-md bg-white dark:bg-[#070D18] border border-surface-300 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-1 focus:ring-brand-600 focus:border-brand-600 transition-colors resize-none placeholder:text-surface-400"
             />
           </div>
 
-          <div className="flex items-center justify-end space-x-2 pt-2">
+          <div className="flex items-center justify-end space-x-2 pt-3 border-t border-surface-200 dark:border-surface-800">
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-2 rounded-lg text-xs font-medium text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors cursor-pointer"
+              className="px-3.5 py-2 rounded-md text-xs font-semibold text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800 border border-surface-300 dark:border-surface-700 transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold shadow-sm disabled:opacity-60 transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs disabled:opacity-60 transition-colors cursor-pointer"
             >
-              {submitting ? 'Submitting...' : 'Submit Verified Review'}
+              {submitting ? 'Submitting...' : 'Post Verified Review'}
             </button>
           </div>
         </form>

@@ -10,7 +10,6 @@ import {
   Building2,
   Share2,
   Flag,
-  Sparkles,
   AlertCircle,
   Clock
 } from 'lucide-react';
@@ -160,16 +159,16 @@ export default function PostsPage() {
     <div className="max-w-2xl mx-auto space-y-4 py-2">
       {/* ─── Create Post Card ────────────────────────────────────────── */}
       {activeBusiness ? (
-        <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-5 rounded-2xl shadow-enterprise space-y-3">
+        <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-5 rounded-lg shadow-subtle space-y-3">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
-              <Building2 className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-[#1E40AF] flex items-center justify-center font-bold text-sm shrink-0">
+              {activeBusiness.name ? activeBusiness.name.charAt(0).toUpperCase() : 'B'}
             </div>
             <div>
-              <h3 className="font-bold text-sm text-surface-900 dark:text-white">
+              <h3 className="font-bold text-sm text-[#0F172A] dark:text-white">
                 {activeBusiness.name}
               </h3>
-              <p className="text-[11px] text-surface-400">Share corporate updates, requirements, or achievements</p>
+              <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">Share commercial updates, announcements, or requirements</p>
             </div>
           </div>
 
@@ -178,15 +177,15 @@ export default function PostsPage() {
               rows={3}
               value={newContent}
               onChange={(e) => setNewContent(e.target.value)}
-              placeholder="What commercial update, need, or capability would you like to share with the network?"
-              className="w-full p-3 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors resize-none"
+              placeholder="What commercial update, need, or capability would you like to publish?"
+              className="w-full p-3 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors resize-none"
             />
             <div className="flex items-center justify-between pt-1">
-              <span className="text-[11px] text-surface-400">Visible to all verified members</span>
+              <span className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">Broadcast to verified directory members</span>
               <button
                 type="submit"
                 disabled={posting || !newContent.trim()}
-                className="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm disabled:opacity-50 transition-colors cursor-pointer"
+                className="px-4 py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle disabled:opacity-50 transition-colors cursor-pointer"
               >
                 {posting ? 'Publishing...' : 'Share Update'}
               </button>
@@ -194,44 +193,47 @@ export default function PostsPage() {
           </form>
         </div>
       ) : (
-        <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-6 rounded-xl shadow-enterprise text-center text-xs text-surface-500">
-          Select or create an active business profile to publish posts to the feed.
+        <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 rounded-lg shadow-subtle text-center text-xs text-[#64748B] dark:text-[#94A3B8]">
+          Select or register an active business profile to publish corporate updates.
         </div>
       )}
 
       {/* ─── Feed Timeline ───────────────────────────────────────────── */}
       {loading ? (
         <div className="text-center py-12 space-y-2">
-          <div className="w-8 h-8 border-3 border-brand-200 border-t-brand-600 rounded-full animate-spin mx-auto" />
-          <p className="text-xs text-surface-400">Loading opportunity feed...</p>
+          <div className="w-8 h-8 border-2 border-[#DBEAFE] border-t-[#2563EB] rounded-full animate-spin mx-auto" />
+          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Loading commercial feed...</p>
         </div>
       ) : posts.length === 0 ? (
-        <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-10 rounded-2xl shadow-enterprise text-center space-y-2 text-surface-400">
-          <Layers className="w-10 h-10 mx-auto" />
-          <p className="font-semibold text-sm">No posts published yet</p>
-          <p className="text-xs">Be the first to share an announcement or commercial opportunity.</p>
+        <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-10 rounded-lg shadow-subtle text-center space-y-2 text-[#94A3B8]">
+          <Layers className="w-10 h-10 mx-auto text-[#94A3B8]" />
+          <p className="font-semibold text-sm text-[#0F172A] dark:text-white">No announcements published yet</p>
+          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">Be the first to share an announcement or commercial opportunity.</p>
         </div>
       ) : (
         posts.map((p) => {
           const cState = commentsState[p.post_id] || { open: false, comments: [], loading: false, newComment: '' };
 
           return (
-            <div key={p.post_id} className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-5 rounded-2xl shadow-enterprise space-y-3.5 hover:border-brand-600/30 transition-colors">
+            <div
+              key={p.post_id}
+              className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-5 rounded-lg shadow-subtle space-y-3.5 hover:border-[#2563EB]/30 transition-colors"
+            >
               {/* Author & Business Header */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 flex items-center justify-center font-bold text-xs">
-                    <Building2 className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-[#1E40AF] flex items-center justify-center font-bold text-xs shrink-0">
+                    {p.business_name ? p.business_name.charAt(0).toUpperCase() : 'B'}
                   </div>
                   <div>
                     <Link
                       to={`/business/${p.business_id}`}
-                      className="font-bold text-xs sm:text-sm text-surface-900 dark:text-white hover:text-brand-600 hover:underline line-clamp-1"
+                      className="font-bold text-xs sm:text-sm text-[#0F172A] dark:text-white hover:text-[#2563EB] dark:hover:text-[#3B82F6] hover:underline line-clamp-1"
                     >
                       {p.business_name}
                     </Link>
-                    <div className="flex items-center space-x-1.5 text-[11px] text-surface-400">
-                      <span>By {p.author_name}</span>
+                    <div className="flex items-center space-x-1.5 text-[11px] text-[#64748B] dark:text-[#94A3B8]">
+                      <span>{p.author_name}</span>
                       <span>&bull;</span>
                       <span>{new Date(p.created_at).toLocaleDateString()}</span>
                     </div>
@@ -240,7 +242,7 @@ export default function PostsPage() {
 
                 <button
                   onClick={() => handleReportPost(p.post_id)}
-                  className="p-1 rounded-lg text-surface-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                  className="p-1.5 rounded text-[#94A3B8] hover:text-[#DC2626] hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
                   title="Report Post"
                 >
                   <Flag className="w-3.5 h-3.5" />
@@ -248,15 +250,15 @@ export default function PostsPage() {
               </div>
 
               {/* Body */}
-              <p className="text-xs text-surface-800 dark:text-surface-200 leading-relaxed whitespace-pre-line">
+              <p className="text-xs text-[#334155] dark:text-[#CBD5E1] leading-relaxed whitespace-pre-line">
                 {p.content}
               </p>
 
               {/* Action Bar */}
-              <div className="pt-2.5 border-t border-surface-200 dark:border-surface-800 flex items-center space-x-6 text-xs text-surface-500">
+              <div className="pt-2.5 border-t border-[#E2E8F0] dark:border-[#22314A] flex items-center space-x-6 text-xs text-[#64748B] dark:text-[#94A3B8]">
                 <button
                   onClick={() => handleLikeToggle(p.post_id)}
-                  className="flex items-center space-x-1.5 hover:text-red-600 transition-colors cursor-pointer"
+                  className="flex items-center space-x-1.5 hover:text-[#DC2626] transition-colors cursor-pointer"
                 >
                   <Heart className="w-4 h-4" />
                   <span>{p.like_count || 0} Likes</span>
@@ -264,7 +266,7 @@ export default function PostsPage() {
 
                 <button
                   onClick={() => toggleComments(p.post_id)}
-                  className="flex items-center space-x-1.5 hover:text-brand-600 transition-colors cursor-pointer"
+                  className="flex items-center space-x-1.5 hover:text-[#2563EB] dark:hover:text-[#3B82F6] transition-colors cursor-pointer"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>Comments</span>
@@ -273,23 +275,23 @@ export default function PostsPage() {
 
               {/* Comment Thread */}
               {cState.open && (
-                <div className="pt-3 border-t border-surface-200 dark:border-surface-800 space-y-2.5">
+                <div className="pt-3 border-t border-[#E2E8F0] dark:border-[#22314A] space-y-2.5">
                   {cState.loading ? (
-                    <div className="text-xs text-surface-400 py-1">Loading comments...</div>
+                    <div className="text-xs text-[#64748B] dark:text-[#94A3B8] py-1">Loading comments...</div>
                   ) : (
                     <div className="space-y-1.5">
                       {cState.comments.length === 0 ? (
-                        <p className="text-[11px] text-surface-400 py-1">No comments yet. Start the conversation.</p>
+                        <p className="text-[11px] text-[#64748B] dark:text-[#94A3B8] py-1">No comments yet. Start the conversation.</p>
                       ) : (
                         cState.comments.map((comment) => (
                           <div
                             key={comment.interaction_id}
-                            className="p-2.5 rounded-lg bg-surface-50 dark:bg-surface-800/60 text-xs space-y-0.5 border border-surface-200/60 dark:border-surface-700/60"
+                            className="p-2.5 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] text-xs space-y-0.5 border border-[#E2E8F0] dark:border-[#334155]"
                           >
-                            <div className="font-bold text-[11px] text-surface-700 dark:text-surface-300">
+                            <div className="font-semibold text-[11px] text-[#0F172A] dark:text-white">
                               {comment.user_name}
                             </div>
-                            <div className="text-surface-800 dark:text-surface-200">{comment.body}</div>
+                            <div className="text-[#475569] dark:text-[#94A3B8]">{comment.body}</div>
                           </div>
                         ))
                       )}
@@ -311,11 +313,11 @@ export default function PostsPage() {
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') handleAddComment(p.post_id);
                       }}
-                      className="flex-1 px-3 py-1.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-xs text-surface-900 dark:text-surface-50 focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
+                      className="flex-1 px-3 py-1.5 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-xs text-[#0F172A] dark:text-white placeholder-[#94A3B8] focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
                     />
                     <button
                       onClick={() => handleAddComment(p.post_id)}
-                      className="p-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs transition-colors cursor-pointer"
+                      className="p-1.5 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs transition-colors cursor-pointer"
                     >
                       <Send className="w-3.5 h-3.5" />
                     </button>
@@ -329,3 +331,4 @@ export default function PostsPage() {
     </div>
   );
 }
+

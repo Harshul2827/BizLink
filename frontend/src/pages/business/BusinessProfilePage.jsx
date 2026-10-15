@@ -64,20 +64,20 @@ export default function BusinessProfilePage() {
   if (loading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-3">
-        <div className="w-8 h-8 border-3 border-brand-200 border-t-brand-600 rounded-full animate-spin" />
-        <p className="text-xs font-medium text-surface-500">Loading business profile...</p>
+        <div className="w-8 h-8 border-2 border-[#DBEAFE] border-t-[#2563EB] rounded-full animate-spin" />
+        <p className="text-xs font-medium text-[#64748B] dark:text-[#94A3B8]">Loading corporate profile...</p>
       </div>
     );
   }
 
   if (error || !business) {
     return (
-      <div className="max-w-xl mx-auto my-12 text-center bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-8 rounded-2xl shadow-enterprise space-y-4">
+      <div className="max-w-xl mx-auto my-12 text-center bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-8 rounded-lg shadow-subtle space-y-4">
         <AlertCircle className="w-10 h-10 text-red-500 mx-auto" />
-        <h2 className="text-lg font-bold text-surface-900 dark:text-white">Profile Not Available</h2>
-        <p className="text-xs text-surface-500 dark:text-surface-400">{error || 'Unable to locate the requested business.'}</p>
-        <Link to="/discover" className="inline-block px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-sm transition-colors">
-          Return to Marketplace
+        <h2 className="text-lg font-bold text-[#0F172A] dark:text-white">Profile Not Available</h2>
+        <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">{error || 'Unable to locate the requested business.'}</p>
+        <Link to="/discover" className="inline-block px-4 py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs shadow-subtle transition-colors">
+          Return to Directory
         </Link>
       </div>
     );
@@ -88,28 +88,28 @@ export default function BusinessProfilePage() {
   return (
     <div className="max-w-5xl mx-auto space-y-6 py-2">
       {/* ─── Profile Header ──────────────────────────────────────────── */}
-      <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-6 sm:p-8 rounded-2xl shadow-enterprise space-y-6">
+      <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 sm:p-7 rounded-lg shadow-subtle space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="flex items-start space-x-4">
-            <div className="w-16 h-16 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm flex-shrink-0">
-              <Building2 className="w-8 h-8" />
+            <div className="w-14 h-14 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-[#1E40AF] flex items-center justify-center font-bold text-xl shrink-0 shadow-subtle">
+              {business.name ? business.name.charAt(0).toUpperCase() : 'B'}
             </div>
             <div className="space-y-1">
               <div className="flex items-center space-x-2.5">
-                <h1 className="text-2xl font-display font-bold text-surface-900 dark:text-white">
+                <h1 className="text-2xl font-bold text-[#0F172A] dark:text-white tracking-tight">
                   {business.name}
                 </h1>
                 {business.status === 'VERIFIED' && (
-                  <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-teal-50 dark:bg-teal-950 text-accent-600 dark:text-accent-400 text-xs font-semibold border border-teal-200 dark:border-teal-800">
-                    <ShieldCheck className="w-3.5 h-3.5" />
+                  <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-[#F0FDFA] dark:bg-[#042F2E] text-[#0F766E] dark:text-[#2DD4BF] text-xs font-semibold border border-[#CCFBF1] dark:border-[#115E59]">
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#14B8A6]" />
                     <span>Verified</span>
                   </span>
                 )}
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 text-xs text-surface-500 dark:text-surface-400">
+              <div className="flex flex-wrap items-center gap-3 text-xs text-[#64748B] dark:text-[#94A3B8]">
                 {business.category_name && (
-                  <span className="flex items-center space-x-1 font-medium text-brand-600 dark:text-brand-400">
+                  <span className="flex items-center space-x-1 font-semibold text-[#2563EB] dark:text-[#3B82F6]">
                     <Tag className="w-3.5 h-3.5" />
                     <span>{business.category_name}</span>
                   </span>
@@ -123,7 +123,7 @@ export default function BusinessProfilePage() {
                 <div className="flex items-center space-x-1 font-semibold text-amber-500">
                   <Star className="w-3.5 h-3.5 fill-amber-400" />
                   <span>{reviewData.stats.averageRating > 0 ? reviewData.stats.averageRating.toFixed(1) : 'New'}</span>
-                  <span className="text-surface-400 font-normal">({reviewData.stats.totalReviews} reviews)</span>
+                  <span className="text-[#94A3B8] font-normal">({reviewData.stats.totalReviews} reviews)</span>
                 </div>
               </div>
             </div>
@@ -134,14 +134,14 @@ export default function BusinessProfilePage() {
             <div className="flex items-center space-x-2.5 w-full sm:w-auto">
               <Link
                 to={`/connections?target=${business.business_id}`}
-                className="flex-1 sm:flex-initial px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm flex items-center justify-center space-x-1.5 transition-colors"
+                className="flex-1 sm:flex-initial px-4 py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle flex items-center justify-center space-x-1.5 transition-colors"
               >
                 <Users2 className="w-3.5 h-3.5" />
                 <span>Connect</span>
               </Link>
               <Link
                 to={`/collaborations?partner=${business.business_id}`}
-                className="flex-1 sm:flex-initial px-4 py-2 rounded-lg bg-accent-500 hover:bg-accent-600 text-white text-xs font-semibold shadow-sm flex items-center justify-center space-x-1.5 transition-colors"
+                className="flex-1 sm:flex-initial px-4 py-2 rounded-md bg-[#0F766E] hover:bg-[#0D9488] text-white text-xs font-semibold shadow-subtle flex items-center justify-center space-x-1.5 transition-colors"
               >
                 <Briefcase className="w-3.5 h-3.5" />
                 <span>Collaborate</span>
@@ -151,7 +151,7 @@ export default function BusinessProfilePage() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center space-x-1 border-t border-surface-200 dark:border-surface-800 pt-4 overflow-x-auto">
+        <div className="flex items-center space-x-1 border-t border-[#E2E8F0] dark:border-[#22314A] pt-4 overflow-x-auto">
           {[
             { id: 'overview', label: 'Overview', count: null },
             { id: 'services', label: 'Services & Capabilities', count: services.length },
@@ -161,15 +161,15 @@ export default function BusinessProfilePage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-colors whitespace-nowrap cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-md text-xs font-semibold flex items-center space-x-1.5 transition-colors whitespace-nowrap cursor-pointer ${
                 activeTab === tab.id
-                  ? 'bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 font-bold border border-brand-200 dark:border-brand-800'
-                  : 'text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800'
+                  ? 'bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF]'
+                  : 'text-[#64748B] dark:text-[#94A3B8] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B]'
               }`}
             >
               <span>{tab.label}</span>
               {tab.count != null && (
-                <span className="px-1.5 py-0.2 rounded-md text-[10px] bg-surface-200 dark:bg-surface-700 text-surface-700 dark:text-surface-300">
+                <span className="px-1.5 py-0.2 rounded text-[10px] bg-[#E2E8F0] dark:bg-[#334155] text-[#0F172A] dark:text-white font-mono">
                   {tab.count}
                 </span>
               )}
@@ -180,10 +180,12 @@ export default function BusinessProfilePage() {
 
       {/* ─── Tab Content ─────────────────────────────────────────────── */}
       {activeTab === 'overview' && (
-        <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-6 sm:p-8 rounded-2xl shadow-enterprise space-y-3">
-          <h2 className="text-base font-bold text-surface-900 dark:text-white">About the Business</h2>
-          <p className="text-xs sm:text-sm text-surface-600 dark:text-surface-300 leading-relaxed whitespace-pre-line">
-            {business.description || 'No detailed description provided by this business yet.'}
+        <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 sm:p-7 rounded-lg shadow-subtle space-y-3">
+          <h2 className="text-sm font-bold text-[#0F172A] dark:text-white uppercase tracking-wider text-xs">
+            About the Enterprise
+          </h2>
+          <p className="text-xs sm:text-sm text-[#475569] dark:text-[#94A3B8] leading-relaxed whitespace-pre-line">
+            {business.description || 'No detailed commercial description provided by this business.'}
           </p>
         </div>
       )}
@@ -191,22 +193,25 @@ export default function BusinessProfilePage() {
       {activeTab === 'services' && (
         <div className="space-y-3">
           {services.length === 0 ? (
-            <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-8 rounded-2xl text-center text-surface-500 dark:text-surface-400 text-xs">
+            <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-8 rounded-lg text-center text-[#64748B] dark:text-[#94A3B8] text-xs">
               No active services listed by this business.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
               {services.map((s) => (
-                <div key={s.service_id} className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-4 rounded-xl shadow-enterprise space-y-2 hover:border-brand-600/30 transition-colors">
+                <div
+                  key={s.service_id}
+                  className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-4 rounded-lg shadow-subtle space-y-2 hover:border-[#2563EB]/30 transition-colors"
+                >
                   <div className="flex items-start justify-between">
-                    <h3 className="font-bold text-xs sm:text-sm text-surface-900 dark:text-white">{s.title}</h3>
-                    <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+                    <h3 className="font-bold text-xs sm:text-sm text-[#0F172A] dark:text-white">{s.title}</h3>
+                    <span className="px-2 py-0.5 text-[10px] font-semibold rounded bg-[#EFF6FF] text-[#1D4ED8] dark:bg-[#172554] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF]">
                       {s.status}
                     </span>
                   </div>
                   {(s.price_min != null || s.price_max != null) && (
-                    <div className="flex items-center space-x-1 text-xs font-semibold text-brand-600 dark:text-brand-400">
-                      <DollarSign className="w-3.5 h-3.5" />
+                    <div className="flex items-center space-x-1 text-xs font-bold text-[#0F172A] dark:text-white">
+                      <DollarSign className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
                       <span>
                         {s.price_min != null && s.price_max != null
                           ? `$${s.price_min} - $${s.price_max}`
@@ -226,22 +231,25 @@ export default function BusinessProfilePage() {
       {activeTab === 'needs' && (
         <div className="space-y-3">
           {needs.length === 0 ? (
-            <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-8 rounded-2xl text-center text-surface-500 dark:text-surface-400 text-xs">
-              No open commercial needs posted by this business.
+            <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-8 rounded-lg text-center text-[#64748B] dark:text-[#94A3B8] text-xs">
+              No open commercial requirements posted by this business.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
               {needs.map((n) => (
-                <div key={n.need_id} className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-4 rounded-xl shadow-enterprise space-y-2 hover:border-accent-500/30 transition-colors">
-                  <h3 className="font-bold text-xs sm:text-sm text-surface-900 dark:text-white">{n.title}</h3>
+                <div
+                  key={n.need_id}
+                  className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-4 rounded-lg shadow-subtle space-y-2 hover:border-[#14B8A6]/30 transition-colors"
+                >
+                  <h3 className="font-bold text-xs sm:text-sm text-[#0F172A] dark:text-white">{n.title}</h3>
                   <div className="flex items-center justify-between text-xs">
                     {(n.budget_min != null || n.budget_max != null) && (
-                      <span className="font-semibold text-accent-600 dark:text-accent-400">
+                      <span className="font-bold text-[#0F766E] dark:text-[#2DD4BF]">
                         Budget: ${n.budget_min || 0} - ${n.budget_max || 'Flexible'}
                       </span>
                     )}
                     {n.deadline && (
-                      <span className="flex items-center space-x-1 text-surface-500">
+                      <span className="flex items-center space-x-1 text-[#64748B] dark:text-[#94A3B8]">
                         <Calendar className="w-3.5 h-3.5" />
                         <span>Due {n.deadline.slice(0, 10)}</span>
                       </span>
@@ -257,19 +265,22 @@ export default function BusinessProfilePage() {
       {activeTab === 'reviews' && (
         <div className="space-y-3">
           {reviewData.reviews.length === 0 ? (
-            <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-8 rounded-2xl text-center text-surface-500 dark:text-surface-400 text-xs">
-              No reviews received yet. Reviews are unlocked upon completing collaborative contracts.
+            <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-8 rounded-lg text-center text-[#64748B] dark:text-[#94A3B8] text-xs">
+              No reviews received yet. Reviews are unlocked strictly upon fulfilling collaborative contracts.
             </div>
           ) : (
             <div className="space-y-3">
               {reviewData.reviews.map((r) => (
-                <div key={r.review_id} className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-4 rounded-xl shadow-enterprise space-y-2">
+                <div
+                  key={r.review_id}
+                  className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-4 rounded-lg shadow-subtle space-y-2"
+                >
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="font-bold text-xs sm:text-sm text-surface-900 dark:text-white">
+                      <div className="font-bold text-xs sm:text-sm text-[#0F172A] dark:text-white">
                         {r.reviewer_business_name}
                       </div>
-                      <div className="text-[11px] text-surface-400">
+                      <div className="text-[11px] text-[#64748B] dark:text-[#94A3B8]">
                         By {r.author_name} &bull; {new Date(r.created_at).toLocaleDateString()}
                       </div>
                     </div>
@@ -278,7 +289,7 @@ export default function BusinessProfilePage() {
                       <span>{r.rating}/5</span>
                     </div>
                   </div>
-                  {r.title && <p className="text-xs font-semibold text-surface-700 dark:text-surface-200">{r.title}</p>}
+                  {r.title && <p className="text-xs font-medium text-[#475569] dark:text-[#CBD5E1]">{r.title}</p>}
                 </div>
               ))}
             </div>
@@ -288,3 +299,4 @@ export default function BusinessProfilePage() {
     </div>
   );
 }
+

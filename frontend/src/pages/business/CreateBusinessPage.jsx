@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/client';
-import { Building2, MapPin, Tag, FileText, ArrowRight, AlertCircle } from 'lucide-react';
+import { Building2, MapPin, Tag, ArrowRight, AlertCircle } from 'lucide-react';
 
 export default function CreateBusinessPage() {
   const [name, setName] = useState('');
@@ -65,35 +65,35 @@ export default function CreateBusinessPage() {
 
   return (
     <div className="max-w-2xl mx-auto py-6">
-      <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-8 sm:p-10 rounded-2xl space-y-6 shadow-enterprise">
+      <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-8 sm:p-10 rounded-lg space-y-6 shadow-subtle">
         
         <div className="space-y-1">
-          <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 text-xs font-semibold mb-1 border border-brand-200 dark:border-brand-800">
+          <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#60A5FA] text-xs font-semibold mb-1 border border-[#DBEAFE] dark:border-[#1E40AF]">
             <Building2 className="w-3.5 h-3.5" />
-            <span>Business Setup</span>
+            <span>Corporate Registration</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-display font-bold text-surface-900 dark:text-white">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#0F172A] dark:text-white tracking-tight">
             Register your business profile
           </h1>
-          <p className="text-xs text-surface-500 dark:text-surface-400">
-            Publish your company on BizLink to start posting commercial needs, offering services, and matching with verified suppliers.
+          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">
+            Publish your company on BizLink to publish commercial needs, offer enterprise services, and connect with verified partners.
           </p>
         </div>
 
         {error && (
-          <div className="flex items-center space-x-2 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="flex items-center space-x-2 p-3 rounded-md bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs">
+            <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
+            <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0] mb-1.5">
               Business / Company Name *
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-surface-400">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#94A3B8]">
                 <Building2 className="w-4 h-4" />
               </div>
               <input
@@ -102,23 +102,23 @@ export default function CreateBusinessPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Apex Industrial Solutions"
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
+                className="w-full pl-10 pr-4 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
-              Primary Category
+            <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0] mb-1.5">
+              Primary Industry Category
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-surface-400">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#94A3B8]">
                 <Tag className="w-4 h-4" />
               </div>
               <select
                 value={primaryCategoryId}
                 onChange={(e) => setPrimaryCategoryId(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors cursor-pointer"
+                className="w-full pl-10 pr-4 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors cursor-pointer"
               >
                 <option value="">Select a category (optional)</option>
                 {categories.map((c) => (
@@ -132,11 +132,11 @@ export default function CreateBusinessPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0] mb-1.5">
                 City
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-surface-400">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#94A3B8]">
                   <MapPin className="w-4 h-4" />
                 </div>
                 <input
@@ -144,13 +144,13 @@ export default function CreateBusinessPage() {
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   placeholder="Austin"
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
+                  className="w-full pl-10 pr-4 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0] mb-1.5">
                 State / Province
               </label>
               <input
@@ -158,12 +158,12 @@ export default function CreateBusinessPage() {
                 value={state}
                 onChange={(e) => setState(e.target.value)}
                 placeholder="TX"
-                className="w-full px-4 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
+                className="w-full px-3 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0] mb-1.5">
                 Country
               </label>
               <input
@@ -171,21 +171,21 @@ export default function CreateBusinessPage() {
                 value={country}
                 onChange={(e) => setCountry(e.target.value)}
                 placeholder="USA"
-                className="w-full px-4 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
+                className="w-full px-3 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
-              Business Description & Focus
+            <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0] mb-1.5">
+              Business Capabilities & Focus
             </label>
             <textarea
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe your capabilities, commercial specializations, and what type of partnerships you seek..."
-              className="w-full p-3 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors resize-none"
+              placeholder="Describe commercial services, specialized capabilities, and partnership criteria..."
+              className="w-full p-3 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors resize-none"
             />
           </div>
 
@@ -193,13 +193,13 @@ export default function CreateBusinessPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-2.5 px-4 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-sm flex items-center justify-center space-x-2 transition-colors disabled:opacity-60 cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs shadow-subtle flex items-center justify-center space-x-2 transition-colors disabled:opacity-60 cursor-pointer"
             >
               {submitting ? (
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  <span>Create Business Profile</span>
+                  <span>Complete Business Registration</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </>
               )}
@@ -210,3 +210,4 @@ export default function CreateBusinessPage() {
     </div>
   );
 }
+

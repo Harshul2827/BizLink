@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Building2, Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react';
+import Logo from '../../components/common/Logo';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -38,33 +39,33 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[75vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-7 bg-white dark:bg-surface-900 p-8 sm:p-10 rounded-2xl shadow-enterprise border border-surface-200 dark:border-surface-800">
-        <div className="text-center">
-          <div className="mx-auto w-12 h-12 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm mb-4">
-            <Building2 className="w-6 h-6" />
+      <div className="max-w-md w-full space-y-6 bg-white dark:bg-[#131C2E] p-8 sm:p-10 rounded-lg shadow-elevated border border-[#E2E8F0] dark:border-[#22314A]">
+        <div className="text-center space-y-2">
+          <div className="flex justify-center mb-3">
+            <Logo variant="mark" size={36} />
           </div>
-          <h2 className="text-2xl font-display font-bold text-surface-900 dark:text-white tracking-tight">
+          <h2 className="text-2xl font-bold text-[#0F172A] dark:text-white tracking-tight">
             Sign in to BizLink
           </h2>
-          <p className="mt-1.5 text-xs text-surface-500 dark:text-surface-400">
-            Access your B2B corporate network and commercial partnerships
+          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">
+            Access your verified B2B corporate network and commercial partnerships
           </p>
         </div>
 
         {error && (
-          <div className="flex items-center space-x-2 p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="flex items-center space-x-2 p-3 rounded-md bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs">
+            <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
+            <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0] mb-1.5">
               Work Email
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-surface-400">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#94A3B8]">
                 <Mail className="w-4 h-4" />
               </div>
               <input
@@ -73,22 +74,22 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@company.com"
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
+                className="w-full pl-10 pr-4 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
               />
             </div>
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300">
+              <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0]">
                 Password
               </label>
-              <a href="#forgot" className="text-xs text-brand-600 dark:text-brand-400 hover:text-brand-700 font-medium hover:underline">
+              <a href="#forgot" className="text-xs text-[#2563EB] dark:text-[#3B82F6] hover:underline font-medium">
                 Forgot password?
               </a>
             </div>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-surface-400">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#94A3B8]">
                 <Lock className="w-4 h-4" />
               </div>
               <input
@@ -97,12 +98,12 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-10 py-2.5 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 placeholder-surface-400 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
+                className="w-full pl-10 pr-10 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-surface-400 hover:text-surface-600 dark:hover:text-surface-200"
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -112,7 +113,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2.5 px-4 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-sm flex items-center justify-center space-x-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs shadow-subtle flex items-center justify-center space-x-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {submitting ? (
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -125,11 +126,11 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="pt-3 border-t border-surface-200 dark:border-surface-800 text-center">
-          <p className="text-xs text-surface-500 dark:text-surface-400">
+        <div className="pt-3 border-t border-[#E2E8F0] dark:border-[#22314A] text-center">
+          <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">
             New to BizLink?{' '}
-            <Link to="/register" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 hover:underline">
-              Join now
+            <Link to="/register" className="font-semibold text-[#2563EB] dark:text-[#3B82F6] hover:underline">
+              Register business
             </Link>
           </p>
         </div>
@@ -137,3 +138,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

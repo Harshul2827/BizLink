@@ -89,27 +89,27 @@ export default function MessagesPage() {
 
   return (
     <div className="max-w-6xl mx-auto py-2">
-      <div className="bg-white dark:bg-surface-900 rounded-2xl shadow-enterprise overflow-hidden border border-surface-200 dark:border-surface-800 grid grid-cols-1 md:grid-cols-12 min-h-[75vh]">
+      <div className="bg-white dark:bg-[#131C2E] rounded-lg shadow-subtle overflow-hidden border border-[#E2E8F0] dark:border-[#22314A] grid grid-cols-1 md:grid-cols-12 min-h-[75vh]">
         
         {/* ─── Left Pane: Conversations List ─────────────────────────── */}
-        <div className="md:col-span-4 border-r border-surface-200 dark:border-surface-800 flex flex-col bg-surface-50/70 dark:bg-surface-900/60">
-          <div className="p-4 border-b border-surface-200 dark:border-surface-800 flex items-center justify-between">
+        <div className="md:col-span-4 border-r border-[#E2E8F0] dark:border-[#22314A] flex flex-col bg-[#F8FAFC] dark:bg-[#0B1220]">
+          <div className="p-4 border-b border-[#E2E8F0] dark:border-[#22314A] flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <MessageSquare className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-              <h2 className="font-bold text-sm text-surface-900 dark:text-white">Messaging</h2>
+              <MessageSquare className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
+              <h2 className="font-bold text-sm text-[#0F172A] dark:text-white">Commercial Messaging</h2>
             </div>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 font-semibold border border-brand-200 dark:border-brand-800">
+            <span className="text-xs px-2 py-0.5 rounded-full bg-[#EFF6FF] text-[#1D4ED8] dark:bg-[#172554] dark:text-[#60A5FA] font-semibold border border-[#DBEAFE] dark:border-[#1E40AF]">
               {conversations.length}
             </span>
           </div>
 
-          <div className="flex-1 overflow-y-auto divide-y divide-surface-200/60 dark:divide-surface-800/60">
+          <div className="flex-1 overflow-y-auto divide-y divide-[#E2E8F0]/70 dark:divide-[#22314A]/70">
             {loadingConvs ? (
-              <div className="p-8 text-center text-xs text-surface-500">Loading chats...</div>
+              <div className="p-8 text-center text-xs text-[#64748B] dark:text-[#94A3B8]">Loading conversations...</div>
             ) : conversations.length === 0 ? (
-              <div className="p-8 text-center text-xs text-surface-500 space-y-2">
+              <div className="p-8 text-center text-xs text-[#64748B] dark:text-[#94A3B8] space-y-2">
                 <p>No active conversations yet.</p>
-                <p className="text-[11px] text-surface-400">Establish a B2B connection to begin messaging partners.</p>
+                <p className="text-[11px] text-[#94A3B8]">Establish a B2B network connection to begin direct messaging.</p>
               </div>
             ) : (
               conversations.map((c) => {
@@ -123,25 +123,25 @@ export default function MessagesPage() {
                     onClick={() => setActiveConnectionId(c.connection_id)}
                     className={`w-full text-left p-3.5 transition-colors flex items-start space-x-3 cursor-pointer ${
                       isSelected
-                        ? 'bg-blue-50/90 dark:bg-brand-950/50 border-l-3 border-brand-600'
-                        : 'hover:bg-surface-100/70 dark:hover:bg-surface-800/50'
+                        ? 'bg-[#EFF6FF] dark:bg-[#172554]/70 border-l-2 border-[#2563EB]'
+                        : 'hover:bg-white dark:hover:bg-[#131C2E]'
                     }`}
                   >
-                    <div className="w-9 h-9 rounded-lg bg-brand-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm">
-                      {partnerName ? partnerName[0] : 'B'}
+                    <div className="w-9 h-9 rounded-md bg-[#2563EB] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-subtle">
+                      {partnerName ? partnerName.charAt(0).toUpperCase() : 'B'}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-xs text-surface-900 dark:text-white truncate">
+                        <h4 className="font-semibold text-xs text-[#0F172A] dark:text-white truncate">
                           {partnerName}
                         </h4>
                         {c.last_message_at && (
-                          <span className="text-[10px] text-surface-400">
+                          <span className="text-[10px] text-[#94A3B8]">
                             {new Date(c.last_message_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs text-surface-500 dark:text-surface-400 truncate mt-0.5">
+                      <p className="text-xs text-[#64748B] dark:text-[#94A3B8] truncate mt-0.5">
                         {c.last_message_body || 'Start a conversation...'}
                       </p>
                     </div>
@@ -153,35 +153,35 @@ export default function MessagesPage() {
         </div>
 
         {/* ─── Right Pane: Active Message Thread ──────────────────────── */}
-        <div className="md:col-span-8 flex flex-col justify-between h-full bg-white dark:bg-surface-900">
+        <div className="md:col-span-8 flex flex-col justify-between h-full bg-white dark:bg-[#131C2E]">
           {activeConnectionId ? (
             <>
               {/* Thread Header */}
-              <div className="p-3.5 border-b border-surface-200 dark:border-surface-800 flex items-center space-x-3">
-                <div className="w-9 h-9 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 border border-brand-200 dark:border-brand-800 flex items-center justify-center font-bold text-xs">
+              <div className="p-3.5 border-b border-[#E2E8F0] dark:border-[#22314A] flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-[#1E40AF] flex items-center justify-center font-bold text-xs">
                   <Building2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-xs sm:text-sm text-surface-900 dark:text-white">
+                  <h3 className="font-bold text-xs sm:text-sm text-[#0F172A] dark:text-white">
                     {activeConv
                       ? (Number(activeConv.requester_business_id) === Number(activeBusiness?.business_id)
                           ? activeConv.receiver_business_name
                           : activeConv.requester_business_name)
                       : 'Commercial Partner'}
                   </h3>
-                  <p className="text-[10px] text-accent-600 dark:text-accent-400 font-medium">
-                    Verified Direct Commercial Channel
+                  <p className="text-[10px] text-[#0F766E] dark:text-[#2DD4BF] font-medium">
+                    Verified Commercial Channel
                   </p>
                 </div>
               </div>
 
               {/* Message Timeline */}
-              <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-3.5 max-h-[55vh] bg-surface-50/30 dark:bg-surface-900/30">
+              <div className="flex-1 p-4 sm:p-6 overflow-y-auto space-y-3.5 max-h-[55vh] bg-[#F8FAFC]/50 dark:bg-[#0B1220]/40">
                 {loadingMsgs ? (
-                  <div className="text-center text-xs text-surface-400 py-8">Loading chat history...</div>
+                  <div className="text-center text-xs text-[#64748B] dark:text-[#94A3B8] py-8">Loading history...</div>
                 ) : messages.length === 0 ? (
-                  <div className="text-center text-xs text-surface-400 py-12">
-                    No messages in this conversation yet. Send a message below.
+                  <div className="text-center text-xs text-[#64748B] dark:text-[#94A3B8] py-12">
+                    No messages in this conversation yet. Send a direct message below.
                   </div>
                 ) : (
                   messages.map((m) => {
@@ -191,19 +191,19 @@ export default function MessagesPage() {
                         key={m.message_id}
                         className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
                       >
-                        <div className="text-[10px] text-surface-400 mb-0.5 px-1">
+                        <div className="text-[10px] text-[#64748B] dark:text-[#94A3B8] mb-0.5 px-1">
                           {isMe ? 'You' : m.sender_business_name || m.sender_name}
                         </div>
                         <div
-                          className={`max-w-md p-3 rounded-xl text-xs leading-relaxed ${
+                          className={`max-w-md p-3 rounded-md text-xs leading-relaxed ${
                             isMe
-                              ? 'bg-brand-600 text-white rounded-br-none shadow-sm'
-                              : 'bg-surface-100 dark:bg-surface-800 text-surface-900 dark:text-surface-100 rounded-bl-none border border-surface-200 dark:border-surface-700'
+                              ? 'bg-[#2563EB] text-white rounded-br-none shadow-subtle'
+                              : 'bg-[#F1F5F9] dark:bg-[#1E293B] text-[#0F172A] dark:text-[#F1F5F9] rounded-bl-none border border-[#E2E8F0] dark:border-[#334155]'
                           }`}
                         >
                           {m.body}
                         </div>
-                        <div className="text-[9px] text-surface-400 mt-1 px-1 flex items-center space-x-1">
+                        <div className="text-[9px] text-[#94A3B8] mt-1 px-1 flex items-center space-x-1">
                           <Clock className="w-2.5 h-2.5" />
                           <span>{new Date(m.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
@@ -215,27 +215,27 @@ export default function MessagesPage() {
               </div>
 
               {/* Message Composer */}
-              <form onSubmit={handleSendMessage} className="p-3 border-t border-surface-200 dark:border-surface-800 flex items-center space-x-2 bg-white dark:bg-surface-900">
+              <form onSubmit={handleSendMessage} className="p-3 border-t border-[#E2E8F0] dark:border-[#22314A] flex items-center space-x-2 bg-white dark:bg-[#131C2E]">
                 <input
                   type="text"
                   value={bodyText}
                   onChange={(e) => setBodyText(e.target.value)}
-                  placeholder="Write a message..."
-                  className="flex-1 px-3.5 py-2 rounded-lg bg-surface-50 dark:bg-surface-900 border border-surface-200 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-2 focus:ring-brand-600/30 focus:border-brand-600 transition-colors"
+                  placeholder="Type a corporate message..."
+                  className="flex-1 px-3.5 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white placeholder-[#94A3B8] text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
                 />
                 <button
                   type="submit"
                   disabled={sending || !bodyText.trim()}
-                  className="p-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white shadow-sm disabled:opacity-50 transition-colors cursor-pointer"
+                  className="p-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-subtle disabled:opacity-50 transition-colors cursor-pointer"
                 >
                   <Send className="w-4 h-4" />
                 </button>
               </form>
             </>
           ) : (
-            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-2 text-surface-400">
+            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-2 text-[#94A3B8]">
               <MessageSquare className="w-10 h-10" />
-              <p className="text-xs font-semibold">Select a conversation to start messaging</p>
+              <p className="text-xs font-semibold text-[#0F172A] dark:text-white">Select a conversation to start messaging</p>
             </div>
           )}
         </div>
@@ -244,3 +244,4 @@ export default function MessagesPage() {
     </div>
   );
 }
+

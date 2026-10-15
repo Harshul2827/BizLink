@@ -63,34 +63,34 @@ export default function DashboardPage() {
   };
 
   const handleDeleteNeed = async (needId) => {
-    if (!window.confirm('Are you sure you want to remove this need?')) return;
+    if (!window.confirm('Are you sure you want to remove this requirement?')) return;
     try {
       await api.delete(`/businesses/${activeBusiness.business_id}/needs/${needId}`);
       loadData();
     } catch (err) {
-      alert(err.message || 'Failed to delete need');
+      alert(err.message || 'Failed to delete requirement');
     }
   };
 
   if (!activeBusiness && businesses.length === 0) {
     return (
-      <div className="max-w-xl mx-auto my-12 text-center bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-10 rounded-2xl shadow-enterprise space-y-4">
-        <div className="w-14 h-14 rounded-xl bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 flex items-center justify-center mx-auto">
+      <div className="max-w-xl mx-auto my-12 text-center bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-10 rounded-lg shadow-subtle space-y-4">
+        <div className="w-14 h-14 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center mx-auto border border-[#DBEAFE] dark:border-[#1E40AF]">
           <Building2 className="w-7 h-7" />
         </div>
-        <h2 className="text-xl font-display font-bold text-surface-900 dark:text-white">
+        <h2 className="text-xl font-bold text-[#0F172A] dark:text-white">
           No Business Profile Found
         </h2>
-        <p className="text-xs text-surface-500 dark:text-surface-400 max-w-sm mx-auto">
-          To manage services, post commercial requirements, and connect with peers, please set up your business profile.
+        <p className="text-xs text-[#64748B] dark:text-[#94A3B8] max-w-sm mx-auto">
+          To manage services, post commercial requirements, and connect with partners, please register your business profile.
         </p>
         <div className="pt-2">
           <Link
             to="/business/create"
-            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-sm transition-colors"
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs shadow-subtle transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Create Business Profile</span>
+            <span>Register Business Profile</span>
           </Link>
         </div>
       </div>
@@ -100,22 +100,22 @@ export default function DashboardPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 py-2">
       {/* ─── Business Top Banner ──────────────────────────────────────── */}
-      <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-6 rounded-2xl shadow-enterprise flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
+      <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 rounded-lg shadow-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
         <div className="flex items-start space-x-4">
-          <div className="w-14 h-14 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-sm flex-shrink-0">
-            <Building2 className="w-7 h-7" />
+          <div className="w-14 h-14 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-[#1E40AF] flex items-center justify-center font-bold text-xl shrink-0 shadow-subtle">
+            {activeBusiness?.name ? activeBusiness.name.charAt(0).toUpperCase() : 'B'}
           </div>
           <div>
             <div className="flex items-center space-x-2.5">
-              <h1 className="text-xl sm:text-2xl font-display font-bold text-surface-900 dark:text-white">
+              <h1 className="text-xl sm:text-2xl font-bold text-[#0F172A] dark:text-white tracking-tight">
                 {activeBusiness?.name}
               </h1>
-              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#F0FDFA] dark:bg-[#042F2E] text-[#0F766E] dark:text-[#2DD4BF] border border-[#CCFBF1] dark:border-[#115E59]">
                 {activeBusiness?.status || 'ACTIVE'}
               </span>
             </div>
-            <p className="text-xs text-surface-500 dark:text-surface-400 mt-1">
-              {[activeBusiness?.city, activeBusiness?.state, activeBusiness?.country].filter(Boolean).join(', ')} &bull; Primary Business Console
+            <p className="text-xs text-[#64748B] dark:text-[#94A3B8] mt-1">
+              {[activeBusiness?.city, activeBusiness?.state, activeBusiness?.country].filter(Boolean).join(', ')} &bull; Enterprise Operations Console
             </p>
           </div>
         </div>
@@ -123,14 +123,14 @@ export default function DashboardPage() {
         <div className="flex items-center space-x-2.5 w-full md:w-auto">
           <Link
             to={`/business/${activeBusiness?.business_id}`}
-            className="px-3.5 py-2 rounded-lg border border-surface-200 dark:border-surface-700 text-xs font-semibold text-surface-700 dark:text-surface-200 hover:bg-surface-50 dark:hover:bg-surface-800 flex items-center space-x-1.5 transition-colors"
+            className="px-3.5 py-2 rounded-md border border-[#E2E8F0] dark:border-[#334155] text-xs font-semibold text-[#0F172A] dark:text-white hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] flex items-center space-x-1.5 transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5" />
-            <span>View Public Profile</span>
+            <span>View Public Directory Profile</span>
           </Link>
           <Link
             to="/business/create"
-            className="px-3.5 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-sm flex items-center space-x-1.5 transition-colors"
+            className="px-3.5 py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle flex items-center space-x-1.5 transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add Business</span>
@@ -145,11 +145,11 @@ export default function DashboardPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="p-1.5 rounded-lg bg-brand-50 dark:bg-brand-950 text-brand-600 dark:text-brand-400 border border-brand-100 dark:border-brand-900">
+              <div className="p-1.5 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-[#1E40AF]">
                 <Briefcase className="w-4 h-4" />
               </div>
-              <h2 className="text-base font-bold text-surface-900 dark:text-white">Services & Capabilities</h2>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-400 font-semibold border border-surface-200 dark:border-surface-700">
+              <h2 className="text-base font-bold text-[#0F172A] dark:text-white">Services & Capabilities</h2>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-[#F1F5F9] dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] font-mono font-semibold border border-[#E2E8F0] dark:border-[#334155]">
                 {services.length}
               </span>
             </div>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
                 setEditingItem(null);
                 setModalOpen(true);
               }}
-              className="px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center space-x-1 shadow-sm transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold flex items-center space-x-1 shadow-subtle transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add Service</span>
@@ -168,17 +168,20 @@ export default function DashboardPage() {
 
           <div className="space-y-2.5">
             {services.length === 0 ? (
-              <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-8 rounded-xl text-center text-surface-500 dark:text-surface-400 text-xs">
-                No active services listed yet. Click "+ Add Service" to publish your company's offerings.
+              <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-8 rounded-lg text-center text-[#64748B] dark:text-[#94A3B8] text-xs">
+                No active services listed yet. Click "+ Add Service" to publish company capabilities.
               </div>
             ) : (
               services.map((s) => (
-                <div key={s.service_id} className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-4 rounded-xl flex items-center justify-between hover:border-brand-600/40 transition-colors shadow-sm">
+                <div
+                  key={s.service_id}
+                  className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-4 rounded-lg flex items-center justify-between hover:border-[#2563EB]/40 transition-colors shadow-subtle"
+                >
                   <div className="space-y-1">
-                    <h3 className="font-semibold text-xs sm:text-sm text-surface-900 dark:text-white">{s.title}</h3>
+                    <h3 className="font-semibold text-xs sm:text-sm text-[#0F172A] dark:text-white">{s.title}</h3>
                     {(s.price_min != null || s.price_max != null) && (
-                      <p className="text-xs text-brand-600 dark:text-brand-400 font-medium">
-                        ${s.price_min || 0} - ${s.price_max || 'N/A'}
+                      <p className="text-xs text-[#2563EB] dark:text-[#3B82F6] font-bold">
+                        ${s.price_min || 0} - ${s.price_max || 'Custom'}
                       </p>
                     )}
                   </div>
@@ -189,13 +192,15 @@ export default function DashboardPage() {
                         setEditingItem(s);
                         setModalOpen(true);
                       }}
-                      className="p-1.5 rounded-lg text-surface-400 hover:text-surface-700 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-surface-800 cursor-pointer"
+                      className="p-1.5 rounded-md text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] cursor-pointer"
+                      title="Edit Service"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => handleDeleteService(s.service_id)}
-                      className="p-1.5 rounded-lg text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
+                      className="p-1.5 rounded-md text-[#94A3B8] hover:text-[#DC2626] hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
+                      title="Delete Service"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -210,11 +215,11 @@ export default function DashboardPage() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="p-1.5 rounded-lg bg-teal-50 dark:bg-teal-950 text-accent-500 border border-teal-100 dark:border-teal-900">
+              <div className="p-1.5 rounded-md bg-[#F0FDFA] dark:bg-[#042F2E] text-[#0F766E] dark:text-[#2DD4BF] border border-[#CCFBF1] dark:border-[#115E59]">
                 <Target className="w-4 h-4" />
               </div>
-              <h2 className="text-base font-bold text-surface-900 dark:text-white">Commercial Needs</h2>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-surface-100 dark:bg-surface-800 text-surface-600 dark:text-surface-400 font-semibold border border-surface-200 dark:border-surface-700">
+              <h2 className="text-base font-bold text-[#0F172A] dark:text-white">Commercial Requirements</h2>
+              <span className="text-xs px-2 py-0.5 rounded-full bg-[#F1F5F9] dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] font-mono font-semibold border border-[#E2E8F0] dark:border-[#334155]">
                 {needs.length}
               </span>
             </div>
@@ -224,7 +229,7 @@ export default function DashboardPage() {
                 setEditingItem(null);
                 setModalOpen(true);
               }}
-              className="px-3 py-1.5 rounded-lg bg-accent-500 hover:bg-accent-600 text-white text-xs font-semibold flex items-center space-x-1 shadow-sm transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-md bg-[#0F766E] hover:bg-[#0D9488] text-white text-xs font-semibold flex items-center space-x-1 shadow-subtle transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Post Need</span>
@@ -233,17 +238,20 @@ export default function DashboardPage() {
 
           <div className="space-y-2.5">
             {needs.length === 0 ? (
-              <div className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-8 rounded-xl text-center text-surface-500 dark:text-surface-400 text-xs">
-                No open needs published yet. Click "+ Post Need" to find suppliers and matching partners.
+              <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-8 rounded-lg text-center text-[#64748B] dark:text-[#94A3B8] text-xs">
+                No open commercial requirements published yet. Click "+ Post Need" to find suppliers and matching partners.
               </div>
             ) : (
               needs.map((n) => (
-                <div key={n.need_id} className="bg-white dark:bg-surface-900 border border-surface-200 dark:border-surface-800 p-4 rounded-xl flex items-center justify-between hover:border-accent-500/40 transition-colors shadow-sm">
+                <div
+                  key={n.need_id}
+                  className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-4 rounded-lg flex items-center justify-between hover:border-[#14B8A6]/40 transition-colors shadow-subtle"
+                >
                   <div className="space-y-1">
-                    <h3 className="font-semibold text-xs sm:text-sm text-surface-900 dark:text-white">{n.title}</h3>
-                    <div className="flex items-center space-x-3 text-xs text-surface-500 dark:text-surface-400">
+                    <h3 className="font-semibold text-xs sm:text-sm text-[#0F172A] dark:text-white">{n.title}</h3>
+                    <div className="flex items-center space-x-3 text-xs text-[#64748B] dark:text-[#94A3B8]">
                       {(n.budget_min != null || n.budget_max != null) && (
-                        <span className="text-accent-600 dark:text-accent-400 font-medium">
+                        <span className="text-[#0F766E] dark:text-[#2DD4BF] font-bold">
                           Budget: ${n.budget_min || 0} - ${n.budget_max || 'Flexible'}
                         </span>
                       )}
@@ -257,13 +265,15 @@ export default function DashboardPage() {
                         setEditingItem(n);
                         setModalOpen(true);
                       }}
-                      className="p-1.5 rounded-lg text-surface-400 hover:text-surface-700 dark:hover:text-white hover:bg-surface-100 dark:hover:bg-surface-800 cursor-pointer"
+                      className="p-1.5 rounded-md text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] cursor-pointer"
+                      title="Edit Need"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => handleDeleteNeed(n.need_id)}
-                      className="p-1.5 rounded-lg text-surface-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
+                      className="p-1.5 rounded-md text-[#94A3B8] hover:text-[#DC2626] hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
+                      title="Delete Need"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -288,3 +298,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
