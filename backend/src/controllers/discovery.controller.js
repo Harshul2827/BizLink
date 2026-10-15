@@ -1,7 +1,5 @@
 const discoveryService = require('../services/discovery.service');
 const matchService = require('../services/match.service');
-const { requireBusinessAccess } = require('../middleware/businessAuth'); // Import from Track 2
-const { ForbiddenError } = require('../errors/AppError');
 
 class DiscoveryController {
   /**

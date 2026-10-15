@@ -24,7 +24,7 @@ router.use('/collaborations', collaborationRoutes);
 router.use('/reviews', reviewRoutes);
 router.use('/posts', postRoutes);
 router.use('/admin', adminRoutes);
-router.use('/reports', adminRoutes);
+// Note: /reports routes are handled inside adminRoutes at /admin/reports
 router.use('/analytics', analyticsRoutes);
 
 module.exports = router;

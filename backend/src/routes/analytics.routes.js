@@ -6,8 +6,8 @@ const { analyticsQuerySchema } = require('../validators/analytics.validator');
 
 const router = express.Router();
 
-// Analytics endpoints require authentication
-router.use(authenticate);
+// Analytics endpoints require authentication + internal role (ADMIN or OPERATIONS)
+router.use(authenticate, requireRole('ADMIN', 'OPERATIONS'));
 
 // Platform Overview KPIs
 router.get(
