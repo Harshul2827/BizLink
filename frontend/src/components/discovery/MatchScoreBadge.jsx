@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { Sparkles, Info } from 'lucide-react';
+import { Target, Info } from 'lucide-react';
 
 export default function MatchScoreBadge({ score, explanation = null }) {
   const [showTooltip, setShowTooltip] = useState(false);
   const percentage = Math.round((score || 0) * 100);
 
-  let colorClasses = 'bg-surface-100 text-surface-700 dark:bg-surface-800 dark:text-surface-300 border-surface-300';
-  let barColor = 'bg-surface-500';
+  let badgeClasses = 'bg-[#F1F5F9] text-[#475569] dark:bg-[#1E293B] dark:text-[#94A3B8] border-[#E2E8F0] dark:border-[#334155]';
+  let barColor = 'bg-[#64748B]';
 
   if (percentage >= 80) {
-    colorClasses = 'bg-teal-50 text-accent-700 dark:bg-teal-950 dark:text-accent-300 border-teal-200 dark:border-teal-800';
-    barColor = 'bg-accent-500';
+    badgeClasses = 'bg-[#F0FDFA] text-[#0F766E] dark:bg-[#042F2E] dark:text-[#2DD4BF] border-[#CCFBF1] dark:border-[#115E59]';
+    barColor = 'bg-[#14B8A6]';
   } else if (percentage >= 50) {
-    colorClasses = 'bg-brand-50 text-brand-700 dark:bg-brand-950 dark:text-brand-300 border-brand-200 dark:border-brand-800';
-    barColor = 'bg-brand-600';
+    badgeClasses = 'bg-[#EFF6FF] text-[#1D4ED8] dark:bg-[#172554] dark:text-[#60A5FA] border-[#DBEAFE] dark:border-[#1E40AF]';
+    barColor = 'bg-[#2563EB]';
   } else if (percentage > 0) {
-    colorClasses = 'bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800';
-    barColor = 'bg-amber-500';
+    badgeClasses = 'bg-[#FFFBEB] text-[#B45309] dark:bg-[#451A03] dark:text-[#FCD34D] border-[#FEF3C7] dark:border-[#78350F]';
+    barColor = 'bg-[#F59E0B]';
   }
 
   return (
@@ -24,41 +24,42 @@ export default function MatchScoreBadge({ score, explanation = null }) {
       <div
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
-        className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold border transition-colors cursor-help ${colorClasses}`}
+        className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold border transition-colors cursor-help ${badgeClasses}`}
+        title="Compatibility match score based on category, budget, and location"
       >
-        <Sparkles className="w-3.5 h-3.5" />
+        <Target className="w-3.5 h-3.5 shrink-0" />
         <span>{percentage}% Match</span>
-        {explanation && <Info className="w-3 h-3 opacity-60 ml-0.5" />}
+        {explanation && <Info className="w-3 h-3 opacity-60 ml-0.5 shrink-0" />}
       </div>
 
       {showTooltip && explanation && (
-        <div className="absolute right-0 bottom-full mb-2 w-64 p-3.5 rounded-xl bg-white dark:bg-surface-900 shadow-enterprise z-50 text-xs space-y-2 border border-surface-200 dark:border-surface-700 animate-fadeIn">
-          <div className="font-bold text-surface-900 dark:text-white flex items-center justify-between">
-            <span>Match Breakdown</span>
-            <span>{percentage}%</span>
+        <div className="absolute right-0 bottom-full mb-2 w-64 p-3.5 rounded-lg bg-white dark:bg-[#131C2E] shadow-lg z-50 text-xs space-y-2 border border-[#E2E8F0] dark:border-[#22314A]">
+          <div className="font-semibold text-[#0F172A] dark:text-white flex items-center justify-between">
+            <span>Compatibility Breakdown</span>
+            <span className="font-mono font-bold">{percentage}%</span>
           </div>
 
-          <div className="w-full h-1.5 rounded-full bg-surface-200 dark:bg-surface-800 overflow-hidden">
-            <div className={`h-full ${barColor}`} style={{ width: `${percentage}%` }} />
+          <div className="w-full h-1.5 rounded-full bg-[#E2E8F0] dark:bg-[#1E293B] overflow-hidden">
+            <div className={`h-full ${barColor} transition-all duration-300`} style={{ width: `${percentage}%` }} />
           </div>
 
-          <div className="space-y-1 text-[11px] text-surface-600 dark:text-surface-400 pt-1">
+          <div className="space-y-1.5 text-[11px] text-[#475569] dark:text-[#94A3B8] pt-1">
             {explanation.category_match != null && (
-              <div className="flex justify-between">
-                <span>Category Alignment:</span>
-                <span className="font-semibold text-surface-900 dark:text-surface-100">{explanation.category_match ? '100%' : '0%'}</span>
+              <div className="flex justify-between items-center">
+                <span>Category Alignment</span>
+                <span className="font-semibold text-[#0F172A] dark:text-white">{explanation.category_match ? '100%' : '0%'}</span>
               </div>
             )}
             {explanation.budget_overlap_score != null && (
-              <div className="flex justify-between">
-                <span>Budget Overlap:</span>
-                <span className="font-semibold text-surface-900 dark:text-surface-100">{Math.round(explanation.budget_overlap_score * 100)}%</span>
+              <div className="flex justify-between items-center">
+                <span>Budget Overlap</span>
+                <span className="font-semibold text-[#0F172A] dark:text-white">{Math.round(explanation.budget_overlap_score * 100)}%</span>
               </div>
             )}
             {explanation.city_proximity_match != null && (
-              <div className="flex justify-between">
-                <span>Location Proximity:</span>
-                <span className="font-semibold text-surface-900 dark:text-surface-100">{explanation.city_proximity_match ? '100%' : '0%'}</span>
+              <div className="flex justify-between items-center">
+                <span>Location Proximity</span>
+                <span className="font-semibold text-[#0F172A] dark:text-white">{explanation.city_proximity_match ? '100%' : '0%'}</span>
               </div>
             )}
           </div>
@@ -67,3 +68,4 @@ export default function MatchScoreBadge({ score, explanation = null }) {
     </div>
   );
 }
+

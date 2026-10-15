@@ -6,67 +6,71 @@ import {
   Compass,
   ArrowRight,
   ShieldCheck,
-  Zap,
   CheckCircle2,
-  Users2,
-  Sparkles,
+  Briefcase,
   Award,
-  Layers,
-  TrendingUp,
-  Lock
+  Zap,
+  Lock,
+  FileCheck
 } from 'lucide-react';
 
 export default function LandingPage() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="space-y-16 py-6 sm:py-10">
+    <div className="space-y-16 py-8 sm:py-12">
       {/* ─── Hero Section ────────────────────────────────────────────── */}
-      <section className="relative text-center max-w-4xl mx-auto space-y-6">
-        <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-[#EEF6FC] dark:bg-[#1E2E48] border border-[#B5DAF4] dark:border-[#22314A] text-[#0A66C2] dark:text-[#388FE5] text-xs font-semibold">
-          <ShieldCheck className="w-4 h-4 text-[#14B8A6]" />
-          <span>The Professional B2B Collaboration & Trust Network</span>
+      <section className="text-center max-w-4xl mx-auto space-y-6">
+        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#F0FDFA] dark:bg-[#042F2E] border border-[#CCFBF1] dark:border-[#115E59] text-[#0F766E] dark:text-[#2DD4BF] text-xs font-semibold">
+          <ShieldCheck className="w-4 h-4 text-[#14B8A6] shrink-0" />
+          <span>Verified Corporate Partnership & Collaboration Network</span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-[#1D2226] dark:text-white tracking-tight leading-[1.2]">
-          Connect, collaborate, and scale with <span className="text-[#0A66C2] dark:text-[#388FE5]">verified enterprises</span>
+        <h1 className="text-3xl sm:text-5xl font-bold text-[#0F172A] dark:text-white tracking-tight leading-[1.15]">
+          Connect, collaborate, and scale with{' '}
+          <span className="text-[#2563EB] dark:text-[#3B82F6]">verified enterprises</span>
         </h1>
 
-        <p className="text-base sm:text-lg text-[#5E6C76] dark:text-[#94A3B8] max-w-2xl mx-auto font-normal leading-relaxed">
-          BizLink powers corporate partnerships through rule-based service matching, milestone-driven contract tracking, and authenticated peer reviews.
+        <p className="text-base sm:text-lg text-[#475569] dark:text-[#94A3B8] max-w-2xl mx-auto font-normal leading-relaxed">
+          BizLink provides commercial enterprises with deterministic service matching, milestone-driven contract tracking, and peer reviews verified strictly by completed deliverables.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
           <Link
             to={isAuthenticated ? '/discover' : '/register'}
-            className="w-full sm:w-auto px-7 py-3 rounded-lg bg-[#0A66C2] hover:bg-[#004182] text-white font-semibold text-sm shadow-sm flex items-center justify-center space-x-2 transition-colors"
+            className="w-full sm:w-auto px-6 py-2.5 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-sm shadow-subtle flex items-center justify-center space-x-2 transition-colors"
           >
-            <span>{isAuthenticated ? 'Open Marketplace' : 'Join as Business'}</span>
+            <span>{isAuthenticated ? 'Open Marketplace' : 'Register Business'}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             to="/discover"
-            className="w-full sm:w-auto px-7 py-3 rounded-lg bg-[#FFFFFF] dark:bg-[#131C2E] border border-[#D9E2EC] dark:border-[#22314A] text-[#1D2226] dark:text-white hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] font-semibold text-sm transition-colors flex items-center justify-center space-x-2"
+            className="w-full sm:w-auto px-6 py-2.5 rounded-md bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] text-[#0F172A] dark:text-white hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] font-semibold text-sm shadow-subtle transition-colors flex items-center justify-center space-x-2"
           >
-            <Compass className="w-4 h-4 text-[#0A66C2]" />
-            <span>Explore Active Needs & Services</span>
+            <Compass className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
+            <span>Explore Active Directory</span>
           </Link>
         </div>
 
         {/* Value Proof Strip */}
-        <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto text-left">
+        <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-left">
           {[
-            { label: 'Rule-Based Matching', desc: 'Deterministic score calculation', icon: Zap },
-            { label: 'Verified Businesses', desc: 'Official administrative badge', icon: ShieldCheck },
-            { label: 'Lifecycle Contracts', desc: 'Draft to completed milestones', icon: Users2 },
-            { label: 'Authenticated Reviews', desc: 'Tied to fulfilled deliverables', icon: Award },
+            { label: 'Rule-Based Matching', desc: 'Deterministic multi-factor score calculation', icon: Zap },
+            { label: 'Verified Identity', desc: 'Administrative vetting & corporate badges', icon: ShieldCheck },
+            { label: 'Lifecycle Contracts', desc: 'Structured milestones from draft to delivery', icon: FileCheck },
+            { label: 'Authenticated Reviews', desc: 'Strictly restricted to fulfilled contracts', icon: Award },
           ].map((item, idx) => {
             const Icon = item.icon;
             return (
-              <div key={idx} className="p-4 rounded-xl bg-[#FFFFFF] dark:bg-[#131C2E] border border-[#D9E2EC] dark:border-[#22314A] shadow-sm">
-                <Icon className="w-5 h-5 text-[#0A66C2] dark:text-[#388FE5] mb-2" />
-                <div className="font-bold text-xs text-[#1D2226] dark:text-white">{item.label}</div>
-                <div className="text-[11px] text-[#5E6C76] dark:text-[#94A3B8] mt-0.5">{item.desc}</div>
+              <div
+                key={idx}
+                className="p-4 rounded-lg bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] shadow-subtle"
+              >
+                <div className="w-8 h-8 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center mb-2.5">
+                  <Icon className="w-4 h-4" />
+                </div>
+                <div className="font-semibold text-xs text-[#0F172A] dark:text-white">{item.label}</div>
+                <div className="text-[11px] text-[#64748B] dark:text-[#94A3B8] mt-0.5 leading-snug">{item.desc}</div>
               </div>
             );
           })}
@@ -76,66 +80,66 @@ export default function LandingPage() {
       {/* ─── Core Pillars ────────────────────────────────────────────── */}
       <section className="space-y-8 max-w-5xl mx-auto">
         <div className="text-center max-w-xl mx-auto space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#1D2226] dark:text-white">
-            Built for enterprise credibility & growth
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A] dark:text-white tracking-tight">
+            Engineered for institutional credibility
           </h2>
-          <p className="text-xs sm:text-sm text-[#5E6C76] dark:text-[#94A3B8]">
-            Facilitate high-value B2B commercial transactions with complete relationship transparency.
+          <p className="text-xs sm:text-sm text-[#64748B] dark:text-[#94A3B8]">
+            Facilitate high-value B2B commercial engagements with complete relationship transparency.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-[#FFFFFF] dark:bg-[#131C2E] border border-[#D9E2EC] dark:border-[#22314A] p-6 rounded-xl space-y-3 shadow-sm hover:border-[#0A66C2] transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-[#EEF6FC] dark:bg-[#1E2E48] text-[#0A66C2] dark:text-[#388FE5] flex items-center justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 rounded-lg space-y-3 shadow-subtle hover:border-[#2563EB]/40 transition-colors">
+            <div className="w-10 h-10 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center">
               <Zap className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-bold text-[#1D2226] dark:text-white">Deterministic Need Matching</h3>
-            <p className="text-xs text-[#5E6C76] dark:text-[#94A3B8] leading-relaxed">
-              Match your open commercial requirements with qualified supplier services based on category alignment, budget compatibility, and location proximity.
+            <h3 className="text-sm font-bold text-[#0F172A] dark:text-white">Deterministic Capability Matching</h3>
+            <p className="text-xs text-[#64748B] dark:text-[#94A3B8] leading-relaxed">
+              Match open commercial requirements with qualified supplier services based on category alignment, budget compatibility, and location proximity.
             </p>
           </div>
 
-          <div className="bg-[#FFFFFF] dark:bg-[#131C2E] border border-[#D9E2EC] dark:border-[#22314A] p-6 rounded-xl space-y-3 shadow-sm hover:border-[#0A66C2] transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-[#EEF6FC] dark:bg-[#1E2E48] text-[#0A66C2] dark:text-[#388FE5] flex items-center justify-center">
-              <Users2 className="w-5 h-5" />
+          <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 rounded-lg space-y-3 shadow-subtle hover:border-[#2563EB]/40 transition-colors">
+            <div className="w-10 h-10 rounded-md bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center">
+              <Briefcase className="w-5 h-5" />
             </div>
-            <h3 className="text-base font-bold text-[#1D2226] dark:text-white">Structured Collaborations</h3>
-            <p className="text-xs text-[#5E6C76] dark:text-[#94A3B8] leading-relaxed">
-              Manage commercial engagements through audited status stages: proposal request, negotiation, active execution, and verified completion.
+            <h3 className="text-sm font-bold text-[#0F172A] dark:text-white">Structured Commercial Lifecycle</h3>
+            <p className="text-xs text-[#64748B] dark:text-[#94A3B8] leading-relaxed">
+              Manage commercial engagements through audited status stages: proposal request, counterparty negotiation, active execution, and signed deliverable completion.
             </p>
           </div>
 
-          <div className="bg-[#FFFFFF] dark:bg-[#131C2E] border border-[#D9E2EC] dark:border-[#22314A] p-6 rounded-xl space-y-3 shadow-sm hover:border-[#0A66C2] transition-colors">
-            <div className="w-10 h-10 rounded-lg bg-[#EEF6FC] dark:bg-[#1E2E48] text-[#0A66C2] dark:text-[#388FE5] flex items-center justify-center">
-              <ShieldCheck className="w-5 h-5" />
+          <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 rounded-lg space-y-3 shadow-subtle hover:border-[#2563EB]/40 transition-colors">
+            <div className="w-10 h-10 rounded-md bg-[#F0FDFA] dark:bg-[#042F2E] text-[#0F766E] dark:text-[#2DD4BF] flex items-center justify-center">
+              <ShieldCheck className="w-5 h-5 text-[#14B8A6]" />
             </div>
-            <h3 className="text-base font-bold text-[#1D2226] dark:text-white">Tamper-Proof Reputation</h3>
-            <p className="text-xs text-[#5E6C76] dark:text-[#94A3B8] leading-relaxed">
-              Reviews and rating scores are strictly restricted to businesses with verified completed collaborations, eliminating spam and fabricated feedback.
+            <h3 className="text-sm font-bold text-[#0F172A] dark:text-white">Tamper-Proof Reputation Network</h3>
+            <p className="text-xs text-[#64748B] dark:text-[#94A3B8] leading-relaxed">
+              Counterparty reviews and performance metrics are locked exclusively to confirmed contract fulfillment, eliminating anonymous feedback and false claims.
             </p>
           </div>
         </div>
       </section>
 
       {/* ─── Call to Action Banner ───────────────────────────────────── */}
-      <section className="rounded-2xl bg-[#004182] text-white p-8 sm:p-12 shadow-md">
+      <section className="rounded-xl bg-[#0F172A] dark:bg-[#0B1220] border border-[#1E293B] text-white p-8 sm:p-10 shadow-elevated">
         <div className="max-w-2xl space-y-4">
-          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-[#0A66C2] text-white text-xs font-semibold">
+          <div className="inline-flex items-center space-x-2 px-2.5 py-1 rounded-md bg-[#1E293B] text-[#93C5FD] text-xs font-semibold border border-[#334155]">
             <Building2 className="w-3.5 h-3.5" />
-            <span>Expand Your Commercial Network</span>
+            <span>Commercial Growth</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
             Ready to discover verified enterprise partners?
           </h2>
-          <p className="text-surface-200 text-xs sm:text-sm leading-relaxed text-[#B5DAF4]">
-            Register your company on BizLink today, publish your first commercial need or service offer, and connect with high-scoring suppliers.
+          <p className="text-xs sm:text-sm leading-relaxed text-[#94A3B8]">
+            Join verified organizations establishing compliant partnerships, discovering vetted service providers, and executing commercial contracts with confidence.
           </p>
           <div className="pt-2">
             <Link
-              to="/register"
-              className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-lg bg-[#0A66C2] hover:bg-[#1B8AD6] text-white font-semibold text-xs transition-colors"
+              to={isAuthenticated ? '/discover' : '/register'}
+              className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs transition-colors shadow-subtle"
             >
-              <span>Get Started Free</span>
+              <span>{isAuthenticated ? 'Browse Marketplace' : 'Register Enterprise Account'}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -144,3 +148,4 @@ export default function LandingPage() {
     </div>
   );
 }
+
