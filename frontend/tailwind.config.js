@@ -8,49 +8,56 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#eef6fc',
-          100: '#d7ebf9',
-          200: '#b5daf4',
-          300: '#81c2ee',
-          400: '#46a4e4',
-          500: '#1b8ad6',
-          600: '#0a66c2', // Professional Blue
-          700: '#0055a5',
-          800: '#004182', // Dark Blue
-          900: '#002d5b',
-          950: '#001c3b'
-        },
-        accent: {
-          50: '#f0fdfa',
-          100: '#ccfbf1',
-          200: '#99f6e4',
-          300: '#5eead4',
-          400: '#2dd4bf',
-          500: '#14b8a6', // Growth Teal
-          600: '#0d9488',
-          700: '#0f766e',
-          800: '#115e59',
-          900: '#134e4a'
-        },
-        surface: {
-          bg: '#f3f6f8',
-          card: '#ffffff',
-          border: '#d9e2ec',
-          borderSubtle: '#e9eff5',
-          textPrimary: '#1d2226',
-          textSecondary: '#5e6c76'
-        }
+        app: 'var(--color-bg-app)',
+        card: 'var(--color-bg-card)',
+        secondary: 'var(--color-bg-secondary)',
+        elevated: 'var(--color-bg-elevated)',
+        border: 'var(--color-border)',
+        'border-subtle': 'var(--color-border-subtle)',
+        'text-primary': 'var(--color-text-primary)',
+        'text-secondary': 'var(--color-text-secondary)',
+        'text-muted': 'var(--color-text-muted)',
+
+        'brand-blue': 'var(--color-brand-blue)',
+        'brand-blue-hover': 'var(--color-brand-blue-hover)',
+        'brand-blue-tint': 'var(--color-brand-blue-tint)',
+
+        'teal-trust': 'var(--color-teal-trust)',
+        'teal-trust-tint': 'var(--color-teal-trust-tint)',
+        'green-success': 'var(--color-green-success)',
+        'green-success-tint': 'var(--color-green-success-tint)',
+        'amber-warning': 'var(--color-amber-warning)',
+        'amber-warning-tint': 'var(--color-amber-warning-tint)',
+        'red-error': 'var(--color-red-error)',
+        'red-error-tint': 'var(--color-red-error-tint)',
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-        display: ['Inter', 'system-ui', 'sans-serif']
+      },
+      fontSize: {
+        '2xs': ['11px', { lineHeight: '14px' }],
+        xs: ['12px', { lineHeight: '16px' }],
+        sm: ['13px', { lineHeight: '18px' }],
+        base: ['14px', { lineHeight: '20px' }],
+        md: ['15px', { lineHeight: '22px' }],
+        lg: ['16px', { lineHeight: '24px' }],
+        xl: ['20px', { lineHeight: '28px' }],
+        '2xl': ['24px', { lineHeight: '32px' }],
+        '3xl': ['32px', { lineHeight: '40px' }],
+      },
+      borderRadius: {
+        card: 'var(--radius-card)',
+        input: 'var(--radius-input)',
+        btn: 'var(--radius-btn)',
+        badge: 'var(--radius-badge)',
       },
       boxShadow: {
-        'enterprise': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',
-        'enterprise-hover': '0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04)',
-        'enterprise-lg': '0 10px 25px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04)'
-      }
+        subtle: 'var(--shadow-subtle)',
+        elevated: 'var(--shadow-elevated)',
+      },
+      maxWidth: {
+        enterprise: '1200px',
+      },
     },
   },
   plugins: [],
