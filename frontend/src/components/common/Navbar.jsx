@@ -300,26 +300,52 @@ export default function Navbar() {
 
         {/* Mobile Navigation Drawer */}
         {isAuthenticated && mobileMenuOpen && (
-          <div className="lg:hidden py-2 border-t border-border space-y-1">
-            {navLinks.map((item) => {
-              const Icon = item.icon;
-              const active = isActive(item.href);
-              return (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-btn text-xs font-medium ${
-                    active
-                      ? 'bg-brand-blue-tint text-brand-blue font-semibold dark:bg-[#1E293B]'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-secondary'
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Link>
-              );
-            })}
+          <div className="lg:hidden py-3 border-t border-border space-y-2">
+            {/* Mobile Active Business Badge */}
+            {activeBusiness && (
+              <div className="px-3 py-2 rounded-btn bg-secondary border border-border flex items-center justify-between">
+                <div className="flex items-center space-x-2 truncate">
+                  <div className="w-5 h-5 rounded bg-brand-blue-tint flex items-center justify-center flex-shrink-0">
+                    <Logo variant="mark" size={12} />
+                  </div>
+                  <div className="truncate">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-text-muted">Active Company</p>
+                    <p className="text-xs font-semibold text-text-primary truncate">{activeBusiness.name}</p>
+                  </div>
+                </div>
+                {businesses.length > 1 && (
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-[11px] font-semibold text-brand-blue"
+                  >
+                    Switch
+                  </Link>
+                )}
+              </div>
+            )}
+
+            <div className="space-y-0.5">
+              {navLinks.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item.href);
+                return (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center space-x-2.5 px-3 py-2 rounded-btn text-xs font-medium ${
+                      active
+                        ? 'bg-brand-blue-tint text-brand-blue font-semibold dark:bg-[#1E293B]'
+                        : 'text-text-secondary hover:text-text-primary hover:bg-secondary'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         )}
       </div>

@@ -136,7 +136,7 @@ export default function CollaborationsPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 py-2">
+    <div className="w-full space-y-6 py-2">
       {/* ─── Header ──────────────────────────────────────────────────── */}
       <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 sm:p-7 rounded-lg shadow-subtle space-y-5">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">

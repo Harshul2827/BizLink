@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import Navbar from '../components/common/Navbar';
 import Logo from '../components/common/Logo';
 
@@ -22,12 +22,12 @@ export default function AppLayout() {
             <span className="text-border">|</span>
             <span>Verified B2B Collaboration Platform</span>
           </div>
-          <div className="flex items-center space-x-5 text-text-secondary">
-            <a href="#about" className="hover:text-brand-blue transition-colors">Platform</a>
-            <a href="#security" className="hover:text-brand-blue transition-colors">Security & Trust</a>
-            <a href="#privacy" className="hover:text-brand-blue transition-colors">Privacy</a>
-            <a href="#terms" className="hover:text-brand-blue transition-colors">Terms</a>
-            <span>&copy; {new Date().getFullYear()} BizLink. All rights reserved.</span>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-text-secondary">
+            <Link to="/discover" className="hover:text-brand-blue transition-colors">Marketplace</Link>
+            <Link to="/posts" className="hover:text-brand-blue transition-colors">Network Feed</Link>
+            <Link to="/collaborations" className="hover:text-brand-blue transition-colors">Contracts</Link>
+            <Link to="/dashboard" className="hover:text-brand-blue transition-colors">Dashboard</Link>
+            <span>&copy; {new Date().getFullYear()} BizLink Technologies Inc. All rights reserved.</span>
           </div>
         </div>
       </footer>

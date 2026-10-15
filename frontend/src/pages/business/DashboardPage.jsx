@@ -98,7 +98,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto space-y-6 py-2">
+    <div className="w-full space-y-6 py-2">
       {/* ─── Business Top Banner ──────────────────────────────────────── */}
       <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-6 rounded-lg shadow-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
         <div className="flex items-start space-x-4">

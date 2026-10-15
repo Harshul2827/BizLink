@@ -88,7 +88,7 @@ export default function MessagesPage() {
   const activeConv = conversations.find((c) => String(c.connection_id) === String(activeConnectionId));
 
   return (
-    <div className="max-w-6xl mx-auto py-2">
+    <div className="w-full py-2">
       <div className="bg-white dark:bg-[#131C2E] rounded-lg shadow-subtle overflow-hidden border border-[#E2E8F0] dark:border-[#22314A] grid grid-cols-1 md:grid-cols-12 min-h-[75vh]">
         
         {/* ─── Left Pane: Conversations List ─────────────────────────── */}
