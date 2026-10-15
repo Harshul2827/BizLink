@@ -13,14 +13,27 @@ const app = express();
 // Security headers
 app.use(helmet());
 
-// CORS — allow only the configured frontend origin
+// CORS — allow configured origins and all localhost/127.0.0.1 ports in development
+const isDev = (process.env.NODE_ENV || 'development') === 'development';
 const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:5173')
   .split(',')
-  .map(o => o.trim());
+  .map(o => o.trim())
+  .filter(Boolean);
+
 app.use(cors({
   origin: (origin, callback) => {
     // Allow server-to-server requests (no origin) and listed origins
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    if (!origin) return callback(null, true);
+
+    // In development, allow any localhost or 127.0.0.1 port (e.g. 5173, 5174)
+    if (isDev && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+      return callback(null, true);
+    }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
     callback(new Error(`CORS: origin '${origin}' not allowed`));
   },
   credentials: true
@@ -65,8 +78,19 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(config.port, () => {
+  const server = app.listen(config.port, () => {
     console.log(`BizLink API server is running on port ${config.port} [${config.env}]`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`\n[ERROR] Port ${config.port} is already in use by another process.`);
+      console.error(`A BizLink backend instance is likely already running.`);
+      console.error(`To fix: kill the running process or change PORT in .env.\n`);
+    } else {
+      console.error('[ERROR] Server failed to start:', err.message);
+    }
+    process.exit(1);
   });
 }
 
