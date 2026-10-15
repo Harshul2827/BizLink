@@ -100,6 +100,10 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const isAdmin = user?.role === 'ADMIN';
+  const isOperations = user?.role === 'OPERATIONS';
+  const isInternal = isAdmin || isOperations;
+
   const value = {
     user,
     businesses,
@@ -111,7 +115,9 @@ export function AuthProvider({ children }) {
     logout,
     refreshUser,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'ADMIN'
+    isAdmin,
+    isOperations,
+    isInternal
   };
 
   return (

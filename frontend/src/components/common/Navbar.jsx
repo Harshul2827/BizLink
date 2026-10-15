@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import Logo from './Logo';
 import {
-  Building2,
   Compass,
   MessageSquare,
   Users2,
@@ -16,14 +16,28 @@ import {
   Menu,
   X,
   Plus,
-  BarChart3
+  BarChart3,
+  Building2,
+  Check
 } from 'lucide-react';
 
 export default function Navbar() {
-  const { user, activeBusiness, businesses, setActiveBusiness, logout, isAdmin, isAuthenticated } = useAuth();
+  const {
+    user,
+    activeBusiness,
+    businesses,
+    setActiveBusiness,
+    logout,
+    isAdmin,
+    isInternal,
+    isAuthenticated
+  } = useAuth();
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [bizDropdownOpen, setBizDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Synchronized theme toggle state
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const stored = localStorage.getItem('theme');
@@ -32,7 +46,7 @@ export default function Navbar() {
     }
     return false;
   });
-  const navigate = useNavigate();
+
   const location = useLocation();
 
   useEffect(() => {
@@ -46,41 +60,47 @@ export default function Navbar() {
   }, [darkMode]);
 
   const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
+    setDarkMode(prev => !prev);
   };
 
-  const navLinks = isAuthenticated ? [
-    { label: 'Feed', href: '/posts', icon: Layers },
-    { label: 'Discover', href: '/discover', icon: Compass },
-    { label: 'Network', href: '/connections', icon: Users2 },
-    { label: 'Messaging', href: '/messages', icon: MessageSquare },
-    { label: 'Projects', href: '/collaborations', icon: Building2 },
-    { label: 'Dashboard', href: '/dashboard', icon: Briefcase },
-    { label: 'Analytics', href: '/analytics', icon: BarChart3 },
-    ...(isAdmin ? [{ label: 'Admin', href: '/admin', icon: ShieldCheck }] : [])
-  ] : [];
+  // Close open dropdowns on route change
+  useEffect(() => {
+    setDropdownOpen(false);
+    setBizDropdownOpen(false);
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
-  const isActive = (path) => location.pathname.startsWith(path);
+  // Role-Aware Navigation Links
+  // Regular business users: Feed, Discover, Network, Messaging, Projects, Dashboard
+  // Internal users (Admin / Operations): additionally see Analytics and Admin Console
+  const navLinks = isAuthenticated
+    ? [
+        { label: 'Feed', href: '/posts', icon: Layers },
+        { label: 'Discover', href: '/discover', icon: Compass },
+        { label: 'Network', href: '/connections', icon: Users2 },
+        { label: 'Messaging', href: '/messages', icon: MessageSquare },
+        { label: 'Projects', href: '/collaborations', icon: Briefcase },
+        { label: 'Dashboard', href: '/dashboard', icon: Building2 },
+        ...(isInternal ? [{ label: 'Analytics', href: '/analytics', icon: BarChart3 }] : []),
+        ...(isAdmin ? [{ label: 'Admin', href: '/admin', icon: ShieldCheck }] : [])
+      ]
+    : [];
+
+  const isActive = (path) => location.pathname === path || location.pathname.startsWith(`${path}/`);
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-[#131C2E] border-b border-[#D9E2EC] dark:border-[#22314A] shadow-[0_1px_2px_0_rgba(0,0,0,0.03)] transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <nav className="sticky top-0 z-50 bg-white dark:bg-[#111827] border-b border-border shadow-subtle transition-colors">
+      <div className="enterprise-container">
+        <div className="flex items-center justify-between h-14">
           
-          {/* Brand Logo */}
-          <div className="flex items-center space-x-3">
-            <Link to="/" className="flex items-center space-x-2.5 group">
-              <div className="w-9 h-9 rounded-lg bg-[#0A66C2] flex items-center justify-center text-white shadow-sm group-hover:bg-[#004182] transition-colors">
-                <Building2 className="w-5 h-5" />
-              </div>
-              <span className="font-bold text-xl tracking-tight text-[#1D2226] dark:text-white">
-                Biz<span className="text-[#0A66C2] dark:text-[#388FE5]">Link</span>
-              </span>
+          {/* Brand Logo & Desktop Navigation */}
+          <div className="flex items-center space-x-6">
+            <Link to="/" className="flex items-center focus:outline-none focus:ring-2 focus:ring-brand-blue/30 rounded-btn">
+              <Logo variant="full" size="md" />
             </Link>
 
-            {/* Desktop Navigation Links */}
             {isAuthenticated && (
-              <div className="hidden lg:flex items-center space-x-1 ml-6">
+              <div className="hidden lg:flex items-center space-x-0.5">
                 {navLinks.map((item) => {
                   const Icon = item.icon;
                   const active = isActive(item.href);
@@ -88,13 +108,13 @@ export default function Navbar() {
                     <Link
                       key={item.href}
                       to={item.href}
-                      className={`flex items-center space-x-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+                      className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-btn text-xs font-medium transition-colors ${
                         active
-                          ? 'bg-[#EEF6FC] text-[#0A66C2] dark:bg-[#1E2E48] dark:text-[#388FE5]'
-                          : 'text-[#5E6C76] dark:text-[#94A3B8] hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] hover:text-[#1D2226] dark:hover:text-white'
+                          ? 'bg-brand-blue-tint text-brand-blue font-semibold dark:bg-[#1E293B]'
+                          : 'text-text-secondary hover:text-text-primary hover:bg-secondary'
                       }`}
                     >
-                      <Icon className={`w-4 h-4 ${active ? 'text-[#0A66C2] dark:text-[#388FE5]' : 'text-[#5E6C76] dark:text-[#94A3B8]'}`} />
+                      <Icon className={`w-3.5 h-3.5 ${active ? 'text-brand-blue' : 'text-text-muted'}`} />
                       <span>{item.label}</span>
                     </Link>
                   );
@@ -104,12 +124,13 @@ export default function Navbar() {
           </div>
 
           {/* Right Action Bar */}
-          <div className="flex items-center space-x-3">
-            {/* Theme Toggle */}
+          <div className="flex items-center space-x-2">
+            {/* Theme Toggle Button */}
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-lg text-[#5E6C76] hover:text-[#1D2226] dark:text-[#94A3B8] dark:hover:text-white hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] transition-colors cursor-pointer"
-              title="Toggle theme"
+              className="p-1.5 rounded-btn text-text-muted hover:text-text-primary hover:bg-secondary transition-colors cursor-pointer"
+              title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              aria-label="Toggle visual theme"
             >
               {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
@@ -121,50 +142,61 @@ export default function Navbar() {
                   <div className="relative hidden md:block">
                     <button
                       onClick={() => setBizDropdownOpen(!bizDropdownOpen)}
-                      className="flex items-center space-x-2 px-3 py-1.5 rounded-lg border border-[#D9E2EC] dark:border-[#22314A] bg-white dark:bg-[#1A263D] text-xs font-semibold text-[#1D2226] dark:text-white hover:border-[#0A66C2] transition-colors cursor-pointer"
+                      className="flex items-center space-x-2 px-2.5 py-1.5 rounded-btn border border-border bg-card text-xs font-medium text-text-primary hover:border-brand-blue transition-colors cursor-pointer"
+                      aria-expanded={bizDropdownOpen}
                     >
-                      <Building2 className="w-3.5 h-3.5 text-[#0A66C2]" />
-                      <span className="max-w-[130px] truncate">
+                      <div className="w-4 h-4 rounded bg-[#F1F5F9] dark:bg-[#172033] flex items-center justify-center flex-shrink-0">
+                        <Logo variant="mark" size={12} />
+                      </div>
+                      <span className="max-w-[120px] truncate text-xs">
                         {activeBusiness ? activeBusiness.name : 'Select Business'}
                       </span>
-                      <ChevronDown className="w-3.5 h-3.5 text-[#5E6C76]" />
+                      <ChevronDown className="w-3 h-3 text-text-muted" />
                     </button>
 
                     {bizDropdownOpen && (
                       <div
-                        className="absolute right-0 mt-2 w-60 rounded-xl bg-white dark:bg-[#131C2E] shadow-lg py-2 z-50 border border-[#D9E2EC] dark:border-[#22314A]"
+                        className="absolute right-0 mt-1.5 w-64 rounded-card bg-card shadow-elevated py-1.5 z-50 border border-border"
                         onMouseLeave={() => setBizDropdownOpen(false)}
                       >
-                        <div className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#5E6C76] dark:text-[#94A3B8] border-b border-[#D9E2EC] dark:border-[#22314A]">
+                        <div className="px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-text-muted border-b border-border">
                           Active Business Profile
                         </div>
-                        {businesses.map((biz) => (
-                          <button
-                            key={biz.business_id}
-                            onClick={() => {
-                              setActiveBusiness(biz);
-                              setBizDropdownOpen(false);
-                            }}
-                            className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] transition-colors cursor-pointer ${
-                              activeBusiness?.business_id === biz.business_id
-                                ? 'text-[#0A66C2] dark:text-[#388FE5] font-bold bg-[#EEF6FC] dark:bg-[#1E2E48]'
-                                : 'text-[#1D2226] dark:text-white'
-                            }`}
-                          >
-                            <span className="truncate">{biz.name}</span>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#E9EFF5] dark:bg-[#22314A] text-[#5E6C76] dark:text-[#94A3B8]">
-                              {biz.city || 'Profile'}
-                            </span>
-                          </button>
-                        ))}
-                        <div className="border-t border-[#D9E2EC] dark:border-[#22314A] mt-1 pt-1 px-2">
+                        <div className="max-h-60 overflow-y-auto py-1">
+                          {businesses.map((biz) => {
+                            const isSelected = activeBusiness?.business_id === biz.business_id;
+                            return (
+                              <button
+                                key={biz.business_id}
+                                onClick={() => {
+                                  setActiveBusiness(biz);
+                                  setBizDropdownOpen(false);
+                                }}
+                                className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-secondary transition-colors cursor-pointer ${
+                                  isSelected
+                                    ? 'text-brand-blue font-semibold bg-brand-blue-tint dark:bg-[#1E293B]'
+                                    : 'text-text-primary'
+                                }`}
+                              >
+                                <div className="flex items-center space-x-2 truncate">
+                                  <div className="w-4 h-4 rounded bg-[#F1F5F9] dark:bg-[#172033] flex items-center justify-center flex-shrink-0">
+                                    <Logo variant="mark" size={10} />
+                                  </div>
+                                  <span className="truncate">{biz.name}</span>
+                                </div>
+                                {isSelected && <Check className="w-3.5 h-3.5 text-brand-blue flex-shrink-0 ml-1" />}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <div className="border-t border-border pt-1 px-1">
                           <Link
                             to="/business/create"
                             onClick={() => setBizDropdownOpen(false)}
-                            className="flex items-center space-x-1.5 text-xs text-[#0A66C2] dark:text-[#388FE5] p-1.5 rounded-lg hover:bg-[#EEF6FC] dark:hover:bg-[#1E2E48] font-semibold"
+                            className="flex items-center space-x-1.5 text-xs text-brand-blue px-2.5 py-1.5 rounded-btn hover:bg-brand-blue-tint font-medium"
                           >
                             <Plus className="w-3.5 h-3.5" />
-                            <span>Create New Business</span>
+                            <span>Register New Business</span>
                           </Link>
                         </div>
                       </div>
@@ -172,13 +204,15 @@ export default function Navbar() {
                   </div>
                 )}
 
-                {/* User Avatar Dropdown */}
+                {/* User Avatar & Menu Dropdown */}
                 <div className="relative">
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center space-x-2 p-1 rounded-full hover:ring-2 hover:ring-[#0A66C2]/30 transition-all cursor-pointer"
+                    className="flex items-center space-x-2 p-0.5 rounded-full hover:ring-2 hover:ring-brand-blue/30 transition-all cursor-pointer"
+                    aria-label="User account menu"
+                    aria-expanded={dropdownOpen}
                   >
-                    <div className="w-8 h-8 rounded-full bg-[#0A66C2] text-white flex items-center justify-center font-bold text-xs shadow-sm">
+                    <div className="w-7 h-7 rounded-full bg-brand-blue text-white flex items-center justify-center font-semibold text-xs shadow-subtle">
                       {user.avatarUrl ? (
                         <img src={user.avatarUrl} alt={user.fullName} className="w-full h-full rounded-full object-cover" />
                       ) : (
@@ -189,42 +223,44 @@ export default function Navbar() {
 
                   {dropdownOpen && (
                     <div
-                      className="absolute right-0 mt-2 w-56 rounded-xl bg-white dark:bg-[#131C2E] shadow-xl py-2 z-50 border border-[#D9E2EC] dark:border-[#22314A]"
+                      className="absolute right-0 mt-1.5 w-56 rounded-card bg-card shadow-elevated py-1.5 z-50 border border-border"
                       onMouseLeave={() => setDropdownOpen(false)}
                     >
-                      <div className="px-4 py-3 border-b border-[#D9E2EC] dark:border-[#22314A]">
-                        <p className="text-xs font-bold text-[#1D2226] dark:text-white truncate">
+                      <div className="px-3.5 py-2.5 border-b border-border">
+                        <p className="text-xs font-semibold text-text-primary truncate">
                           {user.fullName}
                         </p>
-                        <p className="text-[11px] text-[#5E6C76] dark:text-[#94A3B8] truncate">
+                        <p className="text-[11px] text-text-muted truncate mt-0.5">
                           {user.email}
                         </p>
-                        <span className="inline-block mt-1.5 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-[#EEF6FC] text-[#0A66C2] dark:bg-[#1E2E48] dark:text-[#388FE5]">
-                          {user.role}
-                        </span>
+                        <div className="mt-1.5">
+                          <span className="inline-block text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-badge bg-brand-blue-tint text-brand-blue border border-brand-blue/20">
+                            {user.role}
+                          </span>
+                        </div>
                       </div>
 
                       <div className="py-1">
                         <Link
                           to="/dashboard"
                           onClick={() => setDropdownOpen(false)}
-                          className="block px-4 py-2 text-xs text-[#1D2226] dark:text-[#F1F5F9] hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] font-medium"
+                          className="block px-3.5 py-1.5 text-xs text-text-primary hover:bg-secondary font-medium"
                         >
-                          My Dashboard
+                          Company Dashboard
                         </Link>
                         <Link
                           to="/connections"
                           onClick={() => setDropdownOpen(false)}
-                          className="block px-4 py-2 text-xs text-[#1D2226] dark:text-[#F1F5F9] hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] font-medium"
+                          className="block px-3.5 py-1.5 text-xs text-text-primary hover:bg-secondary font-medium"
                         >
                           Commercial Network
                         </Link>
                       </div>
 
-                      <div className="border-t border-[#D9E2EC] dark:border-[#22314A] pt-1">
+                      <div className="border-t border-border pt-1">
                         <button
                           onClick={logout}
-                          className="w-full text-left px-4 py-2 text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center space-x-2 font-semibold cursor-pointer"
+                          className="w-full text-left px-3.5 py-1.5 text-xs text-red-error hover:bg-red-error-tint flex items-center space-x-1.5 font-medium cursor-pointer"
                         >
                           <LogOut className="w-3.5 h-3.5" />
                           <span>Sign Out</span>
@@ -234,10 +270,11 @@ export default function Navbar() {
                   )}
                 </div>
 
-                {/* Mobile Menu Button */}
+                {/* Mobile Menu Toggle Button */}
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="lg:hidden p-2 rounded-lg text-[#5E6C76] dark:text-[#94A3B8] hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D] cursor-pointer"
+                  className="lg:hidden p-1.5 rounded-btn text-text-muted hover:text-text-primary hover:bg-secondary cursor-pointer"
+                  aria-label="Toggle navigation menu"
                 >
                   {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </button>
@@ -246,24 +283,24 @@ export default function Navbar() {
               <div className="flex items-center space-x-2">
                 <Link
                   to="/login"
-                  className="px-4 py-2 rounded-lg text-xs font-semibold text-[#0A66C2] hover:bg-[#EEF6FC] dark:hover:bg-[#1E2E48] transition-colors"
+                  className="px-3 py-1.5 rounded-btn text-xs font-medium text-text-primary hover:bg-secondary transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 rounded-lg text-xs font-semibold bg-[#0A66C2] hover:bg-[#004182] text-white shadow-sm transition-colors"
+                  className="px-3 py-1.5 rounded-btn text-xs font-semibold bg-brand-blue hover:bg-brand-blue-hover text-white shadow-subtle transition-colors"
                 >
-                  Join Now
+                  Join as Business
                 </Link>
               </div>
             )}
           </div>
         </div>
 
-        {/* Mobile menu dropdown */}
+        {/* Mobile Navigation Drawer */}
         {isAuthenticated && mobileMenuOpen && (
-          <div className="lg:hidden py-3 border-t border-[#D9E2EC] dark:border-[#22314A] space-y-1">
+          <div className="lg:hidden py-2 border-t border-border space-y-1">
             {navLinks.map((item) => {
               const Icon = item.icon;
               const active = isActive(item.href);
@@ -272,10 +309,10 @@ export default function Navbar() {
                   key={item.href}
                   to={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center space-x-2.5 px-3 py-2 rounded-lg text-xs font-semibold ${
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-btn text-xs font-medium ${
                     active
-                      ? 'bg-[#EEF6FC] text-[#0A66C2] dark:bg-[#1E2E48] dark:text-[#388FE5]'
-                      : 'text-[#5E6C76] dark:text-[#94A3B8] hover:bg-[#F3F6F8] dark:hover:bg-[#1A263D]'
+                      ? 'bg-brand-blue-tint text-brand-blue font-semibold dark:bg-[#1E293B]'
+                      : 'text-text-secondary hover:text-text-primary hover:bg-secondary'
                   }`}
                 >
                   <Icon className="w-4 h-4" />

@@ -1,16 +1,20 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import Logo from './Logo';
+import { ShieldAlert, ArrowLeft } from 'lucide-react';
 
-export default function ProtectedRoute({ children, requiredRole = null }) {
+export default function ProtectedRoute({ children, allowedRoles = null, requiredRole = null }) {
   const { user, loading, isAuthenticated } = useAuth();
   const location = useLocation();
 
   if (loading) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-4">
-        <div className="w-10 h-10 border-4 border-brand-500/20 border-t-brand-600 rounded-full animate-spin" />
-        <p className="text-sm font-medium text-surface-500 dark:text-surface-400">Verifying session...</p>
+      <div className="min-h-[60vh] flex flex-col items-center justify-center space-y-3">
+        <div className="animate-pulse">
+          <Logo variant="mark" size={32} />
+        </div>
+        <p className="text-xs font-medium text-text-muted">Authenticating enterprise session...</p>
       </div>
     );
   }
@@ -19,17 +23,38 @@ export default function ProtectedRoute({ children, requiredRole = null }) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (requiredRole && user?.role !== requiredRole) {
+  // Handle role restrictions (support allowedRoles array or legacy requiredRole string)
+  const allowed = allowedRoles
+    ? Array.isArray(allowedRoles)
+      ? allowedRoles
+      : [allowedRoles]
+    : requiredRole
+    ? [requiredRole]
+    : null;
+
+  if (allowed && (!user?.role || !allowed.includes(user.role))) {
     return (
-      <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-6 glass-card rounded-2xl max-w-md mx-auto my-12">
-        <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:text-rose-400 flex items-center justify-center mb-4 text-xl font-bold">
-          !
+      <div className="min-h-[60vh] flex items-center justify-center p-4">
+        <div className="w-full max-w-md p-6 sm:p-8 rounded-card bg-card border border-border shadow-subtle text-center space-y-4">
+          <div className="w-12 h-12 rounded-full bg-red-error-tint text-red-error flex items-center justify-center mx-auto">
+            <ShieldAlert className="w-6 h-6" />
+          </div>
+          <div className="space-y-1">
+            <h2 className="text-lg font-bold text-text-primary">Access Restricted</h2>
+            <p className="text-xs text-text-secondary leading-relaxed">
+              This section is restricted to authorized administrative accounts. Your current profile does not have permission to view this resource.
+            </p>
+          </div>
+          <div className="pt-2">
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-btn bg-brand-blue hover:bg-brand-blue-hover text-white text-xs font-semibold shadow-subtle transition-colors"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Return to Dashboard</span>
+            </Link>
+          </div>
         </div>
-        <h2 className="text-xl font-bold text-surface-900 dark:text-white mb-2">Access Restricted</h2>
-        <p className="text-sm text-surface-600 dark:text-surface-300 mb-6">
-          This area requires administrative privileges. Your current role is <strong>{user?.role}</strong>.
-        </p>
-        <Navigate to="/dashboard" replace />
       </div>
     );
   }

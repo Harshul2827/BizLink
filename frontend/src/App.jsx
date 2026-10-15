@@ -25,7 +25,7 @@ import CollaborationsPage from './pages/collaborations/CollaborationsPage';
 import PostsPage from './pages/posts/PostsPage';
 import AdminPage from './pages/admin/AdminPage';
 
-// Track 6: Analytics
+// Track 6: Analytics (Restricted Internal)
 import AnalyticsPage from './pages/analytics/AnalyticsPage';
 
 export default function App() {
@@ -38,7 +38,7 @@ export default function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/business/:id" element={<BusinessProfilePage />} />
 
-        {/* Protected Feature Routes */}
+        {/* Regular Business User Routes */}
         <Route
           path="/dashboard"
           element={
@@ -102,19 +102,21 @@ export default function App() {
           }
         />
 
+        {/* Internal Analytics - Restricted to Admin and Operations Roles */}
         <Route
           path="/analytics"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['ADMIN', 'OPERATIONS']}>
               <AnalyticsPage />
             </ProtectedRoute>
           }
         />
 
+        {/* System Administration - Restricted to Admin Role */}
         <Route
           path="/admin"
           element={
-            <ProtectedRoute requiredRole="ADMIN">
+            <ProtectedRoute allowedRoles={['ADMIN']}>
               <AdminPage />
             </ProtectedRoute>
           }
