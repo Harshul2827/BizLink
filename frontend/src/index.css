@@ -3,10 +3,67 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ==========================================================================
-   BizLink Enterprise Design Tokens
-   Light Mode (Primary): Bright-white, high-trust banking/SaaS visual system
-   Dark Mode: Deep navy, calm, subdued, premium
+   BizLink Enterprise Tailwind v4 Theme Configuration
+   Registers all utility tokens for buttons, surfaces, text, and borders
    ========================================================================== */
+
+@theme {
+  --color-brand-blue: #2563EB;
+  --color-brand-blue-hover: #1D4ED8;
+  --color-brand-blue-tint: #EFF6FF;
+
+  --color-brand-50: #EFF6FF;
+  --color-brand-100: #DBEAFE;
+  --color-brand-200: #BFDBFE;
+  --color-brand-500: #3B82F6;
+  --color-brand-600: #2563EB;
+  --color-brand-700: #1D4ED8;
+  --color-brand-800: #1E40AF;
+  --color-brand-900: #1E3A8A;
+  --color-brand-950: #172554;
+
+  --color-surface-50: #F8FAFC;
+  --color-surface-100: #F1F5F9;
+  --color-surface-200: #E2E8F0;
+  --color-surface-300: #CBD5E1;
+  --color-surface-400: #94A3B8;
+  --color-surface-500: #64748B;
+  --color-surface-600: #475569;
+  --color-surface-700: #334155;
+  --color-surface-800: #1E293B;
+  --color-surface-900: #0F172A;
+  --color-surface-950: #0B1220;
+
+  --color-app: var(--color-bg-app);
+  --color-card: var(--color-bg-card);
+  --color-secondary: var(--color-bg-secondary);
+  --color-elevated: var(--color-bg-elevated);
+
+  --color-border: var(--color-border);
+  --color-border-subtle: var(--color-border-subtle);
+
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+
+  --color-teal-trust: #14B8A6;
+  --color-teal-trust-tint: #F0FDFA;
+  --color-green-success: #16A34A;
+  --color-green-success-tint: #F0FDF4;
+  --color-amber-warning: #D97706;
+  --color-amber-warning-tint: #FFFBEB;
+  --color-red-error: #DC2626;
+  --color-red-error-tint: #FEF2F2;
+
+  --radius-card: 8px;
+  --radius-input: 8px;
+  --radius-btn: 6px;
+  --radius-badge: 6px;
+
+  --shadow-subtle: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-elevated: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.06);
+  --shadow-enterprise: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
 
 :root {
   /* Canvas & Surfaces */
@@ -48,6 +105,7 @@
   /* Shadows */
   --shadow-subtle: 0 1px 2px rgba(15, 23, 42, 0.06);
   --shadow-elevated: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.06);
+  --shadow-enterprise: 0 1px 3px rgba(15, 23, 42, 0.06);
 
   /* Layout */
   --container-max-w: 1200px;
@@ -87,6 +145,7 @@
   /* Shadows */
   --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.35);
   --shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-enterprise: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 @layer base {

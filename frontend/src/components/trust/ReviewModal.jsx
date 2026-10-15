@@ -71,7 +71,7 @@ export default function ReviewModal({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-md text-surface-400 hover:text-surface-700 dark:hover:text-surface-200 hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-md text-[#64748B] hover:text-[#0F172A] dark:text-[#94A3B8] dark:hover:text-white hover:bg-[#F1F5F9] dark:hover:bg-[#1E293B] border border-transparent hover:border-[#E2E8F0] dark:hover:border-[#334155] transition-colors cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-4 h-4" />
@@ -138,18 +138,18 @@ export default function ReviewModal({
             />
           </div>
 
-          <div className="flex items-center justify-end space-x-2 pt-3 border-t border-surface-200 dark:border-surface-800">
+          <div className="flex items-center justify-end space-x-2 pt-3 border-t border-[#E2E8F0] dark:border-[#22314A]">
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-2 rounded-md text-xs font-semibold text-surface-600 dark:text-surface-300 hover:bg-surface-100 dark:hover:bg-surface-800 border border-surface-300 dark:border-surface-700 transition-colors cursor-pointer"
+              className="px-3.5 py-2 rounded-md text-xs font-semibold text-[#475569] dark:text-[#CBD5E1] bg-white dark:bg-[#1E293B] hover:bg-[#F1F5F9] dark:hover:bg-[#334155] border border-[#CBD5E1] dark:border-[#334155] shadow-subtle transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-4 py-2 rounded-md bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold shadow-xs disabled:opacity-60 transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-md bg-[#D97706] hover:bg-[#B45309] text-white text-xs font-semibold shadow-subtle disabled:opacity-60 transition-colors cursor-pointer"
             >
               {submitting ? 'Submitting...' : 'Post Verified Review'}
             </button>

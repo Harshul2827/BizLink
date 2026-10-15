@@ -128,7 +128,7 @@ export default function AdminPage() {
         </div>
 
         {/* Tab Switcher */}
-        <div className="flex items-center space-x-1 border-t border-surface-200 dark:border-surface-800 pt-3.5 overflow-x-auto">
+        <div className="flex items-center space-x-2 border-t border-[#E2E8F0] dark:border-[#22314A] pt-3.5 overflow-x-auto">
           {[
             { id: 'reports', label: 'Compliance Reports Queue', icon: Flag },
             { id: 'business_mod', label: 'Business Verification & Standing', icon: Building2 },
@@ -142,8 +142,8 @@ export default function AdminPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center space-x-2 px-3.5 py-2 rounded-md text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
                   active
-                    ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800 shadow-xs'
-                    : 'text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-800 hover:text-surface-900 dark:hover:text-white'
+                    ? 'bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF] shadow-subtle'
+                    : 'border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#131C2E] text-[#475569] dark:text-[#94A3B8] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-white shadow-subtle'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -159,23 +159,23 @@ export default function AdminPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-bold text-sm sm:text-base text-surface-900 dark:text-white">
+              <h2 className="font-bold text-sm sm:text-base text-[#0F172A] dark:text-white">
                 Member Escalations & Integrity Reports
               </h2>
-              <p className="text-xs text-surface-500 dark:text-surface-400">
+              <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">
                 Filter by resolution status to review flagged listings, profiles, or engagements.
               </p>
             </div>
             
-            <div className="flex items-center space-x-1.5 bg-surface-100 dark:bg-[#070D18] p-1 rounded-md border border-surface-200 dark:border-surface-800">
+            <div className="flex items-center space-x-1.5 bg-[#F1F5F9] dark:bg-[#070D18] p-1 rounded-md border border-[#E2E8F0] dark:border-[#22314A]">
               {['OPEN', 'RESOLVED'].map((st) => (
                 <button
                   key={st}
                   onClick={() => setStatusFilter(st)}
                   className={`px-3 py-1 rounded-md text-xs font-semibold cursor-pointer transition-colors ${
                     statusFilter === st
-                      ? 'bg-white dark:bg-surface-800 text-surface-900 dark:text-white shadow-xs border border-surface-200 dark:border-surface-700'
-                      : 'text-surface-600 dark:text-surface-400 hover:text-surface-900 dark:hover:text-white'
+                      ? 'bg-[#2563EB] text-white shadow-subtle border border-[#2563EB]'
+                      : 'border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#131C2E] text-[#475569] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white'
                   }`}
                 >
                   {st}
@@ -277,7 +277,7 @@ export default function AdminPage() {
                 type="button"
                 disabled={bizSubmitting || !bizIdInput.trim()}
                 onClick={() => handleUpdateBusinessStatus('VERIFIED')}
-                className="px-3.5 py-2 rounded-md bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold flex items-center space-x-1.5 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                className="px-3.5 py-2 rounded-md bg-[#0F766E] hover:bg-[#0D9488] text-white text-xs font-semibold flex items-center space-x-1.5 shadow-subtle transition-colors cursor-pointer disabled:opacity-50"
               >
                 <Award className="w-3.5 h-3.5" />
                 <span>Grant VERIFIED Seal</span>
@@ -287,7 +287,7 @@ export default function AdminPage() {
                 type="button"
                 disabled={bizSubmitting || !bizIdInput.trim()}
                 onClick={() => handleUpdateBusinessStatus('ACTIVE')}
-                className="px-3.5 py-2 rounded-md bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                className="px-3.5 py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle transition-colors cursor-pointer disabled:opacity-50"
               >
                 Set ACTIVE Standard
               </button>
@@ -296,7 +296,7 @@ export default function AdminPage() {
                 type="button"
                 disabled={bizSubmitting || !bizIdInput.trim()}
                 onClick={() => handleUpdateBusinessStatus('SUSPENDED')}
-                className="px-3.5 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white text-xs font-semibold flex items-center space-x-1.5 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                className="px-3.5 py-2 rounded-md bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold flex items-center space-x-1.5 shadow-subtle transition-colors cursor-pointer disabled:opacity-50"
               >
                 <Ban className="w-3.5 h-3.5" />
                 <span>Suspend Entity</span>
@@ -318,19 +318,19 @@ export default function AdminPage() {
 
       {/* ─── Tab 3: User Moderation ──────────────────────────────────── */}
       {activeTab === 'user_mod' && (
-        <div className="bg-white dark:bg-[#0B1220] border border-surface-200 dark:border-surface-800 p-6 sm:p-7 rounded-lg shadow-enterprise space-y-5">
+        <div className="bg-white dark:bg-[#0B1220] border border-[#E2E8F0] dark:border-[#22314A] p-6 sm:p-7 rounded-lg shadow-subtle space-y-5">
           <div>
-            <h2 className="font-bold text-base sm:text-lg text-surface-900 dark:text-white">
+            <h2 className="font-bold text-base sm:text-lg text-[#0F172A] dark:text-white">
               Individual User Account Moderation
             </h2>
-            <p className="text-xs text-surface-500 dark:text-surface-400">
+            <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">
               Manage login privilege and authentication status for registered operators.
             </p>
           </div>
 
           <div className="space-y-4 max-w-lg">
             <div>
-              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
+              <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0] mb-1.5">
                 Target User Account ID *
               </label>
               <input
@@ -338,7 +338,7 @@ export default function AdminPage() {
                 value={userIdInput}
                 onChange={(e) => setUserIdInput(e.target.value)}
                 placeholder="Enter User ID (e.g. 2)"
-                className="w-full px-3.5 py-2 rounded-md bg-white dark:bg-[#070D18] border border-surface-300 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-1 focus:ring-brand-600 focus:border-brand-600 transition-colors"
+                className="w-full px-3.5 py-2 rounded-md bg-white dark:bg-[#070D18] border border-[#CBD5E1] dark:border-[#334155] text-[#0F172A] dark:text-white text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"
               />
             </div>
 
@@ -347,7 +347,7 @@ export default function AdminPage() {
                 type="button"
                 disabled={userSubmitting || !userIdInput.trim()}
                 onClick={() => handleUpdateUserStatus('ACTIVE')}
-                className="px-3.5 py-2 rounded-md bg-teal-700 hover:bg-teal-800 text-white text-xs font-semibold shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                className="px-3.5 py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle transition-colors cursor-pointer disabled:opacity-50"
               >
                 Set ACTIVE Status
               </button>
@@ -356,7 +356,7 @@ export default function AdminPage() {
                 type="button"
                 disabled={userSubmitting || !userIdInput.trim()}
                 onClick={() => handleUpdateUserStatus('SUSPENDED')}
-                className="px-3.5 py-2 rounded-md bg-red-600 hover:bg-red-700 text-white text-xs font-semibold flex items-center space-x-1.5 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+                className="px-3.5 py-2 rounded-md bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-semibold flex items-center space-x-1.5 shadow-subtle transition-colors cursor-pointer disabled:opacity-50"
               >
                 <Ban className="w-3.5 h-3.5" />
                 <span>Suspend User Access</span>

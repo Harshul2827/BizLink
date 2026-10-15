@@ -151,8 +151,8 @@ export default function ConnectionsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-md text-xs font-semibold transition-colors cursor-pointer ${
                   active
-                    ? 'bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF]'
-                    : 'text-[#64748B] dark:text-[#94A3B8] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B]'
+                    ? 'bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF] shadow-subtle'
+                    : 'border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#131C2E] text-[#475569] dark:text-[#94A3B8] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-white'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -245,7 +245,7 @@ export default function ConnectionsPage() {
                   {activeTab === 'outgoing' && (
                     <button
                       onClick={() => handleUpdateStatus(c.connection_id, 'CANCELLED')}
-                      className="px-3 py-1.5 rounded-md border border-[#E2E8F0] dark:border-[#334155] text-[#475569] dark:text-[#94A3B8] text-xs font-medium hover:bg-red-50 hover:text-red-700 hover:border-red-200 transition-colors cursor-pointer"
+                      className="px-3 py-1.5 rounded-md border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] text-xs font-semibold hover:bg-red-50 hover:text-red-700 hover:border-red-200 shadow-subtle transition-colors cursor-pointer"
                     >
                       Cancel
                     </button>

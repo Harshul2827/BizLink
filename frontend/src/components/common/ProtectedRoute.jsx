@@ -48,7 +48,7 @@ export default function ProtectedRoute({ children, allowedRoles = null, required
           <div className="pt-2">
             <Link
               to="/dashboard"
-              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-btn bg-brand-blue hover:bg-brand-blue-hover text-white text-xs font-semibold shadow-subtle transition-colors"
+              className="inline-flex items-center space-x-1.5 px-4 py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Return to Dashboard</span>

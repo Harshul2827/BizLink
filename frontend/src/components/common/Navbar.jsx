@@ -128,11 +128,11 @@ export default function Navbar() {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleDarkMode}
-              className="p-1.5 rounded-btn text-text-muted hover:text-text-primary hover:bg-secondary transition-colors cursor-pointer"
+              className="p-1.5 rounded-btn border border-[#E2E8F0] dark:border-[#334155] bg-white dark:bg-[#131C2E] text-[#64748B] dark:text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] shadow-subtle transition-colors cursor-pointer"
               title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               aria-label="Toggle visual theme"
             >
-              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {darkMode ? <Sun className="w-4 h-4 text-amber-500" /> : <Moon className="w-4 h-4 text-slate-700" />}
             </button>
 
             {isAuthenticated ? (
@@ -142,16 +142,16 @@ export default function Navbar() {
                   <div className="relative hidden md:block">
                     <button
                       onClick={() => setBizDropdownOpen(!bizDropdownOpen)}
-                      className="flex items-center space-x-2 px-2.5 py-1.5 rounded-btn border border-border bg-card text-xs font-medium text-text-primary hover:border-brand-blue transition-colors cursor-pointer"
+                      className="flex items-center space-x-2 px-2.5 py-1.5 rounded-btn border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#131C2E] text-xs font-semibold text-[#0F172A] dark:text-white hover:border-[#2563EB] shadow-subtle transition-colors cursor-pointer"
                       aria-expanded={bizDropdownOpen}
                     >
-                      <div className="w-4 h-4 rounded bg-[#F1F5F9] dark:bg-[#172033] flex items-center justify-center flex-shrink-0">
+                      <div className="w-4 h-4 rounded bg-[#EFF6FF] dark:bg-[#172554] flex items-center justify-center flex-shrink-0">
                         <Logo variant="mark" size={12} />
                       </div>
                       <span className="max-w-[120px] truncate text-xs">
                         {activeBusiness ? activeBusiness.name : 'Select Business'}
                       </span>
-                      <ChevronDown className="w-3 h-3 text-text-muted" />
+                      <ChevronDown className="w-3 h-3 text-[#64748B] dark:text-[#94A3B8]" />
                     </button>
 
                     {bizDropdownOpen && (
@@ -283,13 +283,13 @@ export default function Navbar() {
               <div className="flex items-center space-x-2">
                 <Link
                   to="/login"
-                  className="px-3 py-1.5 rounded-btn text-xs font-medium text-text-primary hover:bg-secondary transition-colors"
+                  className="px-3.5 py-1.5 rounded-btn text-xs font-semibold text-[#0F172A] dark:text-white border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#1E293B] hover:bg-[#F8FAFC] dark:hover:bg-[#334155] shadow-subtle transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="px-3 py-1.5 rounded-btn text-xs font-semibold bg-brand-blue hover:bg-brand-blue-hover text-white shadow-subtle transition-colors"
+                  className="px-3.5 py-1.5 rounded-btn text-xs font-semibold bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-subtle transition-colors"
                 >
                   Join as Business
                 </Link>

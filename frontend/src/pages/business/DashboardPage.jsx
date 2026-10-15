@@ -123,7 +123,7 @@ export default function DashboardPage() {
         <div className="flex items-center space-x-2.5 w-full md:w-auto">
           <Link
             to={`/business/${activeBusiness?.business_id}`}
-            className="px-3.5 py-2 rounded-md border border-[#E2E8F0] dark:border-[#334155] text-xs font-semibold text-[#0F172A] dark:text-white hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] flex items-center space-x-1.5 transition-colors"
+            className="px-3.5 py-2 rounded-md border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-xs font-semibold text-[#0F172A] dark:text-white hover:bg-[#F8FAFC] dark:hover:bg-[#334155] shadow-subtle flex items-center space-x-1.5 transition-colors"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span>View Public Directory Profile</span>
@@ -185,21 +185,21 @@ export default function DashboardPage() {
                       </p>
                     )}
                   </div>
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center space-x-1.5">
                     <button
                       onClick={() => {
                         setModalType('SERVICE');
                         setEditingItem(s);
                         setModalOpen(true);
                       }}
-                      className="p-1.5 rounded-md text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] cursor-pointer"
+                      className="p-1.5 rounded-md border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] hover:text-[#2563EB] hover:border-[#2563EB] hover:bg-[#EFF6FF] shadow-subtle transition-colors cursor-pointer"
                       title="Edit Service"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => handleDeleteService(s.service_id)}
-                      className="p-1.5 rounded-md text-[#94A3B8] hover:text-[#DC2626] hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
+                      className="p-1.5 rounded-md border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] hover:text-[#DC2626] hover:border-red-300 hover:bg-red-50 shadow-subtle transition-colors cursor-pointer"
                       title="Delete Service"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -258,21 +258,21 @@ export default function DashboardPage() {
                       {n.deadline && <span>Due: {n.deadline.slice(0, 10)}</span>}
                     </div>
                   </div>
-                  <div className="flex items-center space-x-1">
+                  <div className="flex items-center space-x-1.5">
                     <button
                       onClick={() => {
                         setModalType('NEED');
                         setEditingItem(n);
                         setModalOpen(true);
                       }}
-                      className="p-1.5 rounded-md text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] cursor-pointer"
+                      className="p-1.5 rounded-md border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] hover:text-[#0F766E] hover:border-[#0F766E] hover:bg-[#F0FDFA] shadow-subtle transition-colors cursor-pointer"
                       title="Edit Need"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => handleDeleteNeed(n.need_id)}
-                      className="p-1.5 rounded-md text-[#94A3B8] hover:text-[#DC2626] hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
+                      className="p-1.5 rounded-md border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#1E293B] text-[#475569] dark:text-[#94A3B8] hover:text-[#DC2626] hover:border-red-300 hover:bg-red-50 shadow-subtle transition-colors cursor-pointer"
                       title="Delete Need"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

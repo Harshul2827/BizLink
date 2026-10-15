@@ -255,20 +255,20 @@ export default function PostsPage() {
               </p>
 
               {/* Action Bar */}
-              <div className="pt-2.5 border-t border-[#E2E8F0] dark:border-[#22314A] flex items-center space-x-6 text-xs text-[#64748B] dark:text-[#94A3B8]">
+              <div className="pt-2.5 border-t border-[#E2E8F0] dark:border-[#22314A] flex items-center space-x-2 text-xs">
                 <button
                   onClick={() => handleLikeToggle(p.post_id)}
-                  className="flex items-center space-x-1.5 hover:text-[#DC2626] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 rounded-md border border-[#E2E8F0] dark:border-[#334155] bg-white dark:bg-[#1E293B] hover:bg-[#F8FAFC] dark:hover:bg-[#334155] flex items-center space-x-1.5 text-xs font-medium text-[#475569] dark:text-[#94A3B8] hover:text-[#DC2626] transition-colors cursor-pointer shadow-subtle"
                 >
-                  <Heart className="w-4 h-4" />
+                  <Heart className="w-3.5 h-3.5" />
                   <span>{p.like_count || 0} Likes</span>
                 </button>
 
                 <button
                   onClick={() => toggleComments(p.post_id)}
-                  className="flex items-center space-x-1.5 hover:text-[#2563EB] dark:hover:text-[#3B82F6] transition-colors cursor-pointer"
+                  className="px-2.5 py-1 rounded-md border border-[#E2E8F0] dark:border-[#334155] bg-white dark:bg-[#1E293B] hover:bg-[#F8FAFC] dark:hover:bg-[#334155] flex items-center space-x-1.5 text-xs font-medium text-[#475569] dark:text-[#94A3B8] hover:text-[#2563EB] dark:hover:text-[#3B82F6] transition-colors cursor-pointer shadow-subtle"
                 >
-                  <MessageSquare className="w-4 h-4" />
+                  <MessageSquare className="w-3.5 h-3.5" />
                   <span>Comments</span>
                 </button>
               </div>

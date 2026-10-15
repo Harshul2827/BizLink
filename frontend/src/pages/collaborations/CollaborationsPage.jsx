@@ -170,8 +170,8 @@ export default function CollaborationsPage() {
               onClick={() => setActiveTab(tab)}
               className={`px-3.5 py-1.5 rounded-md text-xs font-semibold transition-colors whitespace-nowrap cursor-pointer ${
                 activeTab === tab
-                  ? 'bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF]'
-                  : 'text-[#64748B] dark:text-[#94A3B8] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B]'
+                  ? 'bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#60A5FA] border border-[#DBEAFE] dark:border-[#1E40AF] shadow-subtle'
+                  : 'border border-[#CBD5E1] dark:border-[#334155] bg-white dark:bg-[#131C2E] text-[#475569] dark:text-[#94A3B8] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] hover:text-[#0F172A] dark:hover:text-white'
               }`}
             >
               {tab}
@@ -289,7 +289,7 @@ export default function CollaborationsPage() {
                     <div className="flex items-center space-x-2 w-full justify-between">
                       <button
                         onClick={() => handleUpdateStatus(collab.collaboration_id, 'CANCELLED')}
-                        className="px-3 py-1.5 rounded-md text-red-600 text-xs font-semibold hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors cursor-pointer"
+                        className="px-3 py-1.5 rounded-md border border-red-200 dark:border-red-900/60 bg-red-50/60 dark:bg-red-950/30 text-red-700 dark:text-red-400 text-xs font-semibold hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors cursor-pointer"
                       >
                         Cancel Contract
                       </button>
@@ -413,7 +413,7 @@ export default function CollaborationsPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
-                  className="px-3.5 py-2 rounded-md text-xs font-medium text-[#475569] dark:text-[#94A3B8] hover:bg-[#F8FAFC] dark:hover:bg-[#1E293B] transition-colors cursor-pointer"
+                  className="px-3.5 py-2 rounded-md text-xs font-semibold text-[#475569] dark:text-[#CBD5E1] bg-white dark:bg-[#1E293B] hover:bg-[#F1F5F9] dark:hover:bg-[#334155] border border-[#CBD5E1] dark:border-[#334155] shadow-subtle transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
