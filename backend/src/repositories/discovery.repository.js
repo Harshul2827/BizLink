@@ -21,6 +21,10 @@ class DiscoveryRepository {
       limit = 20
     } = filters;
 
+    const limitInt = Math.max(1, Math.min(100, parseInt(limit, 10) || 20));
+    const pageInt = Math.max(1, parseInt(page, 10) || 1);
+    const offset = (pageInt - 1) * limitInt;
+
     const conditions = ["b.status IN ('ACTIVE', 'VERIFIED')"];
     const params = [];
 
@@ -81,7 +85,6 @@ class DiscoveryRepository {
     };
     const sortCol = allowedSortCols[sortBy] || 'b.created_at';
     const direction = sortOrder.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
-    const offset = (page - 1) * limit;
 
     const dataSql = `
       SELECT 
@@ -106,15 +109,15 @@ class DiscoveryRepository {
       LIMIT ? OFFSET ?
     `;
 
-    const [rows] = await pool.query(dataSql, [...params, limit, offset]);
+    const [rows] = await pool.query(dataSql, [...params, limitInt, offset]);
 
     return {
       data: rows,
       pagination: {
-        page,
-        limit,
+        page: pageInt,
+        limit: limitInt,
         total,
-        totalPages: Math.ceil(total / limit)
+        totalPages: Math.ceil(total / limitInt)
       }
     };
   }
@@ -136,6 +139,9 @@ class DiscoveryRepository {
       page = 1,
       limit = 20
     } = filters;
+
+    const limitInt = Math.max(1, Math.min(100, parseInt(limit, 10) || 20));
+    const pageInt = Math.max(1, parseInt(page, 10) || 1);
 
     const conditions = ["s.status = 'ACTIVE'", "b.status IN ('ACTIVE', 'VERIFIED')"];
     const params = [];
@@ -194,7 +200,7 @@ class DiscoveryRepository {
     };
     const sortCol = allowedSortCols[sortBy] || 's.title';
     const direction = sortOrder.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-    const offset = (page - 1) * limit;
+    const offset = (pageInt - 1) * limitInt;
 
     const dataSql = `
       SELECT 
@@ -219,15 +225,15 @@ class DiscoveryRepository {
       LIMIT ? OFFSET ?
     `;
 
-    const [rows] = await pool.query(dataSql, [...params, limit, offset]);
+    const [rows] = await pool.query(dataSql, [...params, limitInt, offset]);
 
     return {
       data: rows,
       pagination: {
-        page,
-        limit,
+        page: pageInt,
+        limit: limitInt,
         total,
-        totalPages: Math.ceil(total / limit)
+        totalPages: Math.ceil(total / limitInt)
       }
     };
   }
@@ -250,6 +256,9 @@ class DiscoveryRepository {
       page = 1,
       limit = 20
     } = filters;
+
+    const limitInt = Math.max(1, Math.min(100, parseInt(limit, 10) || 20));
+    const pageInt = Math.max(1, parseInt(page, 10) || 1);
 
     const conditions = ["b.status IN ('ACTIVE', 'VERIFIED')"];
     const params = [];
@@ -313,7 +322,7 @@ class DiscoveryRepository {
     };
     const sortCol = allowedSortCols[sortBy] || 'n.deadline';
     const direction = sortOrder.toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
-    const offset = (page - 1) * limit;
+    const offset = (pageInt - 1) * limitInt;
 
     const dataSql = `
       SELECT 
@@ -338,15 +347,15 @@ class DiscoveryRepository {
       LIMIT ? OFFSET ?
     `;
 
-    const [rows] = await pool.query(dataSql, [...params, limit, offset]);
+    const [rows] = await pool.query(dataSql, [...params, limitInt, offset]);
 
     return {
       data: rows,
       pagination: {
-        page,
-        limit,
+        page: pageInt,
+        limit: limitInt,
         total,
-        totalPages: Math.ceil(total / limit)
+        totalPages: Math.ceil(total / limitInt)
       }
     };
   }
