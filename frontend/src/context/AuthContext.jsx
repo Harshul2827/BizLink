@@ -22,6 +22,8 @@ export function AuthProvider({ children }) {
 
   const fetchUserBusinesses = useCallback(async () => {
     try {
+      // The api interceptor unwraps axios response.data automatically, so `response`
+      // here is already { success, data: [...] }. Use response.data to get the array.
       const response = await api.get('/businesses/user/me');
       const list = response.data || [];
       setBusinesses(list);
@@ -103,14 +105,20 @@ export function AuthProvider({ children }) {
     return registeredUser;
   };
 
-  const logout = () => {
+  // logout: clears session. Pass a `navigate` function from useNavigate() in the
+  // calling component to do a soft React Router redirect (avoids a full page reload).
+  const logout = (navigate) => {
     localStorage.removeItem('bizlink_token');
     localStorage.removeItem('bizlink_user');
     localStorage.removeItem('bizlink_active_biz_id');
     setUser(null);
     setBusinesses([]);
     setActiveBusinessState(null);
-    window.location.href = '/login';
+    if (typeof navigate === 'function') {
+      navigate('/login', { replace: true });
+    } else {
+      window.location.href = '/login';
+    }
   };
 
   const setActiveBusiness = (biz) => {

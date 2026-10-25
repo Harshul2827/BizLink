@@ -33,6 +33,7 @@ export default function Navbar() {
     isAuthenticated
   } = useAuth();
 
+  const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [bizDropdownOpen, setBizDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -259,7 +260,7 @@ export default function Navbar() {
 
                       <div className="border-t border-border pt-1">
                         <button
-                          onClick={logout}
+                          onClick={() => logout(navigate)}
                           className="w-full text-left px-3.5 py-1.5 text-xs text-red-error hover:bg-red-error-tint flex items-center space-x-1.5 font-medium cursor-pointer"
                         >
                           <LogOut className="w-3.5 h-3.5" />
