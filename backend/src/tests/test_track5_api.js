@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('dotenv').config();
 const assert = require('assert');
 const pool = require('../db');
 const authService = require('../services/auth.service');
@@ -65,6 +66,11 @@ async function runTrack5Tests() {
       state: 'TX',
       country: 'USA'
     });
+
+    await pool.query(
+      "UPDATE businesses SET status = 'VERIFIED' WHERE business_id IN (?, ?)",
+      [bizA.business_id, bizB.business_id]
+    );
 
     assert(bizA.business_id, 'BizA creation failed');
     assert(bizB.business_id, 'BizB creation failed');

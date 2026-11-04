@@ -55,9 +55,12 @@ class AuthService {
     });
 
     // 5. Send verification OTP email (fails gracefully with descriptive error if delivery fails)
+    let emailSent = false;
     try {
-      await emailService.sendVerificationEmail(createdUser.email, otp, createdUser.full_name);
+      const mailRes = await emailService.sendVerificationEmail(createdUser.email, otp, createdUser.full_name);
+      emailSent = Boolean(mailRes && mailRes.success);
     } catch (emailErr) {
+      emailSent = false;
       console.warn(`[WARNING] Verification email delivery error for ${createdUser.email}:`, emailErr.message);
       // In development mode, log notice so developer is unblocked if SMTP is not configured
       if (process.env.NODE_ENV === 'development') {
@@ -70,7 +73,16 @@ class AuthService {
 
     return {
       requiresVerification: true,
+      user: {
+        userId: createdUser.user_id,
+        email: createdUser.email,
+        fullName: createdUser.full_name,
+        role: createdUser.role,
+        emailVerified: false
+      },
       email: createdUser.email,
+      emailSent,
+      devOtp: (process.env.NODE_ENV === 'development' && (!emailSent || !emailService.isConfigured)) ? otp : undefined,
       message: `Account created. A 6-digit verification code has been dispatched to ${createdUser.email}.`
     };
   }
@@ -121,9 +133,12 @@ class AuthService {
       purpose: 'EMAIL_VERIFICATION'
     });
 
+    let emailSent = false;
     try {
-      await emailService.sendVerificationEmail(user.email, otp, user.full_name);
+      const mailRes = await emailService.sendVerificationEmail(user.email, otp, user.full_name);
+      emailSent = Boolean(mailRes && mailRes.success);
     } catch (emailErr) {
+      emailSent = false;
       console.warn(`[WARNING] Resend verification email failed for ${user.email}:`, emailErr.message);
       if (process.env.NODE_ENV === 'development') {
         console.log(`\n==================================================`);
@@ -135,6 +150,8 @@ class AuthService {
 
     return {
       success: true,
+      emailSent,
+      devOtp: (process.env.NODE_ENV === 'development' && (!emailSent || !emailService.isConfigured)) ? otp : undefined,
       message: 'A fresh 6-digit verification code has been sent to your email.'
     };
   }
@@ -202,8 +219,9 @@ class AuthService {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await userRepository.findByEmail(normalizedEmail);
 
+    let generatedOtp = null;
+    let emailSent = false;
     if (user && user.status === 'ACTIVE') {
-      let generatedOtp = null;
       try {
         const { otp } = await otpService.generateAndSaveOtp({
           userId: user.user_id,
@@ -212,8 +230,10 @@ class AuthService {
         });
         generatedOtp = otp;
 
-        await emailService.sendPasswordResetEmail(user.email, otp, user.full_name);
+        const mailRes = await emailService.sendPasswordResetEmail(user.email, otp, user.full_name);
+        emailSent = Boolean(mailRes && mailRes.success);
       } catch (err) {
+        emailSent = false;
         // Enforce cooldown if triggered
         if (err.code === 'OTP_COOLDOWN') {
           throw err;
@@ -230,6 +250,8 @@ class AuthService {
 
     return {
       success: true,
+      emailSent,
+      devOtp: (process.env.NODE_ENV === 'development' && (!emailSent || !emailService.isConfigured)) ? generatedOtp : undefined,
       message: 'We have received your request. If an account exists with this email address, you will receive a password reset OTP shortly.'
     };
   }
@@ -271,16 +293,21 @@ class AuthService {
     const normalizedEmail = email.toLowerCase().trim();
     const user = await userRepository.findByEmail(normalizedEmail);
 
+    let generatedOtp = null;
+    let emailSent = false;
     if (user && user.status === 'ACTIVE') {
       const { otp } = await otpService.generateAndSaveOtp({
         userId: user.user_id,
         email: user.email,
         purpose: 'PASSWORD_RESET'
       });
+      generatedOtp = otp;
 
       try {
-        await emailService.sendPasswordResetEmail(user.email, otp, user.full_name);
+        const mailRes = await emailService.sendPasswordResetEmail(user.email, otp, user.full_name);
+        emailSent = Boolean(mailRes && mailRes.success);
       } catch (err) {
+        emailSent = false;
         console.warn(`[WARNING] Resend reset email failed:`, err.message);
         if (process.env.NODE_ENV === 'development') {
           console.log(`\n==================================================`);
@@ -292,6 +319,8 @@ class AuthService {
 
     return {
       success: true,
+      emailSent,
+      devOtp: (process.env.NODE_ENV === 'development' && (!emailSent || !emailService.isConfigured)) ? generatedOtp : undefined,
       message: 'If an account exists with this email address, a new code has been sent.'
     };
   }

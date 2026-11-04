@@ -3,32 +3,50 @@ const nodemailer = require('nodemailer');
 class EmailService {
   constructor() {
     this.transporter = null;
+    this.isConfigured = false;
     this.initTransporter();
   }
 
   initTransporter() {
     const host = process.env.SMTP_HOST;
     const port = parseInt(process.env.SMTP_PORT || '587', 10);
-    const user = process.env.SMTP_USER;
-    const pass = process.env.SMTP_PASSWORD;
+    const user = process.env.SMTP_USER ? process.env.SMTP_USER.trim() : '';
+    const pass = process.env.SMTP_PASSWORD ? process.env.SMTP_PASSWORD.trim().replace(/\s+/g, '') : '';
     const secure = process.env.SMTP_SECURE === 'true' || port === 465;
 
-    if (!host || !user) {
-      console.warn('[EMAIL WARNING] SMTP credentials not fully configured in environment. Emails may fail to deliver.');
+    this.isConfigured = Boolean(user && pass);
+
+    if (!this.isConfigured) {
+      console.warn('[EMAIL NOTICE] SMTP credentials (SMTP_USER / SMTP_PASSWORD) are not configured in backend/.env.');
+      console.warn('[EMAIL NOTICE] Real emails will not be dispatched to inboxes until Gmail credentials are provided.');
+      console.warn('[EMAIL NOTICE] In development mode, OTP codes are logged directly to the server console and sent in dev responses.');
+      return;
     }
 
-    this.transporter = nodemailer.createTransport({
-      host: host || 'smtp.gmail.com',
-      port,
-      secure,
-      auth: {
-        user: user || '',
-        pass: pass || ''
-      },
-      tls: {
-        rejectUnauthorized: process.env.NODE_ENV === 'production'
-      }
-    });
+    // Gmail optimized transport or standard SMTP
+    const isGmail = (host && host.includes('gmail')) || user.endsWith('@gmail.com');
+    const transportConfig = isGmail
+      ? {
+          service: 'gmail',
+          auth: {
+            user,
+            pass
+          }
+        }
+      : {
+          host: host || 'smtp.gmail.com',
+          port,
+          secure,
+          auth: {
+            user,
+            pass
+          },
+          tls: {
+            rejectUnauthorized: process.env.NODE_ENV === 'production'
+          }
+        };
+
+    this.transporter = nodemailer.createTransport(transportConfig);
   }
 
   /**
@@ -107,7 +125,12 @@ class EmailService {
    * Sends 6-digit OTP for email verification during account registration.
    */
   async sendVerificationEmail(toEmail, otpCode, fullName = 'Valued Member') {
-    const fromAddress = process.env.EMAIL_FROM || 'no-reply@bizlink.com';
+    if (!this.isConfigured || !this.transporter) {
+      console.warn(`[EMAIL DEV NOTICE] Verification email to ${toEmail} skipped: SMTP_USER / SMTP_PASSWORD not set in backend/.env.`);
+      return { success: false, skipped: true, reason: 'SMTP not configured' };
+    }
+
+    const fromAddress = process.env.EMAIL_FROM || process.env.SMTP_USER || 'no-reply@bizlink.com';
     const fromName = process.env.EMAIL_FROM_NAME || 'BizLink Verification';
 
     const html = this.renderEmailLayout({
@@ -139,7 +162,12 @@ class EmailService {
    * Sends 6-digit OTP for password recovery.
    */
   async sendPasswordResetEmail(toEmail, otpCode, fullName = 'Member') {
-    const fromAddress = process.env.EMAIL_FROM || 'no-reply@bizlink.com';
+    if (!this.isConfigured || !this.transporter) {
+      console.warn(`[EMAIL DEV NOTICE] Password reset email to ${toEmail} skipped: SMTP_USER / SMTP_PASSWORD not set in backend/.env.`);
+      return { success: false, skipped: true, reason: 'SMTP not configured' };
+    }
+
+    const fromAddress = process.env.EMAIL_FROM || process.env.SMTP_USER || 'no-reply@bizlink.com';
     const fromName = process.env.EMAIL_FROM_NAME || 'BizLink Security';
 
     const html = this.renderEmailLayout({

@@ -37,6 +37,7 @@ export default function ForgotPasswordPage() {
   const [resending, setResending] = useState(false);
   const [error, setError] = useState(null);
   const [feedback, setFeedback] = useState(null);
+  const [devOtp, setDevOtp] = useState(null);
   const [resendCooldown, setResendCooldown] = useState(0);
 
   // Mask email helper
@@ -72,6 +73,11 @@ export default function ForgotPasswordPage() {
       const res = await api.post('/auth/forgot-password', {
         email: email.trim()
       });
+
+      if (res.data?.devOtp) {
+        setDevOtp(res.data.devOtp);
+        setOtp(res.data.devOtp);
+      }
 
       setFeedback(res.data?.message || 'We have received your request. If an account exists, a 6-digit code has been sent.');
       setResendCooldown(60);
@@ -126,6 +132,11 @@ export default function ForgotPasswordPage() {
       const res = await api.post('/auth/resend-reset-otp', {
         email: email.trim()
       });
+
+      if (res.data?.devOtp) {
+        setDevOtp(res.data.devOtp);
+        setOtp(res.data.devOtp);
+      }
 
       setFeedback(res.data?.message || 'A fresh reset code has been sent if the account exists.');
       setResendCooldown(60);
@@ -271,6 +282,23 @@ export default function ForgotPasswordPage() {
         {/* ─── STEP 2: Enter OTP ───────────────────────────────────────────── */}
         {step === 'OTP' && (
           <form onSubmit={handleVerifyOtp} className="space-y-5">
+            {devOtp && (
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 rounded-md text-xs text-amber-800 dark:text-amber-300">
+                <div className="flex items-start space-x-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+                  <div>
+                    <span className="font-semibold">Development Notice (SMTP unconfigured in .env):</span>
+                    <p className="mt-1">
+                      Your 6-digit passcode is <strong className="font-mono text-sm tracking-wider text-amber-900 dark:text-amber-200 bg-amber-100 dark:bg-amber-900/50 px-1.5 py-0.5 rounded">{devOtp}</strong> (auto-filled).
+                    </p>
+                    <p className="mt-1 text-[11px] text-amber-700/80 dark:text-amber-400/80">
+                      To deliver real emails to your Gmail inbox, add your Gmail address and 16-character App Password to <code className="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded">backend/.env</code>.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div>
               <label className="block text-xs font-semibold text-center text-[#475569] dark:text-[#CBD5E1] mb-3">
                 Enter 6-Digit Password Reset Passcode

@@ -30,6 +30,7 @@ export default function VerifyEmailPage() {
   const [success, setSuccess] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(60);
   const [feedback, setFeedback] = useState(null);
+  const [devOtp, setDevOtp] = useState(null);
 
   // Mask email for privacy (e.g. r***l@example.com)
   const maskEmail = (str) => {
@@ -63,6 +64,11 @@ export default function VerifyEmailPage() {
       const res = await api.post('/auth/resend-verification-otp', {
         email: emailToUse.trim()
       });
+
+      if (res.data?.devOtp) {
+        setDevOtp(res.data.devOtp);
+        setOtp(res.data.devOtp);
+      }
 
       setFeedback(res.data?.message || 'A new verification code has been dispatched to your inbox.');
       setResendCooldown(60);
@@ -227,6 +233,23 @@ export default function VerifyEmailPage() {
               <div className="flex items-center space-x-2 p-3 rounded-md bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-900/60 text-teal-800 dark:text-teal-300 text-xs">
                 <CheckCircle2 className="w-4 h-4 shrink-0" />
                 <span>{feedback}</span>
+              </div>
+            )}
+
+            {devOtp && (
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 rounded-md text-xs text-amber-800 dark:text-amber-300">
+                <div className="flex items-start space-x-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600 dark:text-amber-400" />
+                  <div>
+                    <span className="font-semibold">Development Notice (SMTP unconfigured in .env):</span>
+                    <p className="mt-1">
+                      Your verification passcode is <strong className="font-mono text-sm tracking-wider text-amber-900 dark:text-amber-200 bg-amber-100 dark:bg-amber-900/50 px-1.5 py-0.5 rounded">{devOtp}</strong> (auto-filled).
+                    </p>
+                    <p className="mt-1 text-[11px] text-amber-700/80 dark:text-amber-400/80">
+                      To receive real emails in your inbox, set your Gmail credentials in <code className="bg-amber-100 dark:bg-amber-900/60 px-1 py-0.5 rounded">backend/.env</code>.
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 
