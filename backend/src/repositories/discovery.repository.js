@@ -29,8 +29,14 @@ class DiscoveryRepository {
     const params = [];
 
     if (search) {
-      conditions.push('(b.name LIKE ? OR b.description LIKE ?)');
-      params.push(`%${search}%`, `%${search}%`);
+      const numSearch = Number(search);
+      if (Number.isInteger(numSearch) && numSearch > 0) {
+        conditions.push('(b.business_id = ? OR b.name LIKE ? OR b.description LIKE ?)');
+        params.push(numSearch, `%${search}%`, `%${search}%`);
+      } else {
+        conditions.push('(b.name LIKE ? OR b.description LIKE ?)');
+        params.push(`%${search}%`, `%${search}%`);
+      }
     }
 
     if (categoryId) {
@@ -362,3 +368,4 @@ class DiscoveryRepository {
 }
 
 module.exports = new DiscoveryRepository();
+

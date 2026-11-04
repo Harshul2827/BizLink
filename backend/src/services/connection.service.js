@@ -15,7 +15,17 @@ class ConnectionService {
    * @param {object} param1 
    */
   async createRequest(userId, { requester_business_id, receiver_business_id }) {
-    if (requester_business_id === receiver_business_id) {
+    const reqId = Number(requester_business_id);
+    const recId = Number(receiver_business_id);
+
+    if (!Number.isInteger(recId) || recId <= 0) {
+      throw new BadRequestError('Receiver business ID must be a positive integer', 'INVALID_BUSINESS_ID');
+    }
+    if (!Number.isInteger(reqId) || reqId <= 0) {
+      throw new BadRequestError('Requester business ID must be a positive integer', 'INVALID_BUSINESS_ID');
+    }
+
+    if (reqId === recId) {
       throw new BadRequestError('Businesses cannot connect to themselves', 'SELF_CONNECTION_FORBIDDEN');
     }
 
@@ -173,3 +183,4 @@ class ConnectionService {
 }
 
 module.exports = new ConnectionService();
+

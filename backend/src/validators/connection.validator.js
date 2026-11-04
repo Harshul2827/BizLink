@@ -1,13 +1,13 @@
 const { z } = require('zod');
 
 const createConnectionSchema = z.object({
-  requester_business_id: z
-    .number({ required_error: 'Requester business ID is required' })
-    .int()
+  requester_business_id: z.coerce
+    .number({ required_error: 'Requester business ID is required', invalid_type_error: 'Requester business ID must be a number' })
+    .int('Requester business ID must be an integer')
     .positive('Requester business ID must be a positive integer'),
-  receiver_business_id: z
-    .number({ required_error: 'Receiver business ID is required' })
-    .int()
+  receiver_business_id: z.coerce
+    .number({ required_error: 'Receiver business ID is required', invalid_type_error: 'Receiver business ID must be a number' })
+    .int('Receiver business ID must be an integer')
     .positive('Receiver business ID must be a positive integer')
 }).refine(
   data => data.requester_business_id !== data.receiver_business_id,
