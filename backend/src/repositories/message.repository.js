@@ -89,14 +89,24 @@ class MessageRepository {
          c.requester_business_id,
          c.receiver_business_id,
          c.status AS connection_status,
+         req.name AS requester_business_name,
          req.name AS requester_name,
+         req.city AS requester_city,
+         cat_req.name AS requester_category,
+         rec.name AS receiver_business_name,
          rec.name AS receiver_name,
+         rec.city AS receiver_city,
+         cat_rec.name AS receiver_category,
          latest.body AS last_message_body,
+         latest.sent_at AS last_message_at,
          latest.sent_at AS last_message_time,
-         latest.sender_user_id AS last_sender_user_id
+         latest.sender_user_id AS last_sender_user_id,
+         latest.sender_business_id AS last_sender_business_id
        FROM connections c
        JOIN businesses req ON c.requester_business_id = req.business_id
+       LEFT JOIN categories cat_req ON req.primary_category_id = cat_req.category_id
        JOIN businesses rec ON c.receiver_business_id = rec.business_id
+       LEFT JOIN categories cat_rec ON rec.primary_category_id = cat_rec.category_id
        LEFT JOIN (
          SELECT m1.*
          FROM messages m1

@@ -472,13 +472,20 @@ export default function DiscoverPage() {
               <select
                 value={selectedNeedId}
                 onChange={(e) => setSelectedNeedId(e.target.value)}
-                className="flex-1 px-3 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors cursor-pointer"
+                disabled={myNeeds.length === 0}
+                className="flex-1 px-3 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors cursor-pointer disabled:opacity-60"
               >
-                {myNeeds.map((n) => (
-                  <option key={n.need_id} value={n.need_id}>
-                    {n.title} ({formatBudgetRange(n.budget_min, n.budget_max)})
+                {myNeeds.length === 0 ? (
+                  <option value="">
+                    {activeBusiness ? `No active requirements posted for ${activeBusiness.name}` : 'Select a business first'}
                   </option>
-                ))}
+                ) : (
+                  myNeeds.map((n) => (
+                    <option key={n.need_id} value={n.need_id}>
+                      {n.title} ({formatBudgetRange(n.budget_min, n.budget_max)})
+                    </option>
+                  ))
+                )}
               </select>
             </div>
           )}
@@ -503,13 +510,45 @@ export default function DiscoverPage() {
       {initialLoading ? (
         <DirectorySkeleton />
       ) : results.length === 0 ? (
-        <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-12 rounded-lg shadow-subtle text-center space-y-3">
-          <Compass className="w-10 h-10 text-[#94A3B8] mx-auto" />
-          <h3 className="font-semibold text-sm text-[#0F172A] dark:text-white">No directory records found</h3>
-          <p className="text-xs text-[#64748B] dark:text-[#94A3B8] max-w-sm mx-auto">
-            Try adjusting your search terms, selecting a different category, or switching view tabs.
-          </p>
-        </div>
+        mode === 'matches' && myNeeds.length === 0 ? (
+          <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-12 rounded-lg shadow-subtle text-center space-y-4">
+            <div className="w-12 h-12 rounded-full bg-[#EFF6FF] dark:bg-[#172554] text-[#2563EB] dark:text-[#60A5FA] mx-auto flex items-center justify-center">
+              <Target className="w-6 h-6" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="font-bold text-base text-[#0F172A] dark:text-white">
+                No Active Requirements for {activeBusiness?.name || 'Your Business'}
+              </h3>
+              <p className="text-xs text-[#64748B] dark:text-[#94A3B8] max-w-md mx-auto leading-relaxed">
+                The Compatibility Engine matches supplier services against your business's open procurement requirements (based on category, budget, and location).
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <Link
+                to="/dashboard"
+                className="px-4 py-2 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle transition-colors flex items-center space-x-1.5"
+              >
+                <span>Post a Requirement</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+              <button
+                type="button"
+                onClick={() => handleModeChange('services')}
+                className="px-4 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] hover:bg-[#EFF6FF] dark:hover:bg-[#172554] border border-[#E2E8F0] dark:border-[#334155] text-xs font-semibold text-[#0F172A] dark:text-white transition-colors cursor-pointer"
+              >
+                Browse All Marketplace Services
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-white dark:bg-[#131C2E] border border-[#E2E8F0] dark:border-[#22314A] p-12 rounded-lg shadow-subtle text-center space-y-3">
+            <Compass className="w-10 h-10 text-[#94A3B8] mx-auto" />
+            <h3 className="font-semibold text-sm text-[#0F172A] dark:text-white">No directory records found</h3>
+            <p className="text-xs text-[#64748B] dark:text-[#94A3B8] max-w-sm mx-auto">
+              Try adjusting your search terms, selecting a different category, or switching view tabs.
+            </p>
+          </div>
+        )
       ) : (
         <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 transition-opacity duration-150 ${isSearching ? 'opacity-70' : 'opacity-100'}`}>
           {/* Mode 1: Businesses */}

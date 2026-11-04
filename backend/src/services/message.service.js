@@ -25,10 +25,11 @@ class MessageService {
       throw new BadRequestError(`Cannot send messages in a ${connection.status} connection. Connection must be ACCEPTED.`, 'INVALID_CONNECTION_STATUS');
     }
 
-    if (
-      connection.requester_business_id !== parseInt(sender_business_id, 10) &&
-      connection.receiver_business_id !== parseInt(sender_business_id, 10)
-    ) {
+    const senderBizId = parseInt(sender_business_id, 10);
+    const reqBizId = parseInt(connection.requester_business_id, 10);
+    const recBizId = parseInt(connection.receiver_business_id, 10);
+
+    if (reqBizId !== senderBizId && recBizId !== senderBizId) {
       throw new BadRequestError('Sender business is not a party in this connection', 'INVALID_SENDER_BUSINESS');
     }
 

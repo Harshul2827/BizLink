@@ -170,7 +170,7 @@ class BusinessRepository {
     );
     if (!bizRows.length) return null;
 
-    const isOwner = bizRows[0].owner_user_id === userId;
+    const isOwner = Number(bizRows[0].owner_user_id) === Number(userId);
 
     const [memberRows] = await pool.query(
       `SELECT member_role, joined_at 
