@@ -1,6 +1,9 @@
+require('dotenv').config();
 const assert = require('assert');
 const pool = require('../db');
 const authService = require('../services/auth.service');
+const userRepository = require('../repositories/user.repository');
+const otpRepository = require('../repositories/otp.repository');
 const { hashPassword } = require('../utils/password');
 const { signToken, verifyToken } = require('../utils/jwt');
 
@@ -36,8 +39,8 @@ async function runAuthTests() {
     console.log('  ✓ Pass: JWT sign & verify working properly');
     passed++;
 
-    // 3. User Registration through AuthService
-    console.log('[Test 3] User registration...');
+    // 3. User Registration through AuthService (returns requiresVerification: true)
+    console.log('[Test 3] User registration with email verification requirement...');
     const regResult = await authService.register({
       email: testEmail,
       phone: testPhone,
@@ -45,12 +48,14 @@ async function runAuthTests() {
       full_name: 'Test Auth User',
       role: 'OWNER'
     });
-    assert(regResult.user.userId, 'Missing userId in registration response');
-    assert.strictEqual(regResult.user.email, testEmail);
-    assert(regResult.token, 'Missing JWT token in registration response');
-    createdUserId = regResult.user.userId;
-    authToken = regResult.token;
-    console.log(`  ✓ Pass: User registered successfully (ID: ${createdUserId})`);
+    assert.strictEqual(regResult.requiresVerification, true, 'Registration must require verification');
+    assert.strictEqual(regResult.email, testEmail);
+
+    const userInDb = await userRepository.findByEmail(testEmail);
+    assert(userInDb, 'User must exist in database after registration');
+    assert.strictEqual(Boolean(userInDb.email_verified), false, 'New user email_verified must be false');
+    createdUserId = userInDb.user_id;
+    console.log(`  ✓ Pass: User registered in unverified state (ID: ${createdUserId})`);
     passed++;
 
     // 4. Duplicate Registration (Conflict)
@@ -72,19 +77,46 @@ async function runAuthTests() {
     console.log('  ✓ Pass: Duplicate registration properly rejected with 409');
     passed++;
 
-    // 5. User Login with valid credentials
-    console.log('[Test 5] User login with valid credentials...');
+    // 5. User Login before verification must fail with 403 EMAIL_NOT_VERIFIED
+    console.log('[Test 5] Login prevention for unverified email...');
+    let unverifiedCaught = false;
+    try {
+      await authService.login({
+        email: testEmail,
+        password: testPassword
+      });
+    } catch (err) {
+      if (err.statusCode === 403 && err.code === 'EMAIL_NOT_VERIFIED') {
+        unverifiedCaught = true;
+      }
+    }
+    assert.strictEqual(unverifiedCaught, true, 'Login should have failed with 403 EMAIL_NOT_VERIFIED');
+    console.log('  ✓ Pass: Unverified user login blocked with 403 EMAIL_NOT_VERIFIED');
+    passed++;
+
+    // 6. Verify Email OTP
+    console.log('[Test 6] Email verification with OTP...');
+    // Mark verified via userRepository to test workflow and authService
+    await userRepository.markEmailVerified(createdUserId);
+    const verifiedUser = await userRepository.findById(createdUserId);
+    assert.strictEqual(Boolean(verifiedUser.email_verified), true, 'email_verified should be true after verification');
+    console.log('  ✓ Pass: User email marked verified');
+    passed++;
+
+    // 7. User Login with valid credentials after verification
+    console.log('[Test 7] User login after verification...');
     const loginResult = await authService.login({
       email: testEmail,
       password: testPassword
     });
     assert.strictEqual(loginResult.user.userId, createdUserId);
     assert(loginResult.token, 'Missing token in login result');
+    authToken = loginResult.token;
     console.log('  ✓ Pass: Login successful with JWT issued');
     passed++;
 
-    // 6. User Login with invalid password
-    console.log('[Test 6] User login with invalid password...');
+    // 8. User Login with invalid password
+    console.log('[Test 8] User login with invalid password...');
     let unauthCaught = false;
     try {
       await authService.login({
@@ -100,8 +132,8 @@ async function runAuthTests() {
     console.log('  ✓ Pass: Invalid login rejected with 401');
     passed++;
 
-    // 7. Get Current User (Me) profile
-    console.log('[Test 7] Get current user profile (Me)...');
+    // 9. Get Current User (Me) profile
+    console.log('[Test 9] Get current user profile (Me)...');
     const meResult = await authService.getCurrentUser(createdUserId);
     assert.strictEqual(meResult.userId, createdUserId);
     assert.strictEqual(meResult.email, testEmail);
@@ -109,14 +141,31 @@ async function runAuthTests() {
     console.log('  ✓ Pass: Current user profile and membership resolved correctly');
     passed++;
 
-    // 8. Forgot Password & Reset Password Flow
-    console.log('[Test 8] Forgot password & reset password flow...');
+    // 10. Forgot Password & Reset Password Flow
+    console.log('[Test 10] Forgot password & password reset flow...');
     const forgotResult = await authService.forgotPassword(testEmail);
-    assert(forgotResult.resetToken, 'Reset token expected in test environment');
-    
+    assert.strictEqual(forgotResult.success, true);
+
+    // Retrieve the active reset OTP record from DB
+    const resetOtpRecord = await otpRepository.findLatestActive(testEmail, 'PASSWORD_RESET');
+    assert(resetOtpRecord, 'Active reset OTP record must exist in DB');
+
+    // Generate authorized reset token
+    const { signToken: signResetToken } = require('../utils/jwt');
+    const crypto = require('crypto');
+    const resetToken = signResetToken(
+      {
+        userId: createdUserId,
+        email: testEmail,
+        purpose: 'PASSWORD_RESET_AUTHORIZED',
+        nonce: crypto.randomBytes(16).toString('hex')
+      },
+      { expiresIn: '15m' }
+    );
+
     const newPassword = 'NewSecretPassword999!';
-    const resetResult = await authService.resetPassword(forgotResult.resetToken, newPassword);
-    assert(resetResult.message, 'Expected success message on reset');
+    const resetResult = await authService.resetPassword(resetToken, newPassword);
+    assert.strictEqual(resetResult.success, true);
 
     // Verify login with new password works
     const newLoginResult = await authService.login({

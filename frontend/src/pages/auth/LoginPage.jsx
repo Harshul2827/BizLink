@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Logo from '../../components/common/Logo';
-import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, ArrowRight, ShieldAlert } from 'lucide-react';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(null);
-  const [submitting, setSubmitting] = useState(false);
-
-  const { login, isAuthenticated, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [email, setEmail] = useState(location.state?.email || '');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
+  const [unverifiedEmail, setUnverifiedEmail] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const { login, isAuthenticated, loading } = useAuth();
   const from = location.state?.from?.pathname || '/discover';
 
   useEffect(() => {
@@ -26,6 +27,7 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setUnverifiedEmail(null);
 
     if (!email.trim() || !password) {
       setError('Please provide both email and password.');
@@ -34,10 +36,14 @@ export default function LoginPage() {
 
     try {
       setSubmitting(true);
-      await login(email, password);
+      await login(email.trim(), password);
       navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message || 'Invalid email or password.');
+      if (err.code === 'EMAIL_NOT_VERIFIED' || err.message?.toLowerCase().includes('not been verified')) {
+        setUnverifiedEmail(email.trim());
+      } else {
+        setError(err.message || 'Invalid email or password.');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -57,6 +63,27 @@ export default function LoginPage() {
             Access your verified B2B corporate network and commercial partnerships
           </p>
         </div>
+
+        {/* Unverified Email Warning Banner */}
+        {unverifiedEmail && (
+          <div className="p-3.5 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 text-amber-800 dark:text-amber-200 text-xs space-y-2">
+            <div className="flex items-center space-x-2 font-semibold">
+              <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>Email Verification Required</span>
+            </div>
+            <p className="text-[11px] leading-relaxed text-amber-700 dark:text-amber-300">
+              Your account <strong>{unverifiedEmail}</strong> has not been verified yet. Unverified accounts cannot access enterprise services.
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate(`/verify-email?email=${encodeURIComponent(unverifiedEmail)}&resend=true`)}
+              className="px-3 py-1.5 rounded-md bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs transition-colors flex items-center space-x-1 cursor-pointer"
+            >
+              <span>Verify Email Now & Resend Code</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
 
         {error && (
           <div className="flex items-center space-x-2 p-3 rounded-md bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-700 dark:text-red-300 text-xs">
@@ -90,9 +117,9 @@ export default function LoginPage() {
               <label className="block text-xs font-semibold text-[#0F172A] dark:text-[#E2E8F0]">
                 Password
               </label>
-              <a href="#forgot" className="text-xs text-[#2563EB] dark:text-[#3B82F6] hover:underline font-medium">
+              <Link to="/forgot-password" className="text-xs text-[#2563EB] dark:text-[#3B82F6] hover:underline font-medium">
                 Forgot password?
-              </a>
+              </Link>
             </div>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#94A3B8]">
@@ -109,7 +136,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#94A3B8] hover:text-[#0F172A] dark:hover:text-white cursor-pointer"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -119,24 +146,24 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2.5 px-4 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-semibold text-xs shadow-subtle flex items-center justify-center space-x-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full py-2.5 px-4 rounded-md bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-semibold shadow-subtle disabled:opacity-50 transition-colors flex items-center justify-center space-x-2 cursor-pointer"
           >
             {submitting ? (
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span>Authenticating...</span>
             ) : (
               <>
-                <span>Sign In</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span>Sign In to Platform</span>
+                <ArrowRight className="w-4 h-4" />
               </>
             )}
           </button>
         </form>
 
-        <div className="pt-3 border-t border-[#E2E8F0] dark:border-[#22314A] text-center">
+        <div className="text-center pt-2 border-t border-[#E2E8F0] dark:border-[#22314A]">
           <p className="text-xs text-[#64748B] dark:text-[#94A3B8]">
-            New to BizLink?{' '}
-            <Link to="/register" className="font-semibold text-[#2563EB] dark:text-[#3B82F6] hover:underline">
-              Register business
+            Need a verified commercial account?{' '}
+            <Link to="/register" className="text-[#2563EB] dark:text-[#3B82F6] font-semibold hover:underline">
+              Register company
             </Link>
           </p>
         </div>
@@ -144,4 +171,3 @@ export default function LoginPage() {
     </div>
   );
 }
-

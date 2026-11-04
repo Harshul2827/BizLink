@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/client';
+import { formatPriceRange, formatBudgetRange, formatDate } from '../../utils/formatters';
 import {
   Building2,
   MapPin,
@@ -212,13 +213,7 @@ export default function BusinessProfilePage() {
                   {(s.price_min != null || s.price_max != null) && (
                     <div className="flex items-center space-x-1 text-xs font-bold text-[#0F172A] dark:text-white">
                       <DollarSign className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
-                      <span>
-                        {s.price_min != null && s.price_max != null
-                          ? `$${s.price_min} - $${s.price_max}`
-                          : s.price_min != null
-                          ? `From $${s.price_min}`
-                          : `Up to $${s.price_max}`}
-                      </span>
+                      <span>{formatPriceRange(s.price_min, s.price_max)}</span>
                     </div>
                   )}
                 </div>
@@ -245,13 +240,13 @@ export default function BusinessProfilePage() {
                   <div className="flex items-center justify-between text-xs">
                     {(n.budget_min != null || n.budget_max != null) && (
                       <span className="font-bold text-[#0F766E] dark:text-[#2DD4BF]">
-                        Budget: ${n.budget_min || 0} - ${n.budget_max || 'Flexible'}
+                        {formatBudgetRange(n.budget_min, n.budget_max)}
                       </span>
                     )}
                     {n.deadline && (
                       <span className="flex items-center space-x-1 text-[#64748B] dark:text-[#94A3B8]">
                         <Calendar className="w-3.5 h-3.5" />
-                        <span>Due {n.deadline.slice(0, 10)}</span>
+                        <span>Due {formatDate(n.deadline)}</span>
                       </span>
                     )}
                   </div>

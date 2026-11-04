@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../api/client';
+import { toDateInputValue } from '../../utils/formatters';
 import { X, AlertCircle, DollarSign, Calendar, Tag, Briefcase } from 'lucide-react';
 
 export default function ServiceNeedModal({
@@ -39,12 +40,12 @@ export default function ServiceNeedModal({
       setTitle(initialData.title || '');
       setCategoryId(initialData.category_id || '');
       if (isService) {
-        setMinVal(initialData.price_min != null ? initialData.price_min : '');
-        setMaxVal(initialData.price_max != null ? initialData.price_max : '');
+        setMinVal(initialData.price_min != null ? String(initialData.price_min) : '');
+        setMaxVal(initialData.price_max != null ? String(initialData.price_max) : '');
       } else {
-        setMinVal(initialData.budget_min != null ? initialData.budget_min : '');
-        setMaxVal(initialData.budget_max != null ? initialData.budget_max : '');
-        setDeadline(initialData.deadline ? initialData.deadline.slice(0, 10) : '');
+        setMinVal(initialData.budget_min != null ? String(initialData.budget_min) : '');
+        setMaxVal(initialData.budget_max != null ? String(initialData.budget_max) : '');
+        setDeadline(toDateInputValue(initialData.deadline));
       }
     } else {
       setTitle('');
@@ -67,6 +68,30 @@ export default function ServiceNeedModal({
       return;
     }
 
+    const numMin = minVal !== '' && minVal !== null ? Number(minVal) : null;
+    const numMax = maxVal !== '' && maxVal !== null ? Number(maxVal) : null;
+
+    if (numMin !== null && isNaN(numMin)) {
+      setError(isService ? 'Base Rate must be a valid number.' : 'Budget Floor must be a valid number.');
+      return;
+    }
+    if (numMax !== null && isNaN(numMax)) {
+      setError(isService ? 'Max Scope Rate must be a valid number.' : 'Budget Ceiling must be a valid number.');
+      return;
+    }
+    if (numMin !== null && numMin < 0) {
+      setError(isService ? 'Base Rate cannot be negative.' : 'Budget Floor cannot be negative.');
+      return;
+    }
+    if (numMax !== null && numMax < 0) {
+      setError(isService ? 'Max Scope Rate cannot be negative.' : 'Budget Ceiling cannot be negative.');
+      return;
+    }
+    if (numMin !== null && numMax !== null && numMin > numMax) {
+      setError(isService ? 'Base Rate cannot exceed Max Scope Rate.' : 'Budget Floor cannot exceed Budget Ceiling.');
+      return;
+    }
+
     try {
       setSubmitting(true);
       const endpoint = isService
@@ -76,13 +101,13 @@ export default function ServiceNeedModal({
       const payload = isService ? {
         title: title.trim(),
         category_id: categoryId ? Number(categoryId) : null,
-        price_min: minVal ? Number(minVal) : null,
-        price_max: maxVal ? Number(maxVal) : null
+        price_min: numMin,
+        price_max: numMax
       } : {
         title: title.trim(),
         category_id: categoryId ? Number(categoryId) : null,
-        budget_min: minVal ? Number(minVal) : null,
-        budget_max: maxVal ? Number(maxVal) : null,
+        budget_min: numMin,
+        budget_max: numMax,
         deadline: deadline || null
       };
 
@@ -208,6 +233,7 @@ export default function ServiceNeedModal({
               </label>
               <input
                 type="date"
+                min={new Date().toISOString().split('T')[0]}
                 value={deadline}
                 onChange={(e) => setDeadline(e.target.value)}
                 className="w-full px-3.5 py-2 rounded-md bg-white dark:bg-[#070D18] border border-surface-300 dark:border-surface-700 text-surface-900 dark:text-surface-50 text-xs focus:outline-none focus:ring-1 focus:ring-teal-700 focus:border-teal-700 transition-colors cursor-pointer"

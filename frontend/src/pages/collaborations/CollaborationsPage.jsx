@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, memo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/client';
+import { formatDate } from '../../utils/formatters';
 import ReviewModal from '../../components/trust/ReviewModal';
 import {
   Briefcase,
@@ -74,7 +75,7 @@ const CollaborationCard = memo(function CollaborationCard({
           <div className="flex items-center space-x-1.5 text-[11px] text-[#64748B] dark:text-[#94A3B8]">
             <Calendar className="w-3.5 h-3.5 shrink-0" />
             <span>
-              Timeline: {collab.start_date || 'TBD'} &rarr; {collab.end_date || 'In Progress'}
+              Timeline: {formatDate(collab.start_date) || 'TBD'} &rarr; {formatDate(collab.end_date) || 'In Progress'}
             </span>
           </div>
         )}
@@ -226,6 +227,16 @@ export default function CollaborationsPage() {
       return;
     }
 
+    if (Number(partnerId) === Number(activeBusiness?.business_id)) {
+      setFormError('A business cannot initiate a collaboration with itself.');
+      return;
+    }
+
+    if (startDate && endDate && startDate > endDate) {
+      setFormError('Target End Date cannot be earlier than Start Date.');
+      return;
+    }
+
     try {
       setSubmitting(true);
       await api.post('/collaborations', {
@@ -240,6 +251,8 @@ export default function CollaborationsPage() {
 
       setModalOpen(false);
       setTitle('');
+      setStartDate('');
+      setEndDate('');
       loadCollaborations();
     } catch (err) {
       setFormError(err.message || 'Failed to initiate collaboration.');
@@ -420,6 +433,7 @@ export default function CollaborationsPage() {
                   </label>
                   <input
                     type="date"
+                    min={startDate || undefined}
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     className="w-full px-3.5 py-2 rounded-md bg-[#F8FAFC] dark:bg-[#1E293B] border border-[#E2E8F0] dark:border-[#334155] text-[#0F172A] dark:text-white text-xs focus:outline-none focus:ring-1 focus:ring-[#2563EB] focus:border-[#2563EB] transition-colors"

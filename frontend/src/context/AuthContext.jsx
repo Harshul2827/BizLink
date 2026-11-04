@@ -95,14 +95,22 @@ export function AuthProvider({ children }) {
 
   const register = async (userData) => {
     const res = await api.post('/auth/register', userData);
-    const { token, user: registeredUser } = res.data;
+    
+    // If registration requires OTP email verification
+    if (res.data?.requiresVerification) {
+      return res.data;
+    }
 
-    localStorage.setItem('bizlink_token', token);
-    localStorage.setItem('bizlink_user', JSON.stringify(registeredUser));
-    setUser(registeredUser);
+    if (res.data?.token && res.data?.user) {
+      const { token, user: registeredUser } = res.data;
+      localStorage.setItem('bizlink_token', token);
+      localStorage.setItem('bizlink_user', JSON.stringify(registeredUser));
+      setUser(registeredUser);
+      await fetchUserBusinesses();
+      return registeredUser;
+    }
 
-    await fetchUserBusinesses();
-    return registeredUser;
+    return res.data;
   };
 
   // logout: clears session. Pass a `navigate` function from useNavigate() in the

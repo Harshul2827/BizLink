@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/client';
+import { formatPriceRange, formatBudgetRange, formatDate } from '../../utils/formatters';
 import ServiceNeedModal from '../../components/business/ServiceNeedModal';
 import {
   Building2,
@@ -181,7 +182,7 @@ export default function DashboardPage() {
                     <h3 className="font-semibold text-xs sm:text-sm text-[#0F172A] dark:text-white">{s.title}</h3>
                     {(s.price_min != null || s.price_max != null) && (
                       <p className="text-xs text-[#2563EB] dark:text-[#3B82F6] font-bold">
-                        ${s.price_min || 0} - ${s.price_max || 'Custom'}
+                        {formatPriceRange(s.price_min, s.price_max)}
                       </p>
                     )}
                   </div>
@@ -252,10 +253,10 @@ export default function DashboardPage() {
                     <div className="flex items-center space-x-3 text-xs text-[#64748B] dark:text-[#94A3B8]">
                       {(n.budget_min != null || n.budget_max != null) && (
                         <span className="text-[#0F766E] dark:text-[#2DD4BF] font-bold">
-                          Budget: ${n.budget_min || 0} - ${n.budget_max || 'Flexible'}
+                          {formatBudgetRange(n.budget_min, n.budget_max)}
                         </span>
                       )}
-                      {n.deadline && <span>Due: {n.deadline.slice(0, 10)}</span>}
+                      {n.deadline && <span>Due: {formatDate(n.deadline)}</span>}
                     </div>
                   </div>
                   <div className="flex items-center space-x-1.5">

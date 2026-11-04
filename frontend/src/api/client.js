@@ -36,7 +36,12 @@ api.interceptors.response.use(
         }
       }
 
-      const formattedError = new Error(data?.error?.message || data?.message || 'An unexpected error occurred');
+      const validationMessage = Array.isArray(data?.error?.details) && data.error.details.length > 0
+        ? data.error.details[0].message
+        : null;
+
+      const errorMessage = validationMessage || data?.error?.message || data?.message || 'An unexpected error occurred';
+      const formattedError = new Error(errorMessage);
       formattedError.statusCode = status;
       formattedError.code = data?.error?.code || 'UNKNOWN_ERROR';
       formattedError.details = data?.error?.details || null;

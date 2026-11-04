@@ -1,5 +1,16 @@
 const { z } = require('zod');
 
+const optionalNumberSchema = (minVal = 0, label = 'Value') =>
+  z.preprocess(
+    v => (v === '' || v === undefined || v === null ? null : Number(v)),
+    z.number({ invalid_type_error: `${label} must be a number` }).min(minVal, `${label} must be at least ${minVal}`).optional().nullable()
+  );
+
+const optionalDeadlineSchema = z.preprocess(
+  v => (v === '' || v === undefined || v === null ? null : v),
+  z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Deadline must be formatted as YYYY-MM-DD').optional().nullable()
+);
+
 const createBusinessSchema = z.object({
   name: z
     .string({ required_error: 'Business name is required' })
@@ -110,16 +121,8 @@ const createServiceSchema = z.object({
     .positive()
     .optional()
     .nullable(),
-  price_min: z
-    .number()
-    .min(0, 'Minimum price must be non-negative')
-    .optional()
-    .nullable(),
-  price_max: z
-    .number()
-    .min(0, 'Maximum price must be non-negative')
-    .optional()
-    .nullable(),
+  price_min: optionalNumberSchema(0, 'Minimum price'),
+  price_max: optionalNumberSchema(0, 'Maximum price'),
   status: z
     .enum(['ACTIVE', 'INACTIVE'])
     .default('ACTIVE')
@@ -149,16 +152,8 @@ const updateServiceSchema = z.object({
     .positive()
     .optional()
     .nullable(),
-  price_min: z
-    .number()
-    .min(0)
-    .optional()
-    .nullable(),
-  price_max: z
-    .number()
-    .min(0)
-    .optional()
-    .nullable(),
+  price_min: optionalNumberSchema(0, 'Minimum price'),
+  price_max: optionalNumberSchema(0, 'Maximum price'),
   status: z
     .enum(['ACTIVE', 'INACTIVE'])
     .optional()
@@ -187,21 +182,9 @@ const createNeedSchema = z.object({
     .positive()
     .optional()
     .nullable(),
-  budget_min: z
-    .number()
-    .min(0, 'Minimum budget must be non-negative')
-    .optional()
-    .nullable(),
-  budget_max: z
-    .number()
-    .min(0, 'Maximum budget must be non-negative')
-    .optional()
-    .nullable(),
-  deadline: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Deadline must be formatted as YYYY-MM-DD')
-    .optional()
-    .nullable()
+  budget_min: optionalNumberSchema(0, 'Minimum budget'),
+  budget_max: optionalNumberSchema(0, 'Maximum budget'),
+  deadline: optionalDeadlineSchema
 }).refine(
   data => {
     if (data.budget_min != null && data.budget_max != null) {
@@ -228,21 +211,9 @@ const updateNeedSchema = z.object({
     .positive()
     .optional()
     .nullable(),
-  budget_min: z
-    .number()
-    .min(0)
-    .optional()
-    .nullable(),
-  budget_max: z
-    .number()
-    .min(0)
-    .optional()
-    .nullable(),
-  deadline: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Deadline must be formatted as YYYY-MM-DD')
-    .optional()
-    .nullable()
+  budget_min: optionalNumberSchema(0, 'Minimum budget'),
+  budget_max: optionalNumberSchema(0, 'Maximum budget'),
+  deadline: optionalDeadlineSchema
 }).refine(
   data => {
     if (data.budget_min != null && data.budget_max != null) {

@@ -39,14 +39,19 @@ export default function RegisterPage() {
 
     try {
       setSubmitting(true);
-      await register({
+      const result = await register({
         full_name: fullName.trim(),
         email: email.trim(),
         phone: phone.trim() || null,
         password,
         role
       });
-      navigate('/dashboard', { replace: true });
+      
+      if (result?.requiresVerification) {
+        navigate(`/verify-email?email=${encodeURIComponent(email.trim())}`, { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.');
     } finally {

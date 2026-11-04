@@ -31,6 +31,11 @@ export default function ReviewModal({
       return;
     }
 
+    if (title.trim().length > 160) {
+      setError('Feedback summary must not exceed 160 characters.');
+      return;
+    }
+
     try {
       setSubmitting(true);
       await api.post('/reviews', {
@@ -126,11 +131,17 @@ export default function ReviewModal({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300 mb-1.5">
-              Executive Evaluation & Delivery Feedback
-            </label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-semibold text-surface-700 dark:text-surface-300">
+                Executive Evaluation & Delivery Feedback
+              </label>
+              <span className={`text-[10px] ${title.length > 150 ? 'text-amber-600 dark:text-amber-400 font-bold' : 'text-surface-400'}`}>
+                {title.length}/160
+              </span>
+            </div>
             <textarea
               rows={3}
+              maxLength={160}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="State key observations regarding deliverables, SLA adherence, communication efficiency, and technical rigor..."

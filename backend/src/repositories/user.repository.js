@@ -10,13 +10,20 @@ class UserRepository {
    * @returns {Promise<object|null>}
    */
   async findByEmail(email) {
+    const normalizedEmail = email ? email.toLowerCase().trim() : '';
     const [rows] = await pool.query(
-      `SELECT user_id, email, phone, password_hash, full_name, avatar_url, role, status, last_login_at, created_at, updated_at
+      `SELECT user_id, email, phone, password_hash, full_name, avatar_url, role, status,
+              COALESCE(email_verified, 0) AS email_verified, email_verified_at,
+              last_login_at, created_at, updated_at
        FROM users 
        WHERE email = ?`,
-      [email]
+      [normalizedEmail]
     );
-    return rows[0] || null;
+    if (!rows[0]) return null;
+    return {
+      ...rows[0],
+      email_verified: Boolean(rows[0].email_verified)
+    };
   }
 
   /**
@@ -26,12 +33,18 @@ class UserRepository {
    */
   async findById(userId) {
     const [rows] = await pool.query(
-      `SELECT user_id, email, phone, password_hash, full_name, avatar_url, role, status, last_login_at, created_at, updated_at
+      `SELECT user_id, email, phone, password_hash, full_name, avatar_url, role, status,
+              COALESCE(email_verified, 0) AS email_verified, email_verified_at,
+              last_login_at, created_at, updated_at
        FROM users 
        WHERE user_id = ?`,
       [userId]
     );
-    return rows[0] || null;
+    if (!rows[0]) return null;
+    return {
+      ...rows[0],
+      email_verified: Boolean(rows[0].email_verified)
+    };
   }
 
   /**
@@ -42,36 +55,56 @@ class UserRepository {
   async findByPhone(phone) {
     if (!phone) return null;
     const [rows] = await pool.query(
-      `SELECT user_id, email, phone, full_name, role, status 
+      `SELECT user_id, email, phone, full_name, role, status,
+              COALESCE(email_verified, 0) AS email_verified, email_verified_at
        FROM users 
        WHERE phone = ?`,
       [phone]
     );
-    return rows[0] || null;
+    if (!rows[0]) return null;
+    return {
+      ...rows[0],
+      email_verified: Boolean(rows[0].email_verified)
+    };
   }
 
   /**
-   * Creates a new user record.
+   * Creates a new user record in unverified state (email_verified = FALSE).
    * @param {object} param0 
-   * @returns {Promise<object>} Created user record without sensitive password hash
+   * @returns {Promise<object>} Created user record
    */
-  async create({ email, phone = null, passwordHash, fullName, role = 'OWNER', avatarUrl = null }) {
+  async create({ email, phone = null, passwordHash, fullName, role = 'OWNER', avatarUrl = null, emailVerified = false }) {
+    const normalizedEmail = email.toLowerCase().trim();
     const [result] = await pool.query(
-      `INSERT INTO users (email, phone, password_hash, full_name, role, avatar_url, last_login_at)
-       VALUES (?, ?, ?, ?, ?, ?, NOW())`,
-      [email, phone, passwordHash, fullName, role, avatarUrl]
+      `INSERT INTO users (email, phone, password_hash, full_name, role, avatar_url, email_verified, last_login_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, NOW())`,
+      [normalizedEmail, phone, passwordHash, fullName, role, avatarUrl, emailVerified ? 1 : 0]
     );
 
     return {
       user_id: result.insertId,
-      email,
+      email: normalizedEmail,
       phone,
       full_name: fullName,
       role,
       status: 'ACTIVE',
+      email_verified: emailVerified,
       avatar_url: avatarUrl,
       last_login_at: new Date()
     };
+  }
+
+  /**
+   * Marks a user's email as verified.
+   * @param {number|string} userId 
+   */
+  async markEmailVerified(userId) {
+    await pool.query(
+      `UPDATE users 
+       SET email_verified = 1, email_verified_at = NOW() 
+       WHERE user_id = ?`,
+      [userId]
+    );
   }
 
   /**

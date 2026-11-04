@@ -7,6 +7,7 @@ const config = require('./config');
 const apiRoutes = require('./routes');
 const errorHandler = require('./middleware/errorHandler');
 const { NotFoundError } = require('./errors/AppError');
+const { runMigrations } = require('./db/migrate');
 
 const app = express();
 
@@ -41,7 +42,7 @@ app.use(cors({
 
 app.use(express.json());
 
-// Rate limiting on auth endpoints — 20 requests per 15 minutes per IP
+// Rate limiting on sensitive auth and OTP endpoints — 20 requests per 15 minutes per IP
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
@@ -52,9 +53,15 @@ const authLimiter = rateLimit({
     error: { code: 'TOO_MANY_REQUESTS', message: 'Too many requests. Please try again after 15 minutes.' }
   }
 });
+
 app.use('/api/v1/auth/login', authLimiter);
 app.use('/api/v1/auth/register', authLimiter);
+app.use('/api/v1/auth/verify-email', authLimiter);
+app.use('/api/v1/auth/resend-verification-otp', authLimiter);
 app.use('/api/v1/auth/forgot-password', authLimiter);
+app.use('/api/v1/auth/verify-reset-otp', authLimiter);
+app.use('/api/v1/auth/resend-reset-otp', authLimiter);
+app.use('/api/v1/auth/reset-password', authLimiter);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -78,8 +85,9 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'test') {
-  const server = app.listen(config.port, () => {
+  const server = app.listen(config.port, async () => {
     console.log(`BizLink API server is running on port ${config.port} [${config.env}]`);
+    await runMigrations();
   });
 
   server.on('error', (err) => {

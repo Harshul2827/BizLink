@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef, memo } from '
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../api/client';
+import { formatPriceRange, formatBudgetRange } from '../../utils/formatters';
 import MatchScoreBadge from '../../components/discovery/MatchScoreBadge';
 import {
   Compass,
@@ -86,9 +87,7 @@ const ServiceCard = memo(function ServiceCard({ s }) {
 
       <div className="pt-3 mt-4 border-t border-[#E2E8F0] dark:border-[#22314A] flex items-center justify-between">
         <span className="text-xs font-bold text-[#0F172A] dark:text-white">
-          {s.price_min != null || s.price_max != null
-            ? `$${s.price_min || 0} - $${s.price_max || 'Custom'}`
-            : 'Custom Pricing'}
+          {formatPriceRange(s.price_min, s.price_max)}
         </span>
         <Link
           to={`/business/${s.business_id}`}
@@ -116,7 +115,7 @@ const NeedCard = memo(function NeedCard({ n }) {
 
       <div className="pt-3 mt-4 border-t border-[#E2E8F0] dark:border-[#22314A] flex items-center justify-between">
         <span className="text-xs font-bold text-[#0F766E] dark:text-[#2DD4BF]">
-          Budget: ${n.budget_min || 0} - ${n.budget_max || 'Flexible'}
+          {formatBudgetRange(n.budget_min, n.budget_max)}
         </span>
         <Link
           to={`/business/${n.business_id}`}
@@ -146,7 +145,7 @@ const MatchCard = memo(function MatchCard({ m, selectedNeedId }) {
         </div>
 
         <div className="text-xs text-[#475569] dark:text-[#94A3B8] bg-[#F8FAFC] dark:bg-[#1E293B]/70 p-2.5 rounded-md border border-[#E2E8F0] dark:border-[#22314A]">
-          Pricing: ${m.price_min || 0} - ${m.price_max || 'Custom'} &bull; Location: {m.city || 'Remote'}
+          Pricing: {formatPriceRange(m.price_min, m.price_max)} &bull; Location: {m.city || 'Remote'}
         </div>
       </div>
 
@@ -477,7 +476,7 @@ export default function DiscoverPage() {
               >
                 {myNeeds.map((n) => (
                   <option key={n.need_id} value={n.need_id}>
-                    {n.title} (Budget: ${n.budget_min || 0} - ${n.budget_max || 'Flexible'})
+                    {n.title} ({formatBudgetRange(n.budget_min, n.budget_max)})
                   </option>
                 ))}
               </select>

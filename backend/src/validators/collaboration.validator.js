@@ -11,6 +11,11 @@ const statusEnum = z.enum([
   'CANCELLED'
 ]);
 
+const optionalDateSchema = z.preprocess(
+  v => (v === '' || v === undefined ? null : v),
+  z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'Date must be formatted as YYYY-MM-DD' }).nullable().optional()
+);
+
 const createCollaborationSchema = z.object({
   initiator_business_id: z.coerce.number().int().positive({ message: 'Initiator business ID must be a positive integer' }),
   partner_business_ids: z.array(z.coerce.number().int().positive()).min(1, { message: 'At least one partner business ID is required' }).optional(),
@@ -19,17 +24,33 @@ const createCollaborationSchema = z.object({
   need_id: z.coerce.number().int().positive().nullable().optional(),
   service_id: z.coerce.number().int().positive().nullable().optional(),
   status: z.enum(['DRAFT', 'REQUESTED']).optional().default('REQUESTED'),
-  start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'start_date must be in YYYY-MM-DD format' }).nullable().optional(),
-  end_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'end_date must be in YYYY-MM-DD format' }).nullable().optional()
+  start_date: optionalDateSchema,
+  end_date: optionalDateSchema
 }).refine(data => data.partner_business_ids || data.partner_business_id, {
   message: 'Either partner_business_ids or partner_business_id must be provided',
   path: ['partner_business_ids']
+}).refine(data => {
+  if (data.start_date && data.end_date) {
+    return data.start_date <= data.end_date;
+  }
+  return true;
+}, {
+  message: 'Start date cannot be after end date',
+  path: ['end_date']
 });
 
 const updateCollaborationStatusSchema = z.object({
   status: statusEnum,
-  start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'start_date must be in YYYY-MM-DD format' }).nullable().optional(),
-  end_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: 'end_date must be in YYYY-MM-DD format' }).nullable().optional()
+  start_date: optionalDateSchema,
+  end_date: optionalDateSchema
+}).refine(data => {
+  if (data.start_date && data.end_date) {
+    return data.start_date <= data.end_date;
+  }
+  return true;
+}, {
+  message: 'Start date cannot be after end date',
+  path: ['end_date']
 });
 
 const listCollaborationsQuerySchema = z.object({

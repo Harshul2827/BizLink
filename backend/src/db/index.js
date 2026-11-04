@@ -8,7 +8,8 @@ const poolConfig = {
   database: process.env.DB_NAME || 'bizlink',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  dateStrings: ['DATE']
 };
 
 if (process.env.DB_SSL === 'true' || process.env.DB_SSL === '1') {

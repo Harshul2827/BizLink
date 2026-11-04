@@ -137,6 +137,12 @@ export default function ConnectionsPage() {
   const handleCreateRequest = async (e) => {
     e.preventDefault();
     if (!requestTargetId.trim()) return;
+    
+    if (Number(requestTargetId) === Number(activeBusiness?.business_id)) {
+      setFeedback({ type: 'error', message: 'A business cannot establish a connection with itself.' });
+      return;
+    }
+
     try {
       setSendingRequest(true);
       setFeedback(null);

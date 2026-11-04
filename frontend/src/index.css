@@ -66,6 +66,7 @@
 }
 
 :root {
+  color-scheme: light;
   /* Canvas & Surfaces */
   --color-bg-app: #FFFFFF;
   --color-bg-card: #FFFFFF;
@@ -112,6 +113,7 @@
 }
 
 .dark {
+  color-scheme: dark;
   /* Canvas & Surfaces */
   --color-bg-app: #0B1220;
   --color-bg-card: #111827;
@@ -268,4 +270,19 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
+}
+
+/* Date input calendar indicator polish */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 150ms ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.9) brightness(1.2);
 }
