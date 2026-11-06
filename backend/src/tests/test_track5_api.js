@@ -1,4 +1,4 @@
-require('dotenv').config();
+process.env.NODE_ENV = 'test';
 require('dotenv').config();
 const assert = require('assert');
 const pool = require('../db');

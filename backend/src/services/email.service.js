@@ -122,9 +122,65 @@ class EmailService {
   }
 
   /**
+   * Identifies whether an email address belongs to a mock/synthetic test domain
+   * (e.g., automated test fixtures like conntest.com, biztest.com, test.com, example.com).
+   * Prevents external SMTP delivery to non-existent domains which triggers Google Mailer-Daemon
+   * bounce / delay warnings back to the sender account.
+   *
+   * Real user email addresses (Gmail, Outlook, Yahoo, institutional or corporate domains) are routed normally.
+   */
+  isTestRecipient(email = '') {
+    if (!email || typeof email !== 'string') return true;
+    if (process.env.NODE_ENV === 'test') return true;
+
+    const lower = email.trim().toLowerCase();
+    const atIndex = lower.lastIndexOf('@');
+    if (atIndex === -1) return true;
+
+    const domain = lower.slice(atIndex + 1);
+
+    const testDomains = [
+      'conntest.com',
+      'biztest.com',
+      'bizlinktest.com',
+      'test.com',
+      'example.com',
+      'example.org',
+      'example.net',
+      'invalid',
+      'localhost'
+    ];
+
+    if (testDomains.some((td) => domain === td || domain.endsWith('.' + td))) {
+      return true;
+    }
+
+    if (
+      domain.endsWith('.test') ||
+      domain.endsWith('.example') ||
+      domain.endsWith('.invalid') ||
+      domain.endsWith('.localhost')
+    ) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Sends 6-digit OTP for email verification during account registration.
    */
   async sendVerificationEmail(toEmail, otpCode, fullName = 'Valued Member') {
+    // 1. Guard against synthetic/test domain addresses to avoid mailer-daemon bouncebacks
+    if (this.isTestRecipient(toEmail)) {
+      console.log(`[EMAIL TEST MOCK] Suppressed external SMTP transmission for synthetic test recipient <${toEmail}> (Verification Code: ${otpCode}). Real user email services remain active.`);
+      return {
+        success: true,
+        mocked: true,
+        messageId: `<mock-verify-${Date.now()}@bizlink.internal>`
+      };
+    }
+
     if (!this.isConfigured || !this.transporter) {
       console.warn(`[EMAIL DEV NOTICE] Verification email to ${toEmail} skipped: SMTP_USER / SMTP_PASSWORD not set in backend/.env.`);
       return { success: false, skipped: true, reason: 'SMTP not configured' };
@@ -162,6 +218,16 @@ class EmailService {
    * Sends 6-digit OTP for password recovery.
    */
   async sendPasswordResetEmail(toEmail, otpCode, fullName = 'Member') {
+    // 1. Guard against synthetic/test domain addresses to avoid mailer-daemon bouncebacks
+    if (this.isTestRecipient(toEmail)) {
+      console.log(`[EMAIL TEST MOCK] Suppressed external SMTP transmission for synthetic test recipient <${toEmail}> (Password Reset Code: ${otpCode}). Real user email services remain active.`);
+      return {
+        success: true,
+        mocked: true,
+        messageId: `<mock-reset-${Date.now()}@bizlink.internal>`
+      };
+    }
+
     if (!this.isConfigured || !this.transporter) {
       console.warn(`[EMAIL DEV NOTICE] Password reset email to ${toEmail} skipped: SMTP_USER / SMTP_PASSWORD not set in backend/.env.`);
       return { success: false, skipped: true, reason: 'SMTP not configured' };
