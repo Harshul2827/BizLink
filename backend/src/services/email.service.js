@@ -122,10 +122,11 @@ class EmailService {
   }
 
   /**
-   * Identifies whether an email address belongs to a mock/synthetic test domain
-   * (e.g., automated test fixtures like conntest.com, biztest.com, test.com, example.com).
-   * Prevents external SMTP delivery to non-existent domains which triggers Google Mailer-Daemon
-   * bounce / delay warnings back to the sender account.
+   * Identifies whether an email address belongs to a mock/synthetic test domain,
+   * a test runner fixture, or proxy account.
+   *
+   * Prevents external SMTP delivery to fictitious or test accounts which triggers Google Mailer-Daemon
+   * bounce / delay warnings back to the spitdefaulters account.
    *
    * Real user email addresses (Gmail, Outlook, Yahoo, institutional or corporate domains) are routed normally.
    */
@@ -137,12 +138,39 @@ class EmailService {
     const atIndex = lower.lastIndexOf('@');
     if (atIndex === -1) return true;
 
+    const localPart = lower.slice(0, atIndex);
     const domain = lower.slice(atIndex + 1);
 
+    // 1. Synthetic test runner patterns in username (e.g. userb_1793786576529, usera_..., track5_...)
+    if (
+      localPart.startsWith('usera_') ||
+      localPart.startsWith('userb_') ||
+      localPart.startsWith('test_runner_') ||
+      localPart.startsWith('owner_') ||
+      localPart.startsWith('staff_') ||
+      localPart.startsWith('track5_') ||
+      localPart.startsWith('analytics_admin_') ||
+      /_\d{10,}/.test(localPart)
+    ) {
+      return true;
+    }
+
+    // 2. Test, mock, or disposable domain keywords
+    if (
+      domain.includes('conntest') ||
+      domain.includes('biztest') ||
+      domain.includes('bizlinktest') ||
+      domain.includes('tempmail') ||
+      domain.includes('throwaway') ||
+      domain.includes('proxy') ||
+      domain.includes('fake') ||
+      domain.includes('dummy')
+    ) {
+      return true;
+    }
+
+    // 3. Reserved test TLDs and exact test domains (RFC 2606 / RFC 6761)
     const testDomains = [
-      'conntest.com',
-      'biztest.com',
-      'bizlinktest.com',
       'test.com',
       'example.com',
       'example.org',
